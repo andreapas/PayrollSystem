@@ -6,24 +6,15 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:head></h:head>
 <h:body>
-	<h:form>
-		<p:dataTable var="item" value="#{payrollBean.payrollItems}" rows="10"
-                         paginator="true"
-                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         rowsPerPageTemplate="5,10,15">
-		
-			<p:column sortBy="#{item.id}" headerText="Id">
-            	<h:outputText value="#{item.id}" />
-        	</p:column>
-        	
-        	<p:column sortBy="#{item.message}" headerText="Message">
-            	<h:outputText value="#{item.message}" />
-        	</p:column>
-		
-		</p:dataTable>	
-	</h:form>
-            	<h:commandButton value="Refresh Page" action="#{phoneBookBean.refresh()}"/>
-            
+	<br/>
+	<br/>
+	<h:outputLabel value="#{payrollBean.payrollItems[0].message}">
+	</h:outputLabel>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+	<h:commandButton value="Refresh Page" action="#{payrollBean.refresh()}" />
 
 </h:body>
 </html>
