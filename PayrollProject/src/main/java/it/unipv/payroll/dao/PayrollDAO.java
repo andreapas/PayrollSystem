@@ -24,5 +24,9 @@ public class PayrollDAO {
 		
 		return phoneBooks;
 	}
+
+	public void add(Payroll payroll) {
+		em.persist(payroll);
+	}
 	
 }

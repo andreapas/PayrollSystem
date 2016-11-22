@@ -29,9 +29,6 @@ public class PayrollBean implements Serializable {
 		payrollItems = payrollDAO.findAll();
 	}
 
-	public List<Payroll> refresh(){
-		return payrollController.refreshPage();
-	}
 	public Payroll getPayroll() {
 		return payroll;
 	}
@@ -46,6 +43,16 @@ public class PayrollBean implements Serializable {
 
 	public void setPayrollItems(List<Payroll> payrollItems) {
 		this.payrollItems = payrollItems;
+	}
+
+	public String addMessage() {
+		try {
+			payrollItems= payrollController.addPayroll(payroll);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	

@@ -6,15 +6,27 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:head></h:head>
 <h:body>
-	<br/>
-	<br/>
-	<h:outputLabel value="#{payrollBean.payrollItems[0].message}">
-	</h:outputLabel>
-	<br/>
-	<br/>
-	<br/>
-	<br/>
-	<h:commandButton value="Refresh Page" action="#{payrollBean.refresh()}" />
+	<br />
+	<br />
+	<h:form>
+		<p:panelGrid columns="2">
+
+			<h:outputText value="Message: " />
+			<h:inputText value="#{payrollBean.payroll.message}" />
+
+			<h:commandButton value="Add Entry"
+				action="#{payrollBean.addMessage()}" />
+
+		</p:panelGrid>
+	</h:form>
+	<br />
+    <p:dataList value="#{payrollBean.payrollItems}" var="item" type="ordered">
+        #{item.message}
+    </p:dataList>
+	<br />
+	<br />
+	<br />
+	<br />
 
 </h:body>
 </html>

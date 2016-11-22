@@ -20,13 +20,19 @@ public class PayrollController {
 	
 	@PostConstruct
 	public void init() {
-		logger.info("PhoneBook Controller is up!");
+		logger.info("Payroll ready to receive new commands!");
 	}
-	
-	
-	public List<Payroll> refreshPage(){
-		payrollDao.findAll();
-		List<Payroll> items= payrollDao.findAll();
-		return items;
+
+	public List<Payroll> addPayroll(Payroll payroll) throws Exception{
+		
+		if (payroll.getMessage().isEmpty()||payroll.getMessage().equals(null)) {
+			throw new Exception("Message cannot be empty");
+		}
+		
+		payrollDao.add(payroll);
+		
+		List<Payroll> payrollItems= payrollDao.findAll();
+		
+		return payrollItems;
 	}
 }
