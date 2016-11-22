@@ -1,5 +1,6 @@
 package it.unipv.payroll.view;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -13,7 +14,7 @@ import it.unipv.payroll.model.Payroll;
 
 @Named
 @SessionScoped
-public class PayrollBean {
+public class PayrollBean implements Serializable {
 
 	@Inject PayrollController payrollController;
 	@Inject PayrollDAO payrollDAO;
@@ -28,6 +29,9 @@ public class PayrollBean {
 		payrollItems = payrollDAO.findAll();
 	}
 
+	public List<Payroll> refresh(){
+		return payrollController.refreshPage();
+	}
 	public Payroll getPayroll() {
 		return payroll;
 	}

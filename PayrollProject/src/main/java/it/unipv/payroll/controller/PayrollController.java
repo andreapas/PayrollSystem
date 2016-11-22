@@ -23,4 +23,10 @@ public class PayrollController {
 		logger.info("PhoneBook Controller is up!");
 	}
 	
+	
+	public List<Payroll> refreshPage(){
+		payrollDao.findAll();
+		List<Payroll> items= payrollDao.findAll();
+		return items;
+	}
 }
