@@ -28,5 +28,9 @@ public class PayrollDAO {
 	public void add(Payroll payroll) {
 		em.persist(payroll);
 	}
+
+	public void remove(Payroll pr) {
+		em.remove(em.find(Payroll.class, pr.getId()));
+	}
 	
 }

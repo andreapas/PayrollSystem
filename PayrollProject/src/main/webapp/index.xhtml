@@ -4,7 +4,8 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
-<h:head></h:head>
+<h:head>	
+</h:head>
 <h:body>
 	<br />
 	<br />
@@ -20,9 +21,11 @@
 		</p:panelGrid>
 	</h:form>
 	<br />
-    <p:dataList value="#{payrollBean.payrollItems}" var="item" type="ordered">
-        #{item.message}
+	<h:form>
+    <p:dataList value="#{payrollBean.payrollItems}" var="item" type="unordered">
+		<h:commandButton value="Remove" action="#{payrollBean.remove(item)}" />&nbsp;&nbsp;&nbsp;&nbsp;#{item.message} 
     </p:dataList>
+</h:form>
 	<br />
 	<br />
 	<br />

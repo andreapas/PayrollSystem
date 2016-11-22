@@ -22,7 +22,26 @@ public class PayrollTests extends ArquillianTest{
 	
 	@Before
 	public void cleanup(){
-		//actually empty, but we'll have to add it
+		List<Payroll> payrolls=payrollDAO.findAll();
+		boolean found=false;
+		for (Payroll pr : payrolls) {
+			if ("Hi, I'm a test message. Nice to meet you!".equals(pr.getMessage())) {
+				payrollBean.remove(pr);
+			}
+		}
+	}
+	
+	@Test
+	public void testRemove(){
+		List<Payroll> payrolls=payrollDAO.findAll();
+		boolean found=false;
+		for (Payroll pr : payrolls) {
+			if ("Hi, I'm a test message. Nice to meet you!".equals(pr.getMessage())) {
+				found=true;
+				break;
+			}
+		}
+		Assert.assertTrue("Polite message found!", found==false);
 	}
 	
 	@Test
@@ -30,8 +49,8 @@ public class PayrollTests extends ArquillianTest{
 		// Set an element in the bean
 		Payroll aPayroll= new Payroll();
 		aPayroll.setMessage("Hi, I'm a test message. Nice to meet you!");
-		
 		payrollBean.setPayroll(aPayroll);
+		
 		
 		payrollBean.addMessage();
 		

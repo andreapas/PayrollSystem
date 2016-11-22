@@ -35,4 +35,14 @@ public class PayrollController {
 		
 		return payrollItems;
 	}
+
+	public List<Payroll> remove(Payroll pr) {
+		
+		payrollDao.remove(pr);
+		List<Payroll> payrollItems= payrollDao.findAll();
+		
+		return payrollItems;
+		
+		
+	}
 }

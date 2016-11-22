@@ -54,6 +54,11 @@ public class PayrollBean implements Serializable {
 		}
 		return null;
 	}
+
+	public String remove(Payroll pr) {
+		payrollItems=payrollController.remove(pr);
+		return null;
+	}
 	
 	
 }
