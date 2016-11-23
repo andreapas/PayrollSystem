@@ -15,7 +15,7 @@ import org.jboss.shrinkwrap.api.exporter.ZipExporter;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 
 public class ArquillianTest {
-
+//
 	Logger log = Logger.getLogger(ArquillianTest.class);
 	
 	@Deployment(name = "PayrollTest")
