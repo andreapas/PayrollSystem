@@ -13,6 +13,8 @@ public class Payroll {
 	
 	private String message;
 
+	//door
+	
 	public String getMessage() {
 		return message;
 	}
