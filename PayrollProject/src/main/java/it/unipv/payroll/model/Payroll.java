@@ -12,8 +12,6 @@ public class Payroll {
 	private int id;
 	
 	private String message;
-
-	//door
 	
 	public String getMessage() {
 		return message;
