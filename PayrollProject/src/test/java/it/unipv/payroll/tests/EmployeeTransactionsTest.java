@@ -19,7 +19,7 @@ import it.unipv.payroll.model.UserTransactions;
 import it.unipv.payroll.view.UserTransactionsBean;
 
 @RunWith(Arquillian.class)
-public class UserTransactionsTest extends ArquillianTest{
+public class EmployeeTransactionsTest extends ArquillianTest{
 
 	private static String USER_CODE1= "COD001ABC";
 	private static String USER_CODE2= "COD002ABC";
