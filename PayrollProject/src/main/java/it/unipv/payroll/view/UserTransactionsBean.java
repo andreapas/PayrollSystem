@@ -17,7 +17,6 @@ import it.unipv.payroll.model.UserTransactions;
 public class UserTransactionsBean implements Serializable{
 
 	@Inject UserTransactionsController utController;
-	@Inject UserTransactionsDAO utDAO;
 	
 	private UserTransactions aTransaction;
 	

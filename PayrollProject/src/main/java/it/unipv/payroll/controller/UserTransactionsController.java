@@ -25,16 +25,6 @@ public class UserTransactionsController {
 		logger.info("UserTransactionController ready to receive new commands!");
 	}
 	
-	/*public List<Payroll> remove(Payroll pr) {
-		
-		payrollDao.remove(pr);
-		List<Payroll> payrollItems= payrollDao.findAll();
-		
-		return payrollItems;
-		
-		
-	}*/
-	
 	public List<UserTransactions> addTransaction(UserTransactions aTransaction) throws Exception{
 		
 		if (aTransaction.getCode().isEmpty()||aTransaction.getCode().equals(null)) {
