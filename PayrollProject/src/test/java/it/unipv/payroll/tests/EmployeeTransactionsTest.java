@@ -13,10 +13,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import it.unipv.payroll.controller.UserTransactionsController;
-import it.unipv.payroll.dao.UserTransactionsDAO;
-import it.unipv.payroll.model.UserTransactions;
-import it.unipv.payroll.view.UserTransactionsBean;
+import it.unipv.payroll.controller.EmployeeTransactionsController;
+import it.unipv.payroll.dao.EmployeeTransactionsDAO;
+import it.unipv.payroll.model.EmployeeTransactions;
+import it.unipv.payroll.view.EmployeeTransactionsBean;
 
 @RunWith(Arquillian.class)
 public class EmployeeTransactionsTest extends ArquillianTest{
@@ -25,15 +25,15 @@ public class EmployeeTransactionsTest extends ArquillianTest{
 	private static String USER_CODE2= "COD002ABC";
 	private static String USER_CODE3= "COD003ABC";
 	
-	@Inject UserTransactionsBean utBean;
-	@Inject UserTransactionsController utController;
-	@Inject UserTransactionsDAO utDAO;
+	@Inject EmployeeTransactionsBean utBean;
+	@Inject EmployeeTransactionsController utController;
+	@Inject EmployeeTransactionsDAO utDAO;
 	
 	
 	@After
 	public void removeEntries(){
-		UserTransactions transaction=new UserTransactions();
-		List<UserTransactions> transactions=utDAO.findAll();
+		EmployeeTransactions transaction=new EmployeeTransactions();
+		List<EmployeeTransactions> transactions=utDAO.findAll();
 		for (int i = 0; i < transactions.size(); i++) {
 			if (transactions.get(i).getCode().equals(USER_CODE1)) {
 				transaction.setCode(USER_CODE1);
@@ -50,7 +50,7 @@ public class EmployeeTransactionsTest extends ArquillianTest{
 	
 	@Test
 	public void addTaxToEmployee(){
-		UserTransactions aTransaction= new UserTransactions();
+		EmployeeTransactions aTransaction= new EmployeeTransactions();
 		aTransaction.setCode(USER_CODE1);
 		aTransaction.setFee(50);
 		aTransaction.setEarned(1000);
@@ -60,9 +60,9 @@ public class EmployeeTransactionsTest extends ArquillianTest{
 
 		utBean.addFee(50);
 		
-		List<UserTransactions> allTransactions=utDAO.findAll();
+		List<EmployeeTransactions> allTransactions=utDAO.findAll();
 		int totalFee=0;
-		for (UserTransactions uts : allTransactions) {
+		for (EmployeeTransactions uts : allTransactions) {
 			if (USER_CODE1.equals(uts.getCode())) {
 				totalFee=uts.getFee();
 			}
@@ -75,7 +75,7 @@ public class EmployeeTransactionsTest extends ArquillianTest{
 	@Test
 	public void addEarnedToEmployee(){
 		
-		UserTransactions aTransaction= new UserTransactions();
+		EmployeeTransactions aTransaction= new EmployeeTransactions();
 		aTransaction.setCode("COD001ABC");
 		aTransaction.setFee(50);
 		aTransaction.setEarned(1000);
@@ -85,9 +85,9 @@ public class EmployeeTransactionsTest extends ArquillianTest{
 
 		utBean.addEarned(500);
 		
-		List<UserTransactions> allTransactions=utDAO.findAll();
+		List<EmployeeTransactions> allTransactions=utDAO.findAll();
 		int totalEarned=0;
-		for (UserTransactions uts : allTransactions) {
+		for (EmployeeTransactions uts : allTransactions) {
 			if (USER_CODE1.equals(uts.getCode())) {
 				totalEarned=uts.getEarned();
 			}
@@ -98,21 +98,21 @@ public class EmployeeTransactionsTest extends ArquillianTest{
 	
 	@Test
 	public void testPayday(){
-		UserTransactions firstTransaction= new UserTransactions();
+		EmployeeTransactions firstTransaction= new EmployeeTransactions();
 		firstTransaction.setCode(USER_CODE1);
 		firstTransaction.setFee(50);
 		firstTransaction.setEarned(1000);
 		utBean.setTransaction(firstTransaction);
 		utBean.addTransaction();
 		
-		UserTransactions secondTransaction= new UserTransactions();
+		EmployeeTransactions secondTransaction= new EmployeeTransactions();
 		secondTransaction.setCode(USER_CODE2);
 		secondTransaction.setFee(5000);
 		secondTransaction.setEarned(2000);
 		utBean.setTransaction(secondTransaction);
 		utBean.addTransaction();
 		
-		UserTransactions thirdTransaction= new UserTransactions();
+		EmployeeTransactions thirdTransaction= new EmployeeTransactions();
 		thirdTransaction.setCode(USER_CODE3);
 		thirdTransaction.setFee(200);
 		thirdTransaction.setEarned(200);
@@ -134,21 +134,21 @@ public class EmployeeTransactionsTest extends ArquillianTest{
 	@Test
 	public void verifyCleanUp(){
 		
-		UserTransactions firstTransaction= new UserTransactions();
+		EmployeeTransactions firstTransaction= new EmployeeTransactions();
 		firstTransaction.setCode(USER_CODE1);
 		firstTransaction.setFee(50);
 		firstTransaction.setEarned(1000);
 		utBean.setTransaction(firstTransaction);
 		utBean.addTransaction();
 		
-		UserTransactions secondTransaction= new UserTransactions();
+		EmployeeTransactions secondTransaction= new EmployeeTransactions();
 		secondTransaction.setCode(USER_CODE2);
 		secondTransaction.setFee(5000);
 		secondTransaction.setEarned(2000);
 		utBean.setTransaction(secondTransaction);
 		utBean.addTransaction();
 		
-		UserTransactions thirdTransaction= new UserTransactions();
+		EmployeeTransactions thirdTransaction= new EmployeeTransactions();
 		thirdTransaction.setCode(USER_CODE3);
 		thirdTransaction.setFee(200);
 		thirdTransaction.setEarned(200);
@@ -157,10 +157,10 @@ public class EmployeeTransactionsTest extends ArquillianTest{
 		
 		utBean.startPayday();
 		
-		List<UserTransactions> allTransactions=utDAO.findAll();
+		List<EmployeeTransactions> allTransactions=utDAO.findAll();
 		
 		boolean notNulled=false;
-		for (UserTransactions ut : allTransactions) {
+		for (EmployeeTransactions ut : allTransactions) {
 			if(ut.getCode().equals(USER_CODE1)){
 				if (ut.getEarned()!=0||ut.getFee()!=0) {
 					notNulled=true;

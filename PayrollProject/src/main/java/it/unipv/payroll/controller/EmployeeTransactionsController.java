@@ -10,14 +10,14 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
 import it.unipv.payroll.dao.PayrollDAO;
-import it.unipv.payroll.dao.UserTransactionsDAO;
+import it.unipv.payroll.dao.EmployeeTransactionsDAO;
 import it.unipv.payroll.model.Payroll;
-import it.unipv.payroll.model.UserTransactions;
+import it.unipv.payroll.model.EmployeeTransactions;
 
 @Stateless
-public class UserTransactionsController {
+public class EmployeeTransactionsController {
 
-	@Inject	UserTransactionsDAO utDao;
+	@Inject	EmployeeTransactionsDAO utDao;
 	Logger logger = Logger.getLogger(PayrollController.class);
 	
 	@PostConstruct
@@ -25,7 +25,7 @@ public class UserTransactionsController {
 		logger.info("UserTransactionController ready to receive new commands!");
 	}
 	
-	public List<UserTransactions> addTransaction(UserTransactions aTransaction) throws Exception{
+	public List<EmployeeTransactions> addTransaction(EmployeeTransactions aTransaction) throws Exception{
 		
 		if (aTransaction.getCode().isEmpty()||aTransaction.getCode().equals(null)) {
 			throw new Exception("Code cannot be null");
@@ -33,15 +33,15 @@ public class UserTransactionsController {
 		
 		utDao.add(aTransaction);
 		
-		List<UserTransactions> allTransactions= utDao.findAll();
+		List<EmployeeTransactions> allTransactions= utDao.findAll();
 		
 		return allTransactions;
 	}
 	
-	public List<UserTransactions> updateTransaction(UserTransactions aTransaction){
+	public List<EmployeeTransactions> updateTransaction(EmployeeTransactions aTransaction){
 		utDao.update(aTransaction);
 		
-		List<UserTransactions> allTransactions= utDao.findAll();
+		List<EmployeeTransactions> allTransactions= utDao.findAll();
 		
 		return allTransactions;
 
@@ -49,8 +49,8 @@ public class UserTransactionsController {
 
 	public HashMap<String, Integer> startPayday() {
 		HashMap<String, Integer> employeesEarnings= new HashMap<String, Integer>();
-		List<UserTransactions> allTransactions= utDao.findAll();
-		for (UserTransactions ut : allTransactions) {
+		List<EmployeeTransactions> allTransactions= utDao.findAll();
+		for (EmployeeTransactions ut : allTransactions) {
 			employeesEarnings.put(ut.getCode(), ut.getEarned()-ut.getFee());
 			ut.setEarned(0);
 			ut.setFee(0);

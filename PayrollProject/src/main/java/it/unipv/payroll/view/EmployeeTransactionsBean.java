@@ -8,33 +8,33 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import it.unipv.payroll.controller.UserTransactionsController;
-import it.unipv.payroll.dao.UserTransactionsDAO;
-import it.unipv.payroll.model.UserTransactions;
+import it.unipv.payroll.controller.EmployeeTransactionsController;
+import it.unipv.payroll.dao.EmployeeTransactionsDAO;
+import it.unipv.payroll.model.EmployeeTransactions;
 
 @Named
 @SessionScoped
-public class UserTransactionsBean implements Serializable{
+public class EmployeeTransactionsBean implements Serializable{
 
-	@Inject UserTransactionsController utController;
+	@Inject EmployeeTransactionsController utController;
 	
-	private UserTransactions aTransaction;
+	private EmployeeTransactions aTransaction;
 	
-	private List<UserTransactions> allTransactions;
+	private List<EmployeeTransactions> allTransactions;
 
-	public UserTransactions getTransaction() {
+	public EmployeeTransactions getTransaction() {
 		return aTransaction;
 	}
 
-	public void setTransaction(UserTransactions aTransaction) {
+	public void setTransaction(EmployeeTransactions aTransaction) {
 		this.aTransaction = aTransaction;
 	}
 
-	public List<UserTransactions> getAllTransactions() {
+	public List<EmployeeTransactions> getAllTransactions() {
 		return allTransactions;
 	}
 
-	public void setAllTransactions(List<UserTransactions> allTransactions) {
+	public void setAllTransactions(List<EmployeeTransactions> allTransactions) {
 		this.allTransactions = allTransactions;
 	}
 
