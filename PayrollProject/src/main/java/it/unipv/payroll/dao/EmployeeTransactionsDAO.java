@@ -21,7 +21,7 @@ public class EmployeeTransactionsDAO {
 	public List<EmployeeTransactions> findAll() {
 		
 		List<EmployeeTransactions> userTransactions =
-				em.createQuery("select ut from UserTransactions ut", EmployeeTransactions.class)
+				em.createQuery("select et from EmployeeTransactions et", EmployeeTransactions.class)
 				.getResultList();
 		
 		return userTransactions;
