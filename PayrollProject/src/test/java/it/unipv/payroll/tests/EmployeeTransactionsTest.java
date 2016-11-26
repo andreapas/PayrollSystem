@@ -37,13 +37,13 @@ public class EmployeeTransactionsTest extends ArquillianTest{
 		for (int i = 0; i < transactions.size(); i++) {
 			if (transactions.get(i).getCode().equals(USER_CODE1)) {
 				transaction.setCode(USER_CODE1);
-				utDAO.remove(transaction);
+				utDAO.remove(transaction.getCode());
 			}else if (transactions.get(i).getCode().equals(USER_CODE2)) {
 				transaction.setCode(USER_CODE2);
-				utDAO.remove(transaction);
+				utDAO.remove(transaction.getCode());
 			}else if (transactions.get(i).getCode().equals(USER_CODE3)) {
 				transaction.setCode(USER_CODE3);
-				utDAO.remove(transaction);
+				utDAO.remove(transaction.getCode());
 			}
 		}
 	}

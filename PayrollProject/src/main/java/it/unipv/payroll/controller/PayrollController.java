@@ -38,7 +38,7 @@ public class PayrollController {
 
 	public List<Payroll> remove(Payroll pr) {
 		
-		payrollDao.remove(pr);
+		payrollDao.remove(pr.getId());
 		List<Payroll> payrollItems= payrollDao.findAll();
 		
 		return payrollItems;

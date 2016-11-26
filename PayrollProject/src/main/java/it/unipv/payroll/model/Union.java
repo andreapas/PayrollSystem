@@ -1,12 +1,14 @@
 package it.unipv.payroll.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="unions")
-public class Union {
+public class Union implements Serializable{
 
 	@Id
 	private String unionName = null;

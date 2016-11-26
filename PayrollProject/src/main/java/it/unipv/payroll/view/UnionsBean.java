@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import it.unipv.payroll.controller.UnionsController;
-import it.unipv.payroll.dao.UnionsDAO;
 import it.unipv.payroll.model.Union;
 
 @Named
@@ -17,7 +16,6 @@ import it.unipv.payroll.model.Union;
 public class UnionsBean implements Serializable {
 	
 	@Inject UnionsController unionsController;
-	@Inject UnionsDAO unionsDao;
 
 	private Union union;
 	
@@ -26,7 +24,7 @@ public class UnionsBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		union = new Union();
-		unions = unionsDao.getUnions();
+		unions = unionsController.getAllUnions();
 	}
 
 	public Union getUnion() {
@@ -40,7 +38,7 @@ public class UnionsBean implements Serializable {
 	public void add() {
 		
 		try {
-			unionsController.addUnion(union);
+			unions=unionsController.addUnion(union);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -49,7 +47,7 @@ public class UnionsBean implements Serializable {
 	
 	public void remove(Union union) {
 		
-		unionsController.remove(union);
+		unions=unionsController.remove(union);
 	}
 	
 }

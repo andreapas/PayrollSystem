@@ -1,38 +1,15 @@
 package it.unipv.payroll.dao;
 
-import java.util.List;
-
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import it.unipv.payroll.model.Payroll;
-
 @Stateless
-public class PayrollDAO {
-	
-	@PersistenceContext
-	EntityManager em;
+public class PayrollDAO extends GenericDAO<Payroll>{
 
-	
-	//TODO:ADD GENERICS <T>
-	
-	
-	public List<Payroll> findAll() {
-		
-		List<Payroll> phoneBooks =
-				em.createQuery("select p from Payroll p", Payroll.class)
-				.getResultList();
-		
-		return phoneBooks;
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.dao.GenericPayroll#findAll()
+	 */
+	public PayrollDAO() {
+		super(Payroll.class);
 	}
-
-	public void add(Payroll payroll) {
-		em.persist(payroll);
-	}
-
-	public void remove(Payroll pr) {
-		em.remove(em.find(Payroll.class, pr.getId()));
-	}
-	
 }

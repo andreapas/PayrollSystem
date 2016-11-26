@@ -47,7 +47,7 @@ public class EmployeeController {
 	}
 
 	public List<Employee> fireEmployee(Employee anEmployee) {
-		emDAO.remove(anEmployee);
+		emDAO.remove(anEmployee.getCode());
 		
 		List<Employee>employeeList=emDAO.findAll();
 		

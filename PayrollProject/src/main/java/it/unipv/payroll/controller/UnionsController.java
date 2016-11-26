@@ -34,17 +34,21 @@ public class UnionsController {
 		
 		unionsDao.add(union);
 		
-		List<Union> unions = unionsDao.getUnions();
+		List<Union> unions = unionsDao.findAll();
 				
 		return unions; //Ma WTF!
 	}
 
 	public List<Union> remove(Union union) {
 		
-		unionsDao.remove(union);
+		unionsDao.remove(union.getUnionName());
 		
-		List<Union> unions = unionsDao.getUnions();
+		List<Union> unions = unionsDao.findAll();
 		
 		return unions; //Ma WTF!
+	}
+	
+	public List<Union> getAllUnions(){
+		return unionsDao.findAll();
 	}
 }

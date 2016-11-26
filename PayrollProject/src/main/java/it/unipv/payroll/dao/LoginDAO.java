@@ -5,28 +5,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import it.unipv.payroll.model.Login;
+import it.unipv.payroll.model.Payroll;
 
 @Stateless
-public class LoginDAO {
+public class LoginDAO extends GenericDAO<Login>{
 
-	@PersistenceContext
-	EntityManager em;
-	
-	public void add(Login aLogin) {
-		em.persist(aLogin);
-	}
-
-	public void remove(Login aLogin) {
-		em.remove(em.find(Login.class, aLogin.getHashUsername()));
-	}
-
-	public void update(Login aLogin) {
-		em.merge(aLogin);
-		
-	}
-
-	public Login getLoginCredentials(String hashUsername) {
-		return em.find(Login.class, hashUsername);
-		
+	public LoginDAO() {
+		super(Login.class);
 	}
 }

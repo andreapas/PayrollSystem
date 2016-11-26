@@ -35,8 +35,8 @@ public class LoginTest extends ArquillianTest {
 		Login aLogin= new Login();
 		aLogin.setHashUsername(hashIt(USER1));
 		aLogin.setHashPassword(hashIt(PASSWORD1));
-		if(logDAO.getLoginCredentials(hashIt(USER1))!=null){
-			logDAO.remove(aLogin);
+		if(logDAO.find(hashIt(USER1))!=null){
+			logDAO.remove(aLogin.getHashUsername());
 		}
 	}
 	@Test

@@ -20,31 +20,7 @@ public class PayrollTests extends ArquillianTest{
 	@Inject PayrollBean payrollBean;
 	@Inject PayrollDAO payrollDAO;
 	
-	@Before
-	public void cleanup(){
-		List<Payroll> payrolls=payrollDAO.findAll();
-		boolean found=false;
-		for (Payroll pr : payrolls) {
-			if ("Hi, I'm a test message. Nice to meet you!".equals(pr.getMessage())) {
-				payrollBean.remove(pr);
-			}
-		}
-	}
 	
-	
-	
-	@Test
-	public void testRemove(){
-		List<Payroll> payrolls=payrollDAO.findAll();
-		boolean found=false;
-		for (Payroll pr : payrolls) {
-			if ("Hi, I'm a test message. Nice to meet you!".equals(pr.getMessage())) {
-				found=true;
-				break;
-			}
-		}
-		Assert.assertTrue("Polite message found!", found==false);
-	}
 	
 	@Test
 	public void test() {
@@ -67,5 +43,23 @@ public class PayrollTests extends ArquillianTest{
 		Assert.assertTrue("Polite message found!", found);
 				
 	}
-
+	
+	@Test
+	public void testRemove(){
+		List<Payroll> payrolls=payrollDAO.findAll();
+		boolean found=false;
+		for (Payroll pr : payrolls) {
+			if ("Hi, I'm a test message. Nice to meet you!".equals(pr.getMessage())) {
+				payrollBean.remove(pr);
+			}
+		}
+		payrolls=payrollDAO.findAll();
+		for (Payroll pr : payrolls) {
+			if ("Hi, I'm a test message. Nice to meet you!".equals(pr.getMessage())) {
+				found=true;
+				break;
+			}
+		}
+		Assert.assertTrue("Polite message found!", found==false);
+	}
 }

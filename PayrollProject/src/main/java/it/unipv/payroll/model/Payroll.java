@@ -1,12 +1,14 @@
 package it.unipv.payroll.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="payroll")
-public class Payroll {
+public class Payroll implements Serializable{
 
 	@Id
 	private int id;

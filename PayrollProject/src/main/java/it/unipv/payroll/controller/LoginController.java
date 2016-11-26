@@ -24,7 +24,7 @@ public class LoginController {
 
 
 	public String removeLogin(Login aLogin) {
-		logDAO.remove(aLogin);
+		logDAO.remove(aLogin.getHashUsername());
 		return SUCCESS;
 	}
 
@@ -36,7 +36,7 @@ public class LoginController {
 
 
 	public String login(Login aLogin) {
-		Login foundCredentials=logDAO.getLoginCredentials(aLogin.getHashUsername());
+		Login foundCredentials=logDAO.find(aLogin.getHashUsername());
 		if(foundCredentials==null){
 			return WRONG;
 		}else if(foundCredentials.getHashPassword().equals(aLogin.getHashPassword())){
