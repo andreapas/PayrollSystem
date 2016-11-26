@@ -37,12 +37,14 @@ public class UnionsTests extends ArquillianTest {
 		
 		Union union = new Union();
 		union.setUnion("CIGL", 39.99);
+		unionsBean.setUnion(union);
 		
-		unionsBean.add(union);
+		unionsBean.add();
 		
 		union.setUnion("Cobas", 29.50);
+		unionsBean.setUnion(union);
 		
-		unionsBean.add(union);
+		unionsBean.add();
 		
 		List<Union> unions = unionsDao.getUnions();
 		int flag = 0;

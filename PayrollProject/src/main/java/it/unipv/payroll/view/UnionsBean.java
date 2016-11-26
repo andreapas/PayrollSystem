@@ -19,15 +19,25 @@ public class UnionsBean implements Serializable {
 	@Inject UnionsController unionsController;
 	@Inject UnionsDAO unionsDao;
 
+	private Union union;
+	
 	private List<Union> unions;
 	
 	@PostConstruct
 	public void init() {
-		
+		union = new Union();
 		unions = unionsDao.getUnions();
 	}
 
-	public void add(Union union) {
+	public Union getUnion() {
+		return union;
+	}
+
+	public void setUnion(Union union) {
+		this.union = union;
+	}
+
+	public void add() {
 		
 		try {
 			unionsController.addUnion(union);
