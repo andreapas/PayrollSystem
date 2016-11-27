@@ -1,0 +1,9 @@
+button,
+table {
+	width: 100%;
+}
+.ui-button-icon-left {
+	width: 30px;
+	height: 30px;
+	margin-top: -9px;
+}

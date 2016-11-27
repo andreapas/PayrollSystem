@@ -4,32 +4,93 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
-<h:head>	
+<h:head>
+
+	<link rel="stylesheet" type="text/css" href="css/style.css"></link>
+
 </h:head>
 <h:body>
-	<br />
-	<br />
+
 	<h:form>
-		<p:panelGrid columns="2">
+		<div class="ui-g">
+			<div class="ui-g-3">
 
-			<h:outputText value="Message: " />
-			<h:inputText value="#{payrollBean.payroll.message}" />
+				<p:panel id="mainMenu" header="Menu">
+					<h:panelGrid columns="1" cellpadding="10">
+						<p:button id="overviewButton" value="Overview" icon="fa fa-eye"
+							onclick="return false">
+							<p:effect type="fade" event="click" for="settingsPanel" speed="1">
+								<f:param name="mode" value="'hide'" />
+							</p:effect>
+							<p:effect type="fade" event="click" for="insertHoursPanel"
+								speed="1">
+								<f:param name="mode" value="'hide'" />
+							</p:effect>
+							<p:effect type="fade" event="click" for="overviewPanel" speed="1">
+								<f:param name="mode" value="'show'" />
+							</p:effect>
+						</p:button>
+						<p:button id="settingsButton" value="Settings" icon="fa fa-gears"
+							onclick="return false">
+							<p:effect type="fade" event="click" for="overviewPanel" speed="1">
+								<f:param name="mode" value="'hide'" />
+							</p:effect>
+							<p:effect type="fade" event="click" for="insertHoursPanel"
+								speed="1">
+								<f:param name="mode" value="'hide'" />
+							</p:effect>
+							<p:effect type="fade" event="click" for="settingsPanel" speed="1">
+								<f:param name="mode" value="'show'" />
+							</p:effect>
+						</p:button>
+						<p:button id="insertHoursButton" value="Insert Hours"
+							icon="fa fa-clock-o" onclick="return false">
+							<p:effect type="fade" event="click" for="overviewPanel" speed="1">
+								<f:param name="mode" value="'hide'" />
+							</p:effect>
+							<p:effect type="fade" event="click" for="settingsPanel" speed="1">
+								<f:param name="mode" value="'hide'" />
+							</p:effect>
+							<p:effect type="fade" event="click" for="insertHoursPanel"
+								speed="1">
+								<f:param name="mode" value="'show'" />
+							</p:effect>
+						</p:button>
+					</h:panelGrid>
+				</p:panel>
 
-			<h:commandButton value="Add Entry"
-				action="#{payrollBean.addMessage()}" />
 
-		</p:panelGrid>
+			</div>
+			<div class="ui-g-9">
+
+
+				<p:panel layout="block" id="overviewPanel" header="Overview"
+					style="display: none;">
+					<h:panelGrid columns="2" cellpadding="10">
+						<h:outputText value="Overview Contents" />
+					</h:panelGrid>
+				</p:panel>
+
+				<p:panel id="settingsPanel" header="Settings" widgetVar="settings"
+					style="display: none;">
+					<h:panelGrid columns="2" cellpadding="10">
+						<h:outputText value="Settings Contents" />
+					</h:panelGrid>
+				</p:panel>
+
+				<p:panel id="insertHoursPanel" header="InsertHours"
+					widgetVar="insertHours"
+					style="display: none;">
+					<h:panelGrid columns="2" cellpadding="10">
+						<h:outputText value="Insert Hours Contents" />
+					</h:panelGrid>
+				</p:panel>
+
+
+
+			</div>
+		</div>
 	</h:form>
-	<br />
-	<h:form>
-    <p:dataList value="#{payrollBean.payrollItems}" var="item" type="unordered">
-		<h:commandButton value="Remove" action="#{payrollBean.remove(item)}" />&nbsp;&nbsp;&nbsp;&nbsp;#{item.message} 
-    </p:dataList>
-</h:form>
-	<br />
-	<br />
-	<br />
-	<br />
 
 </h:body>
 </html>
