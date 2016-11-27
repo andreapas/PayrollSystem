@@ -13,6 +13,7 @@
 
 	<h:form>
 		<div class="ui-g">
+
 			<div class="ui-g-3">
 
 				<p:panel id="mainMenu" header="Menu">
@@ -59,34 +60,47 @@
 					</h:panelGrid>
 				</p:panel>
 
-
 			</div>
-			<div class="ui-g-9">
 
+			<div class="ui-g-9">
 
 				<p:panel layout="block" id="overviewPanel" header="Overview"
 					style="display: none;">
-					<h:panelGrid columns="2" cellpadding="10">
-						<h:outputText value="Overview Contents" />
+					<h:panelGrid cellpadding="10">
+						<p:dataTable var="employee" value="#{employeeBean.employeeList}"
+							rows="1">
+							<p:column headerText="Code">
+								<h:outputText value="#{employee.code}" />
+							</p:column>
+							<p:column headerText="Name">
+								<h:outputText value="#{employee.name}" />
+							</p:column>
+							<p:column headerText="Surname">
+								<h:outputText value="#{employee.surname}" />
+							</p:column>
+							<p:column headerText="Email">
+								<h:outputText value="#{employee.email}" />
+							</p:column>
+							<p:column headerText="Union Name">
+								<h:outputText value="#{employee.union_Name}" />
+							</p:column>
+						</p:dataTable>
 					</h:panelGrid>
 				</p:panel>
 
 				<p:panel id="settingsPanel" header="Settings" widgetVar="settings"
 					style="display: none;">
-					<h:panelGrid columns="2" cellpadding="10">
+					<h:panelGrid cellpadding="10">
 						<h:outputText value="Settings Contents" />
 					</h:panelGrid>
 				</p:panel>
 
 				<p:panel id="insertHoursPanel" header="InsertHours"
-					widgetVar="insertHours"
-					style="display: none;">
-					<h:panelGrid columns="2" cellpadding="10">
+					widgetVar="insertHours" style="display: none;">
+					<h:panelGrid cellpadding="10">
 						<h:outputText value="Insert Hours Contents" />
 					</h:panelGrid>
 				</p:panel>
-
-
 
 			</div>
 		</div>

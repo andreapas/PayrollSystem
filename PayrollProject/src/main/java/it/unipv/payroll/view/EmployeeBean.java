@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import it.unipv.payroll.controller.EmployeeController;
+import it.unipv.payroll.dao.EmployeeDAO;
 import it.unipv.payroll.model.Employee;
 
 @Named
@@ -26,6 +27,11 @@ public class EmployeeBean implements Serializable{
 
 	public Employee getEmployee() {
 		return anEmployee;
+	}
+	
+	public List<Employee> getEmployeeList() {
+		
+		return employeeList;
 	}
 
 	public void hireEmployee() {
