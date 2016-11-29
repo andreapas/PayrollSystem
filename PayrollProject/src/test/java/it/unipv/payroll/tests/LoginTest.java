@@ -33,16 +33,16 @@ public class LoginTest extends ArquillianTest {
 	@After
 	public void clean(){
 		Login aLogin= new Login();
-		aLogin.setHashUsername(hashIt(USER1));
+		aLogin.setUsername(hashIt(USER1));
 		aLogin.setHashPassword(hashIt(PASSWORD1));
 		if(logDAO.find(hashIt(USER1))!=null){
-			logDAO.remove(aLogin.getHashUsername());
+			logDAO.remove(aLogin.getUsername());
 		}
 	}
 	@Test
 	public void addLoginTest() {
 		Login aLogin = new Login();
-		aLogin.setHashUsername(hashIt(USER1));
+		aLogin.setUsername(hashIt(USER1));
 		aLogin.setHashPassword(hashIt(PASSWORD1));
 
 		logBean.setLogin(aLogin);
@@ -55,7 +55,7 @@ public class LoginTest extends ArquillianTest {
 	@Test
 	public void loginTest() {
 		Login aLogin = new Login();
-		aLogin.setHashUsername(hashIt(USER1));
+		aLogin.setUsername(hashIt(USER1));
 		aLogin.setHashPassword(hashIt(PASSWORD1));
 
 		logBean.setLogin(aLogin);
@@ -71,7 +71,7 @@ public class LoginTest extends ArquillianTest {
 	@Test
 	public void removeLoginTest() {
 		Login aLogin = new Login();
-		aLogin.setHashUsername(hashIt(USER1));
+		aLogin.setUsername(hashIt(USER1));
 		aLogin.setHashPassword(hashIt(PASSWORD1));
 
 		logBean.setLogin(aLogin);

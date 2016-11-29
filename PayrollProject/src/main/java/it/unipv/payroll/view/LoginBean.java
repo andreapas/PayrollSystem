@@ -3,6 +3,8 @@ package it.unipv.payroll.view;
 import java.io.Serializable;
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -10,39 +12,48 @@ import it.unipv.payroll.controller.LoginController;
 import it.unipv.payroll.model.Login;
 
 @Named
-@SessionScoped
-public class LoginBean implements Serializable{
+@ManagedBean
+@RequestScoped
+public class LoginBean implements Serializable {
 
-	@Inject LoginController logController;
-	
-	
-	private Login aLogin;
-	private String answer;
-	
+	@Inject
+	LoginController loginController;
+
+	private Login login;
+	private String username;
+	private String password;
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+		login.setUsername(username);
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+		login.setHashPassword(password);
+	}
+
 	public Login getLogin() {
-		return aLogin;
-	}
-	public void setLogin(Login aLogin) {
-		this.aLogin = aLogin;
+		return login;
 	}
 
-	public String addLogin() {
-		answer=logController.addLogin(aLogin);
-		return answer;
+	public void setLogin(Login login) {
+		this.login = login;
 	}
-	
-	public String removeLogin(){
-		answer=logController.removeLogin(aLogin);
-		return answer;
-	}
-	
-	public String updateLogin(String newPassword){
-		aLogin.setHashPassword(newPassword);
-		answer=logController.updateLogin(aLogin);
-		return answer;
-	}
+
 	public String login() {
-		answer=logController.login(aLogin);
-		return answer;
+		return loginController.login(login);
+	}
+
+	public String logout() {
+		return loginController.logout();
 	}
 }

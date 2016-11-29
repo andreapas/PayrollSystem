@@ -11,16 +11,16 @@ import javax.persistence.Table;
 public class Login implements Serializable{
 
 	@Id
-	private String hashUsername;
+	private String username;
 	
 	private String hashPassword;
 
-	public String getHashUsername() {
-		return hashUsername;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setHashUsername(String hashUsername) {
-		this.hashUsername = hashUsername;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getHashPassword() {

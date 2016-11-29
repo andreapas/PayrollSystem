@@ -1,6 +1,9 @@
 package it.unipv.payroll.controller;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 import it.unipv.payroll.dao.LoginDAO;
@@ -9,40 +12,45 @@ import it.unipv.payroll.model.Login;
 @Stateless
 public class LoginController {
 
-	@Inject LoginDAO logDAO;
+	@Inject LoginDAO loginDAO;
 	
 	private static String SUCCESS="Success";
 	private static String WRONG="Wrong Username or Password";
 	
-	
-	public String addLogin(Login aLogin){
+	public String addLogin(Login login){
 		
-		logDAO.add(aLogin);
+		loginDAO.add(login);
+		return SUCCESS;
+	}
+
+	public String removeLogin(Login login) {
+		loginDAO.remove(login.getUsername());
+		return SUCCESS;
+	}
+
+	public String updateLogin(Login login) {
+		loginDAO.update(login);
+		return SUCCESS;
+	}
+
+	public String login(Login login) {
 		
-		return SUCCESS;
-	}
-
-
-	public String removeLogin(Login aLogin) {
-		logDAO.remove(aLogin.getHashUsername());
-		return SUCCESS;
-	}
-
-
-	public String updateLogin(Login aLogin) {
-		logDAO.update(aLogin);
-		return SUCCESS;
-	}
-
-
-	public String login(Login aLogin) {
-		Login foundCredentials=logDAO.find(aLogin.getHashUsername());
-		if(foundCredentials==null){
-			return WRONG;
-		}else if(foundCredentials.getHashPassword().equals(aLogin.getHashPassword())){
-			return SUCCESS;
+		Login user = loginDAO.find(login.getUsername());
+		FacesContext context = FacesContext.getCurrentInstance();
+		
+		if (user == null) {
+			context.addMessage(null, new FacesMessage("Unknown login, try again"));
+			return null;
+		} else if(user.getHashPassword().equals(login.getHashPassword())){
+			context.getExternalContext().getSessionMap().put("user", user);
+            return "index.xhtml";
 		}
-		return WRONG;
+		return null;
 	}
+	
+    public String logout() {
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        return "login.xhtml";
+    }
 	
 }
