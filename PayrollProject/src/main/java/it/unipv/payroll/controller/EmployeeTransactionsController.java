@@ -18,7 +18,7 @@ import it.unipv.payroll.model.EmployeeTransactions;
 public class EmployeeTransactionsController {
 
 	@Inject	EmployeeTransactionsDAO utDao;
-	Logger logger = Logger.getLogger(PayrollController.class);
+	Logger logger = Logger.getLogger(GenericController.class);
 	
 	@PostConstruct
 	public void init() {
@@ -57,6 +57,9 @@ public class EmployeeTransactionsController {
 			utDao.update(ut);
 		}
 		return employeesEarnings;
+	}
+	public void addFee(int fee, EmployeeTransactions aTransaction){
+		
 	}
 
 }

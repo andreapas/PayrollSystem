@@ -8,6 +8,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import it.unipv.payroll.controller.GenericController;
 import it.unipv.payroll.controller.PayrollController;
 import it.unipv.payroll.dao.PayrollDAO;
 import it.unipv.payroll.model.Payroll;
@@ -46,18 +47,15 @@ public class PayrollBean implements Serializable {
 	}
 
 	public String addMessage() {
-		try {
-			payrollItems= payrollController.addPayroll(payroll);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		String answer= payrollController.add(payroll);
+		payrollItems=payrollController.findAll();
+		return answer;
 	}
 
 	public String remove(Payroll pr) {
-		payrollItems=payrollController.remove(pr);
-		return null;
+		String answer= payrollController.remove(pr.getId());
+		payrollItems=payrollController.findAll();
+		return answer;
 	}
 	
 	

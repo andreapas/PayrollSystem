@@ -16,7 +16,7 @@ public class EmployeeController {
 
 	
 	@Inject	EmployeeDAO emDAO;
-	Logger logger = Logger.getLogger(PayrollController.class);
+	Logger logger = Logger.getLogger(GenericController.class);
 	
 	@PostConstruct
 	public void init() {
