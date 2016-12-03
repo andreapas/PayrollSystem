@@ -17,6 +17,7 @@ public class Employee implements Serializable{
 	private String surname;
 	private String email;
 	private String union_name;
+	
 	public String getCode() {
 		return code;
 	}
