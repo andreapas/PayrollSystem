@@ -36,6 +36,7 @@ public class TransactionsInfoController {
 	}
 
 	public List<TransactionsInfo> getAllTransactionsInfo() {
+		
 		return tiDAO.findAll();
 	}
 
