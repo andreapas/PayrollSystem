@@ -60,6 +60,6 @@ public class PayrollTests extends ArquillianTest{
 				break;
 			}
 		}
-		Assert.assertTrue("Polite message found!", found==false);
+		Assert.assertTrue("Polite message removed!", found==false);
 	}
 }

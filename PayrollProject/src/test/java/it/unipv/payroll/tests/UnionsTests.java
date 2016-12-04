@@ -27,7 +27,6 @@ public class UnionsTests extends ArquillianTest {
 	@After
 	public void clean(){
 		List<Union> unions = unionsDao.findAll();
-		boolean found=false;
 		for (Union u : unions) {
 			if (u.getUnionName().equals(CIGL)||u.getUnionName().equals(COBAS)) {
 				unionsDao.remove(u.getUnionName());
@@ -42,12 +41,12 @@ public class UnionsTests extends ArquillianTest {
 		union.setUnion(CIGL, CIGL_TAX);
 		unionsBean.setUnion(union);
 		
-		unionsBean.add();
+		unionsBean.addUnion();
 		
 		union.setUnion(COBAS, COBAS_TAX);
 		unionsBean.setUnion(union);
 		
-		unionsBean.add();
+		unionsBean.addUnion();
 		
 		List<Union> unions = unionsDao.findAll();
 		int flag = 0;

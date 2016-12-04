@@ -2,9 +2,10 @@ package it.unipv.payroll.view;
 
 import java.io.Serializable;
 
-import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -29,7 +30,6 @@ public class LoginBean implements Serializable {
 
 	public void setUsername(String username) {
 		this.username = username;
-		login.setUsername(username);
 	}
 
 	public String getPassword() {
@@ -38,22 +38,26 @@ public class LoginBean implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
-		login.setHashPassword(password);
 	}
-
-	public Login getLogin() {
-		return login;
-	}
-
-	public void setLogin(Login login) {
-		this.login = login;
-	}
-
+	
 	public String login() {
-		return loginController.login(login);
+		FacesContext context = FacesContext.getCurrentInstance();
+			
+		if(loginController.areValidCredential(username, password)){
+			login.setUsername(username);
+			login.setHashPassword(password);
+				context.getExternalContext().getSessionMap().put("user", login);
+	            return "index.xhtml";
+			}
+		
+		context.addMessage(null, new FacesMessage("Wrong Username or Password. Try again"));
+	
+
+		return null;
 	}
 
 	public String logout() {
-		return loginController.logout();
+		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        return "login.xhtml";
 	}
 }

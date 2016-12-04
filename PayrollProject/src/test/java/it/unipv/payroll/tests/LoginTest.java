@@ -21,7 +21,7 @@ import it.unipv.payroll.view.LoginBean;
 public class LoginTest extends ArquillianTest {
 
 	private static String USER1 = "ABC001DEF";
-	private static String PASSWORD1 = "oh_no_una_password!AAARG11110101101000110101110010101010";
+	private static String PASSWORD1 = "oh_no_a_wild_password_appeared!AAARG11110101101000110101110010101010";
 
 	@Inject
 	LoginController logController;
@@ -45,7 +45,7 @@ public class LoginTest extends ArquillianTest {
 		aLogin.setUsername(hashIt(USER1));
 		aLogin.setHashPassword(hashIt(PASSWORD1));
 
-		String answer = logController.addLogin(aLogin);
+		String answer = logController.add(aLogin);
 		
 		Assert.assertTrue("Adding login credentials successfully completed", answer.equals("Success"));
 
@@ -56,12 +56,12 @@ public class LoginTest extends ArquillianTest {
 		aLogin.setUsername(hashIt(USER1));
 		aLogin.setHashPassword(hashIt(PASSWORD1));
 
-		logController.addLogin(aLogin);
+		logController.add(aLogin);
 
 		String answer = logBean.login();
 
 		// Questa va cambiata
-		//Assert.assertTrue("Login successfully completed", answer.equals("Success"));
+		Assert.assertTrue("Login successfully completed", answer.equals("Success"));
 
 	}
 	
@@ -71,9 +71,9 @@ public class LoginTest extends ArquillianTest {
 		aLogin.setUsername(hashIt(USER1));
 		aLogin.setHashPassword(hashIt(PASSWORD1));
 
-		logController.addLogin(aLogin);
+		logController.add(aLogin);
 
-		String answer = logController.removeLogin(aLogin);
+		String answer = logController.remove(aLogin.getUsername());
 
 		Assert.assertTrue("Remove login credentials successfully completed", answer.equals("Success"));
 

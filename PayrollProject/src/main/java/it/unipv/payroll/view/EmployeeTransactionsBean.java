@@ -31,33 +31,26 @@ public class EmployeeTransactionsBean implements Serializable{
 	}
 
 	public List<EmployeeTransactions> getAllTransactions() {
+		allTransactions.addAll(utController.findAll());
 		return allTransactions;
 	}
-
-	public void setAllTransactions(List<EmployeeTransactions> allTransactions) {
-		this.allTransactions = allTransactions;
-	}
-
-	public void addTransaction() {
-		try {
-			allTransactions= utController.addTransaction(aTransaction);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	public void addFee(int fee) {
+	
+	public String addTransaction() {
 		
-		aTransaction.setFee(aTransaction.getFee()+fee);
-		allTransactions= utController.updateTransaction(aTransaction);
+		String answer=utController.add(aTransaction);
+		return answer;
+	}
+
+	public String addFee(int fee, String id) {
+		
+		String answer=utController.addFee(fee, id);
+		return answer;
 		
 	}
 
-	public void addEarned(int earned) {
-		aTransaction.setEarned(aTransaction.getEarned()+earned);
-		allTransactions= utController.updateTransaction(aTransaction);
-		
+	public String addEarned(int earned, String id) {
+		String answer= utController.addEarned(earned,id);
+		return answer;
 	}
 
 	public HashMap<String, Integer> startPayday() {

@@ -17,7 +17,6 @@ public abstract class GenericDAO<T extends Serializable> implements Serializable
 	@PersistenceContext
 	EntityManager em;
 
-	// TODO:ADD GENERICS <T>
 
 	public GenericDAO(Class<T> type) {
 		this.type = type;

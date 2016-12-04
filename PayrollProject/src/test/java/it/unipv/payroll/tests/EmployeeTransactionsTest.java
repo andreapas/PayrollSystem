@@ -1,7 +1,6 @@
 package it.unipv.payroll.tests;
 
 import java.util.HashMap;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -9,11 +8,9 @@ import javax.inject.Inject;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.After;
 import org.junit.Assert;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import it.unipv.payroll.controller.EmployeeTransactionsController;
 import it.unipv.payroll.dao.EmployeeTransactionsDAO;
 import it.unipv.payroll.dao.TransactionsInfoDAO;
 import it.unipv.payroll.model.EmployeeTransactions;
@@ -34,7 +31,6 @@ public class EmployeeTransactionsTest extends ArquillianTest{
 	
 	@Inject TransactionsInfoBean tiBean;
 	@Inject TransactionsInfoDAO tiDAO;
-	
 	
 	
 	@After
@@ -65,7 +61,7 @@ public class EmployeeTransactionsTest extends ArquillianTest{
 		
 		utBean.addTransaction();
 
-		utBean.addFee(50);
+		utBean.addFee(50, aTransaction.getCode());
 		
 		List<EmployeeTransactions> allTransactions=utDAO.findAll();
 		int totalFee=0;
@@ -90,7 +86,7 @@ public class EmployeeTransactionsTest extends ArquillianTest{
 		
 		utBean.addTransaction();
 
-		utBean.addEarned(500);
+		utBean.addEarned(500, aTransaction.getCode());
 		
 		List<EmployeeTransactions> allTransactions=utDAO.findAll();
 		int totalEarned=0;
@@ -188,71 +184,23 @@ public class EmployeeTransactionsTest extends ArquillianTest{
 		Assert.assertTrue("All the emplyees has no fees nor earnings pending", notNulled==false);
 		
 	}
-/*	
-	 @Test
-	 public void employeeTransactionsInfo(){
-		 
-		 String TRANS_INFO1 = "transaction info 1";
-		 String TRANS_INFO2 = "transaction info 2";
-		 TransactionsInfo t1 = new TransactionsInfo();
-		 t1.setId(1);
-		 t1.setInfo(TRANS_INFO1);
-		 t1.setCode(USER_CODE1);
-		 tiBean.setTransactionsInfo(t1);
-		 tiBean.add();
-		 
-		 TransactionsInfo t2 = new TransactionsInfo();
-		 t2.setId(2);
-		 t2.setInfo(TRANS_INFO2);
-		 t2.setCode(USER_CODE2);
-		 tiBean.setTransactionsInfo(t2);
-		 tiBean.add();
-		 
-		 List<TransactionsInfo>	l = tiDAO.findAll();	
-		 int aux = 0;
-		 for(TransactionsInfo t:l){
-			 
-			if(t.getId()==(t1.getId()) ||t.getId()==(t2.getId())){
-				
-				aux++;
-				
-				
-			}
-			 
-		 }
-		 
-		 Assert.assertTrue("2 TransactionsInfo added!", aux == 2);
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-	 }*/
-	
+
 	@Test
-	public void TransactionsInfoTest(){
+	public void transactionsInfoTest(){
 		
 		TransactionsInfo ti1 = new TransactionsInfo();
-		ti1.setId(1);
 		ti1.setInfo("Transactions info 1");
 		ti1.setCode(USER_CODE1);
 		tiBean.setTransactionsInfo(ti1);
 		tiBean.addTransactionsInfo();
 		
 		TransactionsInfo ti2 = new TransactionsInfo();
-		ti2.setId(2);
 		ti2.setInfo("Transactions info 2");
 		ti2.setCode(USER_CODE1);
 		tiBean.setTransactionsInfo(ti2);
 		tiBean.addTransactionsInfo();
 		
 		TransactionsInfo ti3 = new TransactionsInfo();
-		ti3.setId(3);
 		ti3.setInfo("Transactions info 3");
 		ti3.setCode(USER_CODE1);
 		tiBean.setTransactionsInfo(ti3);
@@ -265,19 +213,35 @@ public class EmployeeTransactionsTest extends ArquillianTest{
 		for(TransactionsInfo t:allTransactionsInfo){
 			
 			if(t.getCode().equals(USER_CODE1)){
-				
 				aux++;
-				
 			}
 			
 			
 		}
 		
-		
 		Assert.assertTrue("3 Transactions info found!!!",aux==3);
 		
+		List<TransactionsInfo>list= tiDAO.findAll();
+		for (TransactionsInfo transactionsInfo : list) {
+			if(transactionsInfo.getInfo().equals(ti1.getInfo())){
+				tiBean.removeTransactionInfo(transactionsInfo);
+			}else if(transactionsInfo.getInfo().equals(ti2.getInfo())){
+				tiBean.removeTransactionInfo(transactionsInfo);
+			}else if(transactionsInfo.getInfo().equals(ti3.getInfo())){
+				tiBean.removeTransactionInfo(transactionsInfo);
+			} 
+		}
+		
+		List<TransactionsInfo> lastList=tiDAO.findAll();
+		int tot=0;
+		for (TransactionsInfo transactionsInfo : lastList) {
+			if (transactionsInfo.getCode().equals(USER_CODE1)) {
+				tot++;
+			}
+		}
+		
+		Assert.assertTrue("All has been deleted", tot==0);
+		
 	}
-	
-	
 
 }

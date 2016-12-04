@@ -12,14 +12,12 @@ public class TransactionsInfo implements Serializable {
 	
 	@Id 
 	private int id;
+	
 	private String info;
 	private String code;
 	
 	public int getId() {
 		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
 	}
 	public String getInfo() {
 		return info;

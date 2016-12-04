@@ -10,9 +10,6 @@ import it.unipv.payroll.model.Payroll;
 public class PayrollController extends GenericController<Payroll>{
 	
 	
-	public PayrollController() {
-		super(Payroll.class);
-	}
 	
 	public List<Payroll> findAll() {
 		return dao.findAll();

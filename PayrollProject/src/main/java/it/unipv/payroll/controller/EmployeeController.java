@@ -12,62 +12,63 @@ import it.unipv.payroll.dao.EmployeeDAO;
 import it.unipv.payroll.model.Employee;
 
 @Stateless
-public class EmployeeController {
+public class EmployeeController extends GenericController<Employee> {
 
 	
 	@Inject	EmployeeDAO emDAO;
 	Logger logger = Logger.getLogger(GenericController.class);
 	
-	@PostConstruct
-	public void init() {
-		logger.info("EmployeeController ready to receive new commands!");
-	}
+//	@PostConstruct
+//	public void init() {
+//		logger.info("EmployeeController ready to receive new commands!");
+//	}
+	
 
-	public List<Employee> hireEmployee(Employee anEmployee) throws Exception{
+//	public List<Employee> hireEmployee(Employee anEmployee) throws Exception{
+//
+//		if (anEmployee.getCode().isEmpty()||anEmployee.getCode().equals(null)) {
+//			throw new Exception("Code cannot be null");
+//		}
+//		if (anEmployee.getName().isEmpty()||anEmployee.getName().equals(null)) {
+//			throw new Exception("Name cannot be null");			
+//		}
+//		if (anEmployee.getSurname().isEmpty()||anEmployee.getSurname().equals(null)) {
+//			throw new Exception("Surname cannot be null");			
+//		}
+//		if (anEmployee.getEmail().isEmpty()||anEmployee.getEmail().equals(null)) {
+//			throw new Exception("Email cannot be null");			
+//		}
+//
+//		emDAO.add(anEmployee);
+//		
+//		List<Employee>employeeList=emDAO.findAll();
+//		
+//		return employeeList;
+//		
+//	}
 
-		if (anEmployee.getCode().isEmpty()||anEmployee.getCode().equals(null)) {
-			throw new Exception("Code cannot be null");
-		}
-		if (anEmployee.getName().isEmpty()||anEmployee.getName().equals(null)) {
-			throw new Exception("Name cannot be null");			
-		}
-		if (anEmployee.getSurname().isEmpty()||anEmployee.getSurname().equals(null)) {
-			throw new Exception("Surname cannot be null");			
-		}
-		if (anEmployee.getEmail().isEmpty()||anEmployee.getEmail().equals(null)) {
-			throw new Exception("Email cannot be null");			
-		}
-
-		emDAO.add(anEmployee);
-		
-		List<Employee>employeeList=emDAO.findAll();
-		
-		return employeeList;
-		
-	}
-
-	public List<Employee> fireEmployee(Employee anEmployee) {
-		emDAO.remove(anEmployee.getCode());
-		
-		List<Employee>employeeList=emDAO.findAll();
-		
-		return employeeList;
-	}
-
-	public List<Employee> editEmail(Employee anEmployee) {
-		emDAO.update(anEmployee);
-		
-		List<Employee>employeeList=emDAO.findAll();
-		
-		return employeeList;
-	}
-	public List<Employee> editUnion(Employee anEmployee) {
-		emDAO.update(anEmployee);
-		
-		List<Employee>employeeList=emDAO.findAll();
-		
-		return employeeList;
-	}
+//	public List<Employee> fireEmployee(Employee anEmployee) {
+//		emDAO.remove(anEmployee.getCode());
+//		
+//		List<Employee>employeeList=emDAO.findAll();
+//		
+//		return employeeList;
+//	}
+//
+//	public List<Employee> editEmail(Employee anEmployee) {
+//		emDAO.update(anEmployee);
+//		
+//		List<Employee>employeeList=emDAO.findAll();
+//		
+//		return employeeList;
+//	}
+//	public List<Employee> editUnion(Employee anEmployee) {
+//		emDAO.update(anEmployee);
+//		
+//		List<Employee>employeeList=emDAO.findAll();
+//		
+//		return employeeList;
+//	}
 	
 	
 

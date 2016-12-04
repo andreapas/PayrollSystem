@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import it.unipv.payroll.controller.EmployeeController;
+import it.unipv.payroll.controller.GenericController;
 import it.unipv.payroll.dao.EmployeeDAO;
 import it.unipv.payroll.model.Employee;
 
@@ -15,7 +16,7 @@ import it.unipv.payroll.model.Employee;
 @SessionScoped
 public class EmployeeBean implements Serializable{
 
-	@Inject EmployeeController emController;
+	@Inject GenericController<Employee> emController;
 	
 	private Employee anEmployee;
 	private List<Employee> employeeList;
@@ -34,29 +35,29 @@ public class EmployeeBean implements Serializable{
 		return employeeList;
 	}
 
-	public void hireEmployee() {
-		try {
-			employeeList=emController.hireEmployee(anEmployee);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public String hireEmployee() {
+
+		String answer=emController.add(anEmployee);
+		return answer;
+	}
+
+	public String fireEmployee() {
+		String answer=emController.remove(anEmployee.getCode());
+		return answer;
 		
 	}
 
-	public void fireEmployee() {
-		employeeList=emController.fireEmployee(anEmployee);
-		
-	}
-
-	public void editEmail(String newEmail) {
+	public String editEmail(String newEmail) {
 		anEmployee.setEmail(newEmail);
-		employeeList=emController.editEmail(anEmployee);
+		String answer=emController.update(anEmployee);
+		return answer;
 		
 	}
 	
-	public void editUnion(String newUnion) {
+	public String editUnion(String newUnion) {
 		anEmployee.setUnion_Name(newUnion);
-		employeeList=emController.editUnion(anEmployee);
+		String answer=emController.update(anEmployee);
+		return answer;
 		
 	}
 

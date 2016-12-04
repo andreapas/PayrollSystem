@@ -20,12 +20,6 @@ public class UnionsBean implements Serializable {
 	private Union union;
 	
 	private List<Union> unions;
-	
-	@PostConstruct
-	public void init() {
-		union = new Union();
-		unions = unionsController.getAllUnions();
-	}
 
 	public Union getUnion() {
 		return union;
@@ -35,19 +29,15 @@ public class UnionsBean implements Serializable {
 		this.union = union;
 	}
 
-	public void add() {
-		
-		try {
-			unions=unionsController.addUnion(union);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public String addUnion() {
+			String answer=unionsController.add(union);
+			return answer;
 	}
 	
-	public void remove(Union union) {
+	public String removeUnion(Union union) {
 		
-		unions=unionsController.remove(union);
+		String answer=unionsController.remove(union);
+		return answer;
 	}
 	
 }

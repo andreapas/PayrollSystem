@@ -21,11 +21,6 @@ public class TransactionsInfoBean implements Serializable {
 	private TransactionsInfo transactionsInfo;
 	private List<TransactionsInfo> allTransactionsInfo;
 
-	@PostConstruct
-	public void init() {
-		transactionsInfo = new TransactionsInfo();
-		allTransactionsInfo = tiController.getAllTransactionsInfo();
-	}
 
 	public TransactionsInfo getTransactionsInfo() {
 		return transactionsInfo;
@@ -36,28 +31,21 @@ public class TransactionsInfoBean implements Serializable {
 	}
 
 	public List<TransactionsInfo> getAllTransactionsInfo() {
+		allTransactionsInfo.addAll(tiController.findAll());
 		return allTransactionsInfo;
 	}
-
-	public void setAllTransactionsInfo(List<TransactionsInfo> allTransactionsInfo) {
-
-		this.allTransactionsInfo = allTransactionsInfo;
-
+	
+	public String addTransactionsInfo(){
+		
+		String answer = tiController.add(transactionsInfo);
+	
+		return answer;
 	}
 	
-	public void addTransactionsInfo(){
-		
-		try{
-			
-			allTransactionsInfo = tiController.addTransactionsInfo(transactionsInfo);
-			
-		}catch(Exception e){
-			
-			e.printStackTrace();
-			
-		}
-		
-		
+	public String removeTransactionInfo(TransactionsInfo transactionsInfo){
+		String answer= tiController.remove(transactionsInfo.getId());
+		return answer;
 	}
+	
 
 }

@@ -1,56 +1,43 @@
 package it.unipv.payroll.controller;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 
-import it.unipv.payroll.dao.LoginDAO;
 import it.unipv.payroll.model.Login;
 
 @Stateless
-public class LoginController {
+public class LoginController extends GenericController<Login> {
 
-	@Inject LoginDAO loginDAO;
 	
-	private static String SUCCESS="Success";
-	private static String WRONG="Wrong Username or Password";
-	
-	public String addLogin(Login login){
+	public boolean areValidCredential(String username, String password) {
 		
-		loginDAO.add(login);
-		return SUCCESS;
-	}
-
-	public String removeLogin(Login login) {
-		loginDAO.remove(login.getUsername());
-		return SUCCESS;
-	}
-
-	public String updateLogin(Login login) {
-		loginDAO.update(login);
-		return SUCCESS;
-	}
-
-	public String login(Login login) {
-		
-		Login user = loginDAO.find(login.getUsername());
-		FacesContext context = FacesContext.getCurrentInstance();
-		
-		if (user == null) {
-			context.addMessage(null, new FacesMessage("Unknown login, try again"));
-			return null;
-		} else if(user.getHashPassword().equals(login.getHashPassword())){
-			context.getExternalContext().getSessionMap().put("user", user);
-            return "index.xhtml";
+		Login loginAttempt=dao.find(username);
+		if(loginAttempt!=null){
+			if (loginAttempt.getHashPassword().equals(password)) {
+				return true;
+			}else{
+				return false;
+			}
+		} else{
+			return false;
 		}
-		return null;
 	}
-	
-    public String logout() {
-        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-        return "login.xhtml";
-    }
+    
+//	public String addLogin(Login login){
+//		
+//		loginDAO.add(login);
+//		return SUCCESS;
+//	}
+//
+//	public String removeLogin(Login login) {
+//		loginDAO.remove(login.getUsername());
+//		return SUCCESS;
+//	}
+//
+//	public String updateLogin(Login login) {
+//		loginDAO.update(login);
+//		return SUCCESS;
+//	}
+//
+
 	
 }

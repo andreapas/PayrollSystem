@@ -14,41 +14,37 @@ import it.unipv.payroll.model.Payroll;
 import it.unipv.payroll.model.Union;
 
 @Stateless
-public class UnionsController {
+public class UnionsController extends GenericController<Union>{
 
 
-	@Inject	UnionsDAO unionsDao;
-	Logger logger = Logger.getLogger(UnionsController.class);
-	
-	@PostConstruct
-	public void init() {
-		logger.info("UnionsController ready to receive new commands!");
-	}
-
-	public List<Union> addUnion(Union union) throws Exception{
-		
-		if (union.getUnionName() == null || union.getUnionFee() == -1) {
-			
-			throw new Exception("Empty fields");
-		}
-		
-		unionsDao.add(union);
-		
-		List<Union> unions = unionsDao.findAll();
-				
-		return unions; //Ma WTF!
-	}
-
-	public List<Union> remove(Union union) {
-		
-		unionsDao.remove(union.getUnionName());
-		
-		List<Union> unions = unionsDao.findAll();
-		
-		return unions; //Ma WTF!
-	}
+//	@Inject	UnionsDAO unionsDao;
+//	Logger logger = Logger.getLogger(UnionsController.class);
+//	
+//	@PostConstruct
+//	public void init() {
+//		logger.info("UnionsController ready to receive new commands!");
+//	}
 	
 	public List<Union> getAllUnions(){
-		return unionsDao.findAll();
+		return dao.findAll();
 	}
+
+	
+//	public List<Union> addUnion(Union union) throws Exception{
+//		unionsDao.add(union);
+//		
+//		List<Union> unions = unionsDao.findAll();
+//				
+//		return unions; //Ma WTF!
+//	}
+
+//	public List<Union> remove(Union union) {
+//		
+//		unionsDao.remove(union.getUnionName());
+//		
+//		List<Union> unions = unionsDao.findAll();
+//		
+//		return unions; //Ma WTF!
+//	}
+//	
 }

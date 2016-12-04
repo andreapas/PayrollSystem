@@ -1,10 +1,8 @@
 package it.unipv.payroll.controller;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
@@ -12,13 +10,10 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
 import it.unipv.payroll.dao.GenericDAO;
-import it.unipv.payroll.dao.PayrollDAO;
-import it.unipv.payroll.model.Payroll;
 
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public abstract class GenericController<T extends Serializable> {
 
-	private final Class<T> type;
 
 	private static String SUCCESS = "Operation completed successfully.";
 	private static String ERROR = "Something went wrong. No changes has been made.";
@@ -32,9 +27,6 @@ public abstract class GenericController<T extends Serializable> {
 		logger.info("Controller ready to receive new commands!");
 	}
 
-	public GenericController(Class<T> type) {
-		this.type = type;
-	}
 
 	public String add(T element) {
 		dao.add(element);
@@ -46,4 +38,8 @@ public abstract class GenericController<T extends Serializable> {
 		return SUCCESS;
 	}
 
+	public String update(T element) {
+		dao.update(element);
+		return SUCCESS;
+	}
 }
