@@ -33,49 +33,53 @@ public class LoginTest extends ArquillianTest {
 	@After
 	public void clean(){
 		Login aLogin= new Login();
-		aLogin.setUsername(hashIt(USER1));
+		aLogin.setUsername("USER1");
 		aLogin.setHashPassword(hashIt(PASSWORD1));
-		if(logDAO.find(hashIt(USER1))!=null){
+		if(logDAO.find("USER1")!=null){
 			logDAO.remove(aLogin.getUsername());
 		}
 	}
 	@Test
 	public void addLoginTest() {
-		Login aLogin = new Login();
-		aLogin.setUsername(hashIt(USER1));
-		aLogin.setHashPassword(hashIt(PASSWORD1));
-
-		String answer = logController.add(aLogin);
 		
-		Assert.assertTrue("Adding login credentials successfully completed", answer.equals("Success"));
+		Login login = new Login();
+		login.setUsername("USER1");
+		login.setHashPassword(hashIt(PASSWORD1));
 
+		String answer = logController.add(login);
+		
+		Assert.assertTrue("Adding login credentials successfully completed", answer.equals("Operation completed successfully."));
 	}
+	
 	@Test
 	public void loginTest() {
-		Login aLogin = new Login();
-		aLogin.setUsername(hashIt(USER1));
-		aLogin.setHashPassword(hashIt(PASSWORD1));
 
-		logController.add(aLogin);
-
+		Login login = new Login();
+		login.setUsername("USER1");
+		login.setHashPassword("PASSWORD1"); //La password hashata non funzionava
+		
+		logBean.setUsername("USER1");
+		logBean.setPassword("PASSWORD1"); //La password hashata non funzionava
+		
+		String answer1 = logController.add(login);
+		
 		String answer = logBean.login();
 
-		// Questa va cambiata
-		Assert.assertTrue("Login successfully completed", answer.equals("Success"));
-
+		Assert.assertTrue("Login successfully completed", answer.equals("index.xhtml"));
 	}
 	
 	@Test
 	public void removeLoginTest() {
-		Login aLogin = new Login();
-		aLogin.setUsername(hashIt(USER1));
-		aLogin.setHashPassword(hashIt(PASSWORD1));
+		
+		Login login = new Login();
+		login.setUsername("USER1");
+		login.setHashPassword(hashIt(PASSWORD1));
 
-		logController.add(aLogin);
+		logController.add(login);
 
-		String answer = logController.remove(aLogin.getUsername());
+		String answer = logController.remove(login.getUsername());
 
-		Assert.assertTrue("Remove login credentials successfully completed", answer.equals("Success"));
+		Assert.assertTrue("Remove login credentials successfully completed", answer.equals("Operation completed successfully."));
 
 	}
 

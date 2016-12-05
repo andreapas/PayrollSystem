@@ -9,7 +9,6 @@ public class LoginController extends GenericController<Login> {
 
 	
 	public boolean areValidCredential(String username, String password) {
-		
 		Login loginAttempt=dao.find(username);
 		if(loginAttempt!=null){
 			if (loginAttempt.getHashPassword().equals(password)) {

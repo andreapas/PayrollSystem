@@ -42,16 +42,15 @@ public class LoginBean implements Serializable {
 	
 	public String login() {
 		FacesContext context = FacesContext.getCurrentInstance();
-			
+		
 		if(loginController.areValidCredential(username, password)){
 			login.setUsername(username);
 			login.setHashPassword(password);
-				context.getExternalContext().getSessionMap().put("user", login);
-	            return "index.xhtml";
-			}
+			context.getExternalContext().getSessionMap().put("user", login);
+	        return "index.xhtml";
+		}
 		
 		context.addMessage(null, new FacesMessage("Wrong Username or Password. Try again"));
-	
 
 		return null;
 	}
