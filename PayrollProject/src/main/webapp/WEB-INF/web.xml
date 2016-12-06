@@ -3,15 +3,6 @@
  xmlns="http://java.sun.com/xml/ns/javaee"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
  <display-name>PayrollSystem</display-name>
- <filter>
-    <filter-name>LoginFilter</filter-name>
-    <filter-class>it.unipv.payroll.model.LoginFilter</filter-class>
-</filter>
-
-<filter-mapping>
-    <filter-name>LoginFilter</filter-name>
-    <url-pattern>/faces/index.xhtml</url-pattern>
-</filter-mapping>
 
  <context-param>
   <param-name>primefaces.FONT_AWESOME</param-name>
