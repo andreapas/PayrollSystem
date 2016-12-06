@@ -56,12 +56,12 @@ public class LoginTest extends ArquillianTest {
 
 		Login login = new Login();
 		login.setUsername(USER1);
-		login.setHashPassword(hashIt(PASSWORD1));
-		
-		logBean.setUsername(USER1);
-		logBean.setPassword(hashIt(PASSWORD1));
+		login.setHashPassword(PASSWORD1); // è senza hash
 		
 		String answer1 = logController.add(login);
+		
+		logBean.setUsername(USER1);
+		logBean.setPassword(PASSWORD1); // è senza hash
 		
 		String answer = logBean.login();
 
