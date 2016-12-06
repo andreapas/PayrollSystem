@@ -46,6 +46,7 @@ public class LoginBean implements Serializable {
 		if(loginController.areValidCredential(username, password)){
 			login.setUsername(username);
 			login.setHashPassword(password);
+			System.out.println("************* sono dentro yeee");
 			//context.getExternalContext().getSessionMap().put("user", login);
 	        return "index.xhtml";
 		}
