@@ -33,9 +33,9 @@ public class LoginTest extends ArquillianTest {
 	@After
 	public void clean(){
 		Login aLogin= new Login();
-		aLogin.setUsername("USER1");
+		aLogin.setUsername(USER1);
 		aLogin.setHashPassword(hashIt(PASSWORD1));
-		if(logDAO.find("USER1")!=null){
+		if(logDAO.find(USER1)!=null){
 			logDAO.remove(aLogin.getUsername());
 		}
 	}
@@ -43,7 +43,7 @@ public class LoginTest extends ArquillianTest {
 	public void addLoginTest() {
 		
 		Login login = new Login();
-		login.setUsername("USER1");
+		login.setUsername(USER1);
 		login.setHashPassword(hashIt(PASSWORD1));
 
 		String answer = logController.add(login);
@@ -55,11 +55,11 @@ public class LoginTest extends ArquillianTest {
 	public void loginTest() {
 
 		Login login = new Login();
-		login.setUsername("USER1");
-		login.setHashPassword("PASSWORD1"); //La password hashata non funzionava
+		login.setUsername(USER1);
+		login.setHashPassword(hashIt(PASSWORD1));
 		
-		logBean.setUsername("USER1");
-		logBean.setPassword("PASSWORD1"); //La password hashata non funzionava
+		logBean.setUsername(USER1);
+		logBean.setPassword(hashIt(PASSWORD1));
 		
 		String answer1 = logController.add(login);
 		
@@ -72,7 +72,7 @@ public class LoginTest extends ArquillianTest {
 	public void removeLoginTest() {
 		
 		Login login = new Login();
-		login.setUsername("USER1");
+		login.setUsername(USER1);
 		login.setHashPassword(hashIt(PASSWORD1));
 
 		logController.add(login);
