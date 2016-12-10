@@ -3,6 +3,7 @@ package it.unipv.payroll.dao;
 import javax.ejb.Stateless;
 
 import it.unipv.payroll.model.Payroll;
+
 @Stateless
 public class PayrollDAO extends GenericDAO<Payroll>{
 

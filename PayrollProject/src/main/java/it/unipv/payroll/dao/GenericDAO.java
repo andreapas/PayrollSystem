@@ -10,7 +10,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
 
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
-public abstract class GenericDAO<T extends Serializable> implements Serializable {
+public abstract class GenericDAO<T extends Serializable> {
 
 	private final Class<T> type;
 

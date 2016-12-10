@@ -4,6 +4,7 @@ import javax.ejb.Stateless;
 
 import it.unipv.payroll.model.Employee;
 
+
 @Stateless
 public class EmployeeDAO extends GenericDAO<Employee>{
 

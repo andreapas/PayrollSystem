@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 
 import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.dao.EmployeeDAO;
+import it.unipv.payroll.dao.GenericDAO;
 import it.unipv.payroll.model.Employee;
 import it.unipv.payroll.view.EmployeeBean;
 

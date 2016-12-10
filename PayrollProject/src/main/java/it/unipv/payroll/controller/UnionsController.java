@@ -2,15 +2,8 @@ package it.unipv.payroll.controller;
 
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 
-import org.apache.log4j.Logger;
-
-import it.unipv.payroll.dao.PayrollDAO;
-import it.unipv.payroll.dao.UnionsDAO;
-import it.unipv.payroll.model.Payroll;
 import it.unipv.payroll.model.Union;
 
 @Stateless

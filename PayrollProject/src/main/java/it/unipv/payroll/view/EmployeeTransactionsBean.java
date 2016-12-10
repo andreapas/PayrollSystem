@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import it.unipv.payroll.controller.EmployeeTransactionsController;
-import it.unipv.payroll.dao.EmployeeTransactionsDAO;
 import it.unipv.payroll.model.EmployeeTransactions;
 
 @Named

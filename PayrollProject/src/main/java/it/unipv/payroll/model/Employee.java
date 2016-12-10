@@ -2,12 +2,14 @@ package it.unipv.payroll.model;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.RequestScoped;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="employees")
+@RequestScoped
 public class Employee implements Serializable{
 
 	@Id

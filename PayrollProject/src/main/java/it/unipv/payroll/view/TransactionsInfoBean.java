@@ -3,8 +3,8 @@ package it.unipv.payroll.view;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -15,8 +15,7 @@ import it.unipv.payroll.model.TransactionsInfo;
 @SessionScoped
 public class TransactionsInfoBean implements Serializable {
 
-	@Inject
-	TransactionsInfoController tiController;
+	@Inject TransactionsInfoController tiController;
 
 	private TransactionsInfo transactionsInfo;
 	private List<TransactionsInfo> allTransactionsInfo;

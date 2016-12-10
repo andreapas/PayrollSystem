@@ -8,9 +8,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import it.unipv.payroll.controller.GenericController;
 import it.unipv.payroll.controller.PayrollController;
-import it.unipv.payroll.dao.PayrollDAO;
 import it.unipv.payroll.model.Payroll;
 
 @Named
@@ -18,7 +16,6 @@ import it.unipv.payroll.model.Payroll;
 public class PayrollBean implements Serializable {
 
 	@Inject PayrollController payrollController;
-	@Inject PayrollDAO payrollDAO;
 	
 	private Payroll payroll;
 	
@@ -27,7 +24,6 @@ public class PayrollBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		payroll = new Payroll();
-		payrollItems = payrollDAO.findAll();
 	}
 
 	public Payroll getPayroll() {

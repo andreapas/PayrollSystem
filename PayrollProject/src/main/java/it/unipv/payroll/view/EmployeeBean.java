@@ -4,12 +4,11 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.controller.GenericController;
-import it.unipv.payroll.dao.EmployeeDAO;
 import it.unipv.payroll.model.Employee;
 
 @Named
