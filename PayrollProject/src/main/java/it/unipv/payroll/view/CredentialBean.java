@@ -17,7 +17,7 @@ import it.unipv.payroll.model.Login;
 @Named
 @ManagedBean
 @RequestScoped
-public class LoginBean implements Serializable {
+public class CredentialBean implements Serializable {
 
 	@Inject
 	LoginController loginController;

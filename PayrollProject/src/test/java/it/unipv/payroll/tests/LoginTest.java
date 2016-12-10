@@ -15,7 +15,7 @@ import org.junit.runner.RunWith;
 import it.unipv.payroll.controller.LoginController;
 import it.unipv.payroll.dao.LoginDAO;
 import it.unipv.payroll.model.Login;
-import it.unipv.payroll.view.LoginBean;
+import it.unipv.payroll.view.CredentialBean;
 
 @RunWith(Arquillian.class)
 public class LoginTest extends ArquillianTest {
@@ -28,7 +28,7 @@ public class LoginTest extends ArquillianTest {
 	@Inject
 	LoginDAO logDAO;
 	@Inject
-	LoginBean logBean;
+	CredentialBean logBean;
 
 	@After
 	public void clean(){
