@@ -21,7 +21,7 @@
 				<p:panel id="mainMenu" header="Menu">
 					<h:panelGrid columns="1" cellpadding="10">
 						<p>Welcome, #{user.fullName}</p>
-						<h:commandButton value="logout" action="#{loginBean.logout}" />
+						<h:commandButton value="logout" action="logout()" />
 						<p:button id="overviewButton" value="Overview" icon="fa fa-eye"
 							onclick="return false">
 							<p:effect type="fade" event="click" for="settingsPanel" speed="1">

@@ -4,13 +4,13 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import it.unipv.payroll.model.Login;
+import it.unipv.payroll.model.Credentials;
 import it.unipv.payroll.model.Payroll;
 
 @Stateless
-public class LoginDAO extends GenericDAO<Login>{
+public class LoginDAO extends GenericDAO<Credentials>{
 
 	public LoginDAO() {
-		super(Login.class);
+		super(Credentials.class);
 	}
 }

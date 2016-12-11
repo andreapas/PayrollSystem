@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
 
 import it.unipv.payroll.controller.LoginController;
 import it.unipv.payroll.dao.LoginDAO;
-import it.unipv.payroll.model.Login;
+import it.unipv.payroll.model.Credentials;
 import it.unipv.payroll.view.CredentialBean;
 
 @RunWith(Arquillian.class)
@@ -32,9 +32,9 @@ public class LoginTest extends ArquillianTest {
 
 	@After
 	public void clean(){
-		Login aLogin= new Login();
+		Credentials aLogin= new Credentials();
 		aLogin.setUsername(USER1);
-		aLogin.setHashPassword(hashIt(PASSWORD1));
+		aLogin.setPassword(hashIt(PASSWORD1));
 		if(logDAO.find(USER1)!=null){
 			logDAO.remove(aLogin.getUsername());
 		}
