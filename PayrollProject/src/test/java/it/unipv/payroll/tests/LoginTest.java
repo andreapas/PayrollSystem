@@ -12,10 +12,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import it.unipv.payroll.controller.LoginController;
-import it.unipv.payroll.dao.LoginDAO;
+import it.unipv.payroll.controller.CredentialsController;
+import it.unipv.payroll.dao.CredentialsDAO;
 import it.unipv.payroll.model.Credentials;
-import it.unipv.payroll.view.CredentialBean;
+import it.unipv.payroll.view.CredentialsBean;
 
 @RunWith(Arquillian.class)
 public class LoginTest extends ArquillianTest {
@@ -24,11 +24,11 @@ public class LoginTest extends ArquillianTest {
 	private static String PASSWORD1 = "oh_no_a_wild_password_appeared!AAARG11110101101000110101110010101010";
 
 	@Inject
-	LoginController logController;
+	CredentialsController logController;
 	@Inject
-	LoginDAO logDAO;
+	CredentialsDAO logDAO;
 	@Inject
-	CredentialBean logBean;
+	CredentialsBean logBean;
 
 	@After
 	public void clean(){
@@ -42,7 +42,7 @@ public class LoginTest extends ArquillianTest {
 	@Test
 	public void addLoginTest() {
 		
-		logBean.setUsername(USER1);
+		logBean.setCode(USER1);
 		logBean.setPassword(hashIt(PASSWORD1));
 		String answer = logBean.addLogin();
 
@@ -53,7 +53,7 @@ public class LoginTest extends ArquillianTest {
 	@Test
 	public void removeLoginTest() {
 		
-		logBean.setUsername(USER1);
+		logBean.setCode(USER1);
 		logBean.setPassword(hashIt(PASSWORD1));
 
 		logBean.addLogin();

@@ -18,7 +18,7 @@
 				<p:panel id="mainMenu" header="Menu">
 					<h:panelGrid columns="1" cellpadding="10">
 						<p>Welcome, #{credentialBean.username}</p>
-						<h:commandButton value="logout" action="#{credentialBean.logout()}" />
+						<h:commandButton value="logout" action="#{credentialsBean.logout()}" />
 						<p:button id="overviewButton" value="Overview" icon="fa fa-eye"
 							onclick="return false">
 							<p:effect type="fade" event="click" for="settingsPanel" speed="1">
@@ -68,7 +68,7 @@
 				<p:panel layout="block" id="overviewPanel" header="Overview"
 					style="display: none;">
 					<h:panelGrid cellpadding="10">
-						<p:dataTable var="employee" value="#{employeeBean.employeeList}"
+						<p:dataTable var="employee" value="#{employeeBean.employee}"
 							rows="1">
 							<p:column headerText="Code">
 								<h:outputText value="#{employee.code}" />

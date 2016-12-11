@@ -9,27 +9,27 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
-import it.unipv.payroll.controller.LoginController;
+import it.unipv.payroll.controller.CredentialsController;
 import it.unipv.payroll.model.Credentials;
 
 @Named
 @ManagedBean
 @RequestScoped
-public class CredentialBean implements Serializable {
+public class CredentialsBean implements Serializable {
 
 	@Inject
-	LoginController loginController;
+	CredentialsController credentialsController;
 
 	private Credentials login;
-	private String username;
+	private String code;
 	private String password;
 
 //	public String getUsername() {
 //		return username;
 //	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setCode(String username) {
+		this.code = username;
 	}
 
 	public String getPassword() {
@@ -42,11 +42,11 @@ public class CredentialBean implements Serializable {
 	}
 	
 	public String addLogin() {
-		return loginController.add(login);
+		return credentialsController.add(login);
 	}
 
 	public String removeLogin() {
-		return loginController.remove(username);
+		return credentialsController.remove(code);
 	}
 	public String logout() {
 	    HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
@@ -54,14 +54,14 @@ public class CredentialBean implements Serializable {
 	    return "/index.xhtml?faces-redirect=true";
 	}
 
-	public boolean isUserLoggedIn() {
-	    String user = this.getUsername();
-	    boolean result = !((user == null)|| user.isEmpty());
-	    return result;
-	}
+//	public boolean isUserLoggedIn() {
+//	    String user = this.getUsername();
+//	    boolean result = !((user == null)|| user.isEmpty());
+//	    return result;
+//	}
 
 	public String getUsername() {
-	    username = FacesContext.getCurrentInstance().getExternalContext().getRemoteUser();
-	    return username;
+	    code = FacesContext.getCurrentInstance().getExternalContext().getRemoteUser();
+	    return code;
 	}    
 }
