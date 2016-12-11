@@ -1,17 +1,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+<html xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
-
 	<link rel="stylesheet" type="text/css" href="css/style.css"></link>
-
 </h:head>
+
 <h:body>
-
-
 
 	<h:form>
 		<div class="ui-g">
@@ -22,12 +17,16 @@
 					<h:panelGrid columns="1" cellpadding="10">
 						<p>Welcome, #{user.fullName}</p>
 						<h:commandButton value="logout" action="#{loginBean.logout}" />
+
+
+
+
 						<p:button id="overviewButton" value="Overview" icon="fa fa-eye"
 							onclick="return false">
 							<p:effect type="fade" event="click" for="settingsPanel" speed="1">
 								<f:param name="mode" value="'hide'" />
 							</p:effect>
-							<p:effect type="fade" event="click" for="insertHoursPanel"
+							<p:effect type="fade" event="click" for="insertSalesPanel"
 								speed="1">
 								<f:param name="mode" value="'hide'" />
 							</p:effect>
@@ -35,12 +34,15 @@
 								<f:param name="mode" value="'show'" />
 							</p:effect>
 						</p:button>
+
+
+
 						<p:button id="settingsButton" value="Settings" icon="fa fa-gears"
 							onclick="return false">
 							<p:effect type="fade" event="click" for="overviewPanel" speed="1">
 								<f:param name="mode" value="'hide'" />
 							</p:effect>
-							<p:effect type="fade" event="click" for="insertHoursPanel"
+							<p:effect type="fade" event="click" for="insertSalesPanel"
 								speed="1">
 								<f:param name="mode" value="'hide'" />
 							</p:effect>
@@ -48,23 +50,46 @@
 								<f:param name="mode" value="'show'" />
 							</p:effect>
 						</p:button>
-						<p:button id="insertHoursButton" value="Insert Hours"
-							icon="fa fa-clock-o" onclick="return false">
+
+
+
+
+						<p:button id="insertSalesButton" value="Insert Sales"
+							icon="fa fa-eur" onclick="return false">
 							<p:effect type="fade" event="click" for="overviewPanel" speed="1">
 								<f:param name="mode" value="'hide'" />
 							</p:effect>
 							<p:effect type="fade" event="click" for="settingsPanel" speed="1">
 								<f:param name="mode" value="'hide'" />
 							</p:effect>
-							<p:effect type="fade" event="click" for="insertHoursPanel"
+							<p:effect type="fade" event="click" for="insertSalesPanel"
 								speed="1">
 								<f:param name="mode" value="'show'" />
 							</p:effect>
 						</p:button>
+
+
+
+
+
+
+
+
 					</h:panelGrid>
 				</p:panel>
 
 			</div>
+
+
+
+
+
+
+
+
+
+
+
 
 			<div class="ui-g-9">
 
@@ -92,44 +117,59 @@
 					</h:panelGrid>
 				</p:panel>
 
+
+
 				<p:panel id="settingsPanel" header="Settings" widgetVar="settings"
 					style="display: none;">
 					<h:panelGrid cellpadding="10">
 						<p:outputLabel for="paymentMethod" value="Method of payment:" />
-						<p:selectOneRadio id="paymentMethod" value="#{someBean.paymentMethod}">
-							<f:selectItem itemLabel="Mailed to the postal address" itemValue="Mail" />
-							<f:selectItem itemLabel="Held for pickup by the paymaster" itemValue="Paymaster" />
-							<f:selectItem itemLabel="Deposited into the bank account" itemValue="Bank" />
+						<p:selectOneRadio id="paymentMethod"
+							value="#{someBean.paymentMethod}">
+							<f:selectItem itemLabel="Mailed to the postal address"
+								itemValue="Mail" />
+							<f:selectItem itemLabel="Held for pickup by the paymaster"
+								itemValue="Paymaster" />
+							<f:selectItem itemLabel="Deposited into the bank account"
+								itemValue="Bank" />
 						</p:selectOneRadio>
-						<p:commandButton value="Submit Payment Method" actionListener="#{someBean.updatePayment}" />
+						<p:commandButton value="Submit Payment Method"
+							actionListener="#{someBean.updatePayment}" />
 					</h:panelGrid>
 				</p:panel>
 
-				<p:panel id="insertHoursPanel" header="Insert Hours"
-					widgetVar="insertHours" style="display: none;">
+				<p:panel id="insertSalesPanel" header="Insert sales"
+					widgetVar="insertSales" style="display: none;">
+
 					<h:panelGrid cellpadding="10">
 
-						<h:outputLabel for="id" value="ID: *" />
-						<p:inputText id="id" value="#{someBean.id}" placeholder="ID"
-							required="true" />
 
-						<p:outputLabel for="h" value="Amount of hours:" />
-						<p:inputText id="h" value="#{someBean.h}" required="true"
-							disabled="true" />
-						<p:slider for="h" step="1" maxValue="20" />
+						<h:outputLabel for="id" value="ID:" />
+						<p:inputText id="id" required="true" placeholder="ID" />
+
+						<h:outputLabel for="amount" value="Amount:" />
+						<p:inputText id="amount" required="true" />
+
+						<p:outputLabel for="date" value="Date:" />
+						<p:calendar id="date" value="#{CalendarBean.date}" />
 
 						<h:outputLabel for="password" value="Password:" />
-						<p:password id="password" value="#{someBean.password}"
-							required="true" label="password" />
-
+						<p:inputText id="password" required="true" />
+						
 						<p:commandButton value="Add" actionListener="#{someBean.addHours}" />
 
 					</h:panelGrid>
+
 				</p:panel>
 
 			</div>
 		</div>
-	</h:form>
 
+
+
+
+
+	</h:form>
 </h:body>
+
+
 </html>
