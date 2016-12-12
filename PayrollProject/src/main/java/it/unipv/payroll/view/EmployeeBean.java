@@ -4,21 +4,21 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
-import javax.enterprise.inject.Default;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import it.unipv.payroll.controller.GenericController;
+import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.model.Employee;
 
 @Named
 @SessionScoped
 public class EmployeeBean implements Serializable{
 
-	@Inject GenericController<Employee> emController;
+	@Inject EmployeeController emController;
 	
 	private Employee anEmployee;
-	private List<Employee> employeeList;
+	//private List<Employee> employeeList;
 
 	
 	public void setEmployee(Employee anEmployee) {
@@ -26,13 +26,14 @@ public class EmployeeBean implements Serializable{
 	}
 
 	public Employee getEmployee() {
+		anEmployee= emController.find( FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
 		return anEmployee;
 	}
 	
-	public List<Employee> getEmployeeList() {
-		
-		return employeeList;
-	}
+//	public List<Employee> getEmployeeList() {
+//		
+//		return employeeList;
+//	}
 
 	public String hireEmployee() {
 

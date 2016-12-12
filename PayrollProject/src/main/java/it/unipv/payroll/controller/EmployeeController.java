@@ -6,4 +6,9 @@ import it.unipv.payroll.model.Employee;
 
 @Stateless
 public class EmployeeController extends GenericController<Employee> {
+	
+	public Employee find(String code){
+		return dao.find(code);
+	}
+	
 }

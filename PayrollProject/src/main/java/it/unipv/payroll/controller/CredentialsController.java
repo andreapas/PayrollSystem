@@ -2,16 +2,16 @@ package it.unipv.payroll.controller;
 
 import javax.ejb.Stateless;
 
-import it.unipv.payroll.model.Login;
+import it.unipv.payroll.model.Credentials;
 
 @Stateless
-public class LoginController extends GenericController<Login> {
+public class CredentialsController extends GenericController<Credentials> {
 
 	
 	public boolean areValidCredential(String username, String password) {
-		Login loginAttempt=dao.find(username);
+		Credentials loginAttempt=dao.find(username);
 		if(loginAttempt!=null){
-			if (loginAttempt.getHashPassword().equals(password)) {
+			if (loginAttempt.getPassword().equals(password)) {
 				return true;
 			}else{
 				return false;

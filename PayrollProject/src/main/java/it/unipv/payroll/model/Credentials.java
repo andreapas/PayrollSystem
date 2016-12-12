@@ -8,12 +8,12 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="credentials")
-public class Login implements Serializable{
+public class Credentials implements Serializable{
 
 	@Id
 	private String username;
 	
-	private String hashPassword;
+	private String password;
 
 	public String getUsername() {
 		return username;
@@ -23,12 +23,12 @@ public class Login implements Serializable{
 		this.username = username;
 	}
 
-	public String getHashPassword() {
-		return hashPassword;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setHashPassword(String hashPassword) {
-		this.hashPassword = hashPassword;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	

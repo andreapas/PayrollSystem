@@ -44,18 +44,10 @@
 			<role-name>Manager</role-name>
 		</auth-constraint>
 	</security-constraint>
-	<!-- <security-constraint>
-		<web-resource-collection>
-			<web-resource-name>HtmlAuth</web-resource-name>
-			<description>application security constraints</description>
-			<url-pattern>/*</url-pattern>
-			<http-method>GET</http-method>
-			<http-method>POST</http-method>
-		</web-resource-collection>
-		<auth-constraint>
-			<role-name>Weekly</role-name>
-		</auth-constraint>
-	</security-constraint>-->
+	<!-- <security-constraint> <web-resource-collection> <web-resource-name>HtmlAuth</web-resource-name> 
+		<description>application security constraints</description> <url-pattern>/*</url-pattern> 
+		<http-method>GET</http-method> <http-method>POST</http-method> </web-resource-collection> 
+		<auth-constraint> <role-name>Weekly</role-name> </auth-constraint> </security-constraint> -->
 	<login-config>
 		<auth-method>FORM</auth-method>
 		<form-login-config>
@@ -63,7 +55,7 @@
 			<form-error-page>/faces/error.xhtml</form-error-page>
 		</form-login-config>
 	</login-config>
-	
+
 	<security-role>
 		<role-name>Weekly</role-name>
 	</security-role>
@@ -73,4 +65,7 @@
 	<security-role>
 		<role-name>Manager</role-name>
 	</security-role>
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
 </web-app>
