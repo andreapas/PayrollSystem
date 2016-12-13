@@ -26,10 +26,12 @@ public class EmployeeBean implements Serializable{
 	}
 
 	public Employee getEmployee() {
+		return anEmployee;
+	}
+	public Employee getLoggedUser() {
 		anEmployee= emController.find( FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
 		return anEmployee;
 	}
-	
 //	public List<Employee> getEmployeeList() {
 //		
 //		return employeeList;
