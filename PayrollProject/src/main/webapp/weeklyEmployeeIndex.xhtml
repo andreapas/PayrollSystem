@@ -7,10 +7,19 @@
 <h:head>
 
 	<link rel="stylesheet" type="text/css" href="css/style.css"></link>
-
+	<!--script type="text/javascript">
+		function getDate(){
+			var today = new Date();
+			var dd = today.getDate();
+			var mm = today.getMonth()+1; //January is 0!
+			var yyyy = today.getFullYear();
+			var today = dd+'/'+mm+'/'+yyyy;
+			return today;
+		}
+	</script-->
 </h:head>
 <h:body>
-	<ui:param name="loggedUser" value="#{employeeBean.loggedUser}"/>
+	<ui:param name="loggedUser" value="#{employeeBean.loggedUser}" />
 	<h:form>
 		<div class="ui-g">
 
@@ -18,8 +27,9 @@
 
 				<p:panel id="mainMenu" header="Menu">
 					<h:panelGrid columns="1" cellpadding="10">
-						<p>Welcome,  #{loggedUser.name}</p>
-						<h:commandButton value="logout" action="#{credentialsBean.logout()}" />
+						<p>Welcome, #{loggedUser.name}</p>
+						<h:commandButton value="logout"
+							action="#{credentialsBean.logout()}" />
 						<p:button id="overviewButton" value="Overview" icon="fa fa-eye"
 							onclick="return false">
 							<p:effect type="fade" event="click" for="settingsPanel" speed="1">
@@ -105,22 +115,18 @@
 				<p:panel id="insertHoursPanel" header="Insert Hours"
 					widgetVar="insertHours" style="display: none;">
 					<h:panelGrid cellpadding="10">
+						<p:outputLabel for="id" value="ID:" />
+						<p:inputText id="id" value="#{insertHoursBean.id}"
+							placeholder="ID" required="true" />
 
-						<!-- <p:outputLabel for="id" value="ID:" />
-						<p:inputText id="id" value="#{someBean.id}" placeholder="ID"
-							required="true" />
+						<h:outputText id="output"
+							value="Hours worked today: #{insertHoursBean.hours}" />
+						<h:inputHidden id="h" value="#{insertHoursBean.hours}" />
+						<p:slider for="h" display="output" step="1" maxValue="10" displayTemplate="Hours worked today: {value}" />
 
-						<p:outputLabel for="h" value="Amount of hours:" />
-						<p:inputText id="h" value="#{someBean.h}" required="true"
-							disabled="true" />
-						<p:slider for="h" step="1" maxValue="20" />
 
-						<h:outputLabel for="password" value="Password:" />
-						<p:password id="password" value="#{someBean.password}"
-							required="true" label="password" />
-
-						<p:commandButton value="Add" actionListener="#{someBean.addHours}" />
- -->
+						<p:commandButton value="Add"
+							actionListener="#{insertHoursBean.addHours()}" />
 					</h:panelGrid>
 				</p:panel>
 
