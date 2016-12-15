@@ -19,6 +19,7 @@ public class Employee implements Serializable{
 	private String surname;
 	private String email;
 	private String union_name;
+	private String payment_method;
 	
 	public String getCode() {
 		return code;
@@ -49,6 +50,12 @@ public class Employee implements Serializable{
 	}
 	public void setUnion_Name(String union) {
 		this.union_name = union;
+	}
+	public String getPayment_method() {
+		return payment_method;
+	}
+	public void setPayment_method(String payment_method) {
+		this.payment_method = payment_method;
 	}
 	
 	

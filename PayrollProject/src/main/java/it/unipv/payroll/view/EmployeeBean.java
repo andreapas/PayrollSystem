@@ -63,4 +63,10 @@ public class EmployeeBean implements Serializable{
 		
 	}
 
+	public String editPaymentMethod(String newPaymentMethod) {
+		anEmployee.setPayment_method(newPaymentMethod);
+		String answer=emController.update(anEmployee);
+		return answer;
+	}
+
 }
