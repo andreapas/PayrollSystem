@@ -38,12 +38,13 @@ public class UnionsTests extends ArquillianTest {
 	public void testUnions() {
 		
 		Union union = new Union();
-		union.setUnion(CIGL, CIGL_TAX);
+		union.setUnionName(CIGL);
+		union.setUnionFee(CIGL_TAX);
 		unionsBean.setUnion(union);
 		
 		unionsBean.addUnion();
-		
-		union.setUnion(COBAS, COBAS_TAX);
+		union.setUnionName(COBAS);
+		union.setUnionFee(COBAS_TAX);
 		unionsBean.setUnion(union);
 		
 		unionsBean.addUnion();

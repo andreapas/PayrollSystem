@@ -18,10 +18,11 @@ public class UnionsController extends GenericController<Union>{
 //		logger.info("UnionsController ready to receive new commands!");
 //	}
 	
-	public List<Union> getAllUnions(){
-		return dao.findAll();
+	public Union findUnion(String unionName){
+		return dao.find(unionName);
 	}
 
+	
 	
 //	public List<Union> addUnion(Union union) throws Exception{
 //		unionsDao.add(union);

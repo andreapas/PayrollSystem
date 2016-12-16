@@ -36,7 +36,7 @@ public class UnionsBean implements Serializable {
 	
 	public String removeUnion(Union union) {
 		
-		String answer=unionsController.remove(union);
+		String answer=unionsController.remove(union.getUnionName());
 		return answer;
 	}
 	

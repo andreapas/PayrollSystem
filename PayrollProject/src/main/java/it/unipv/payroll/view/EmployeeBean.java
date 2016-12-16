@@ -1,7 +1,6 @@
 package it.unipv.payroll.view;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -10,6 +9,7 @@ import javax.inject.Named;
 
 import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.model.Employee;
+import it.unipv.payroll.model.Union;
 
 @Named
 @SessionScoped
@@ -56,8 +56,8 @@ public class EmployeeBean implements Serializable{
 		
 	}
 	
-	public String editUnion(String newUnion) {
-		anEmployee.setUnion_Name(newUnion);
+	public String editUnion(Union newUnion) {
+		anEmployee.setUnion(newUnion);
 		String answer=emController.update(anEmployee);
 		return answer;
 		

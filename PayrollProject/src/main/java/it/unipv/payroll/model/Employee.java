@@ -3,8 +3,11 @@ package it.unipv.payroll.model;
 import java.io.Serializable;
 
 import javax.enterprise.context.RequestScoped;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -18,7 +21,9 @@ public class Employee implements Serializable{
 	private String name;
 	private String surname;
 	private String email;
-	private String union_name;
+	@ManyToOne/*(cascade={CascadeType.ALL})*/
+	@JoinColumn(name="union_name")
+	private Union union;
 	private String payment_method;
 	
 	public String getCode() {
@@ -45,11 +50,11 @@ public class Employee implements Serializable{
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getUnion_Name() {
-		return union_name;
+	public Union getUnion() {
+		return union;
 	}
-	public void setUnion_Name(String union) {
-		this.union_name = union;
+	public void setUnion(Union union) {
+		this.union = union;
 	}
 	public String getPayment_method() {
 		return payment_method;
