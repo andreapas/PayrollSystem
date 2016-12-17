@@ -1,20 +1,23 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:f="http://java.sun.com/jsf/core">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<link rel="stylesheet" type="text/css" href="css/style.css"></link>
 </h:head>
 
 <h:body>
+	<ui:param name="loggedUser" value="#{employeeBean.loggedUser}" />
 	<h:form>
 		<div class="ui-g">
 
 			<div class="ui-g-3">
 				<p:panel id="mainMenu" header="Menu">
 					<h:panelGrid columns="1" cellpadding="10">
-						<p>Welcome, #{user.fullName}</p>
-						<h:commandButton value="logout" action="#{loginBean.logout}" />
+						<p>Welcome, #{loggedUser.name}</p>
+						<h:commandButton value="logout" action="#{credentialsBean.logout()}" />
 						<p:button id="overviewButton" value="Overview" icon="fa fa-eye"
 							onclick="return false">
 							<p:effect type="fade" event="click" for="settingsPanel" speed="1">
@@ -148,7 +151,7 @@
 				<p:panel layout="block" id="overviewPanel" header="Overview"
 					style="display: none;">
 					<h:panelGrid cellpadding="10">
-						<p:dataTable var="employee" value="#{employeeBean.employeeList}"
+						<p:dataTable var="employee" value="#{loggedUser}"
 							rows="1">
 							<p:column headerText="Code">
 								<h:outputText value="#{employee.code}" />

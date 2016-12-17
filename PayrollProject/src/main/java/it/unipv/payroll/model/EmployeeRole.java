@@ -2,23 +2,25 @@ package it.unipv.payroll.model;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.RequestScoped;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import it.unipv.payroll.utils.Role;
 
 @Entity
-@Table(name="credentials")
-public class Credentials implements Serializable{
+@Table(name="employee_roles")
+@RequestScoped
+public class EmployeeRole implements Serializable{
 
 	@Id
 	private String username;
 	
-	private String password;
-	
+	private String role;
+
 	public String getUsername() {
 		return username;
 	}
@@ -27,14 +29,13 @@ public class Credentials implements Serializable{
 		this.username = username;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getRole() {
+		return role;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setRole(String role) {
+		this.role = role;
 	}
-
 	
 	
 	

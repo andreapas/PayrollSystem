@@ -102,13 +102,13 @@
 				<p:panel id="settingsPanel" header="Settings" widgetVar="settings"
 					style="display: none;">
 					<h:panelGrid cellpadding="10">
-						<!-- <p:outputLabel for="paymentMethod" value="Method of payment:" />
-						<p:selectOneRadio id="paymentMethod" value="#{someBean.paymentMethod}">
+						<p:outputLabel for="paymentMethod" value="Method of payment:" />
+						<p:selectOneRadio id="paymentMethod" value="#{loggedUser.payment_method}">
 							<f:selectItem itemLabel="Mailed to the postal address" itemValue="Mail" />
 							<f:selectItem itemLabel="Held for pickup by the paymaster" itemValue="Paymaster" />
 							<f:selectItem itemLabel="Deposited into the bank account" itemValue="Bank" />
 						</p:selectOneRadio>
-						<p:commandButton value="Submit Payment Method" actionListener="#{someBean.updatePayment}" /> -->
+						<p:commandButton value="Submit Payment Method" actionListener="" />
 					</h:panelGrid>
 				</p:panel>
 

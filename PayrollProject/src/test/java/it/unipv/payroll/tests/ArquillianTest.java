@@ -28,6 +28,7 @@ public class ArquillianTest {
         .addPackages(true, "it.unipv.payroll.model")
         .addPackages(true, "it.unipv.payroll.view")
         .addPackages(true, "it.unipv.payroll.tests")
+        .addPackages(true, "it.unipv.payroll.utils")
         .addAsResource("META-INF/persistence.xml")
         /*.addAsResource("META-INF/ejb-jar.xml")*/
         /*.addAsLibraries(Maven.resolver().loadPomFromFile("pom.xml").resolve("org.apache.httpcomponents:httpmime").withTransitivity().asFile())*/
