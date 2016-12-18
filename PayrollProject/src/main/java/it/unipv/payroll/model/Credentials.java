@@ -8,7 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import it.unipv.payroll.utils.Role;
+
 
 @Entity
 @Table(name="credentials")

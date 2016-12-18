@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import it.unipv.payroll.utils.Role;
+
 
 @Entity
 @Table(name="employee_roles")
