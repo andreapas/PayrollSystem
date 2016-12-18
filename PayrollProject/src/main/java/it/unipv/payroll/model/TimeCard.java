@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -15,7 +17,11 @@ public class TimeCard implements Serializable {
 	
 	@Id
 	private int postId;
-	private String employeeCode;
+	
+	@ManyToOne/*(cascade={CascadeType.ALL})*/
+	@JoinColumn(name="employee_code")
+	private Employee employee;
+	
 	private int hoursWorked;
 	private long data;
 	
@@ -25,11 +31,11 @@ public class TimeCard implements Serializable {
 	public void setPostId(int postId) {
 		this.postId = postId;
 	}
-	public String getEmployeeCode() {
-		return employeeCode;
+	public Employee getEmployee() {
+		return employee;
 	}
-	public void setEmployeeCode(String employeeCode) {
-		this.employeeCode = employeeCode;
+	public void setEmployee(Employee employeeCode) {
+		this.employee = employee;
 	}
 	public int getHoursWorked() {
 		return hoursWorked;

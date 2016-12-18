@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import it.unipv.payroll.controller.TimeCardController;
+import it.unipv.payroll.model.Employee;
 import it.unipv.payroll.model.TimeCard;
 import it.unipv.payroll.view.TimeCardBean;
 
@@ -17,13 +18,20 @@ import it.unipv.payroll.view.TimeCardBean;
 public class TimeCardTest extends ArquillianTest {
 
 	private TimeCard aTimeCard;
+	private Employee anEmployee;
 	@Inject TimeCardBean tcBean;
 	@Inject TimeCardController tcController;
 	
 	@Test
 	public void testPostTimeCard() {
 		aTimeCard= new TimeCard();
-		aTimeCard.setEmployeeCode("il bello di casa");
+		anEmployee= new Employee();
+		anEmployee.setCode("123456");
+		anEmployee.setEmail("ernesto.andrea@davide.com");
+		anEmployee.setName("Tullio");
+		anEmployee.setSurname("Facchinetti");
+		anEmployee.setPayment_method("Vojo li sordi");
+		aTimeCard.setEmployee(anEmployee);
 		aTimeCard.setData((new Date()).getTime());;
 		aTimeCard.setHoursWorked(10);
 		aTimeCard.setPostId(123456789);

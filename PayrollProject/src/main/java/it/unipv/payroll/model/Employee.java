@@ -1,13 +1,16 @@
 package it.unipv.payroll.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -26,6 +29,15 @@ public class Employee implements Serializable{
 	private Union union;
 	private String payment_method;
 	
+	@OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
+	private List<TimeCard> postedTimeCards;	
+	
+	public List<TimeCard> getPostedTimeCards() {
+		return postedTimeCards;
+	}
+	public void setPostedTimeCards(List<TimeCard> postedTimeCards) {
+		this.postedTimeCards = postedTimeCards;
+	}
 	public String getCode() {
 		return code;
 	}
