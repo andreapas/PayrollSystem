@@ -39,12 +39,12 @@ public class UnionsTests extends ArquillianTest {
 		
 		Union union = new Union();
 		union.setUnionName(CIGL);
-		union.setUnionFee(CIGL_TAX);
+		union.setWeeklyRate(CIGL_TAX);
 		unionsBean.setUnion(union);
 		
 		unionsBean.addUnion();
 		union.setUnionName(COBAS);
-		union.setUnionFee(COBAS_TAX);
+		union.setWeeklyRate(COBAS_TAX);
 		unionsBean.setUnion(union);
 		
 		unionsBean.addUnion();
@@ -52,7 +52,7 @@ public class UnionsTests extends ArquillianTest {
 		List<Union> unions = unionsDao.findAll();
 		int flag = 0;
 		for (Union u : unions) {
-			if (u.getUnionName() != null && u.getUnionFee() != -1) {
+			if (u.getUnionName() != null && u.getWeeklyRate() != -1) {
 				flag++;
 			}
 		}
