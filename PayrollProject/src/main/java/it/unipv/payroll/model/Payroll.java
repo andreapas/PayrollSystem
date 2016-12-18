@@ -3,8 +3,11 @@ package it.unipv.payroll.model;
 import java.io.Serializable;
 
 import javax.enterprise.context.RequestScoped;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -16,6 +19,10 @@ public class Payroll implements Serializable{
 	private int id;
 	
 	private String message;
+	
+	@ManyToOne (cascade = {CascadeType.ALL})
+	@JoinColumn(name="user_name")
+	private PayrollUsername user_name; //Questo deve essere una Union
 	
 	public String getMessage() {
 		return message;
@@ -29,6 +36,14 @@ public class Payroll implements Serializable{
 		return id;
 	}
 	
+	public PayrollUsername getUser_name() {
+		return user_name;
+	}
+
+	public void setUser_name(PayrollUsername user_name) {
+		this.user_name = user_name;
+	}
+
 	@Override
 	public String toString() {
 		return "Payroll [message=" + message + "]";

@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 
 import it.unipv.payroll.dao.PayrollDAO;
 import it.unipv.payroll.model.Payroll;
+import it.unipv.payroll.model.PayrollUsername;
 import it.unipv.payroll.view.PayrollBean;
 
 @RunWith(Arquillian.class)
@@ -26,13 +27,18 @@ public class PayrollTests extends ArquillianTest{
 	public void test() {
 		// Set an element in the bean
 		Payroll aPayroll= new Payroll();
+		PayrollUsername aPayrollUsername = new PayrollUsername();
 		aPayroll.setMessage("Hi, I'm a test message. Nice to meet you!");
+		List<Payroll> payrolls=payrollDAO.findAll();
+		aPayrollUsername.setUsername("Davide");
+		aPayrollUsername.setPayrolls(payrolls);
+		aPayrollUsername.setCity("Pavia");
+		aPayroll.setUser_name(aPayrollUsername);
 		payrollBean.setPayroll(aPayroll);
-		
 		
 		payrollBean.addMessage();
 		
-		List<Payroll> payrolls=payrollDAO.findAll();
+		payrolls=payrollDAO.findAll();
 		boolean found=false;
 		for (Payroll pr : payrolls) {
 			if ("Hi, I'm a test message. Nice to meet you!".equals(pr.getMessage())) {
