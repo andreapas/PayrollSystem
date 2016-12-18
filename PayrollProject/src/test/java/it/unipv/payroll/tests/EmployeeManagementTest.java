@@ -15,7 +15,9 @@ import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.controller.UnionsController;
 import it.unipv.payroll.dao.EmployeeDAO;
 import it.unipv.payroll.model.Employee;
+import it.unipv.payroll.model.MonthlyEmployee;
 import it.unipv.payroll.model.Union;
+import it.unipv.payroll.model.WeeklyEmployee;
 import it.unipv.payroll.view.EmployeeBean;
 import it.unipv.payroll.view.UnionsBean;
 
@@ -50,16 +52,16 @@ public class EmployeeManagementTest extends ArquillianTest {
 	public void setUp(){
 		USER1_UNION= new Union();
 		USER1_UNION.setUnionName("union 1");
-		USER1_UNION.setUnionFee(9000);
+		USER1_UNION.setWeeklyRate(9000);
 		unBean.setUnion(USER1_UNION);
 		unBean.addUnion();
 		USER1_UNION_EDITED= new Union();
 		USER1_UNION_EDITED.setUnionName("union 2");
-		USER1_UNION_EDITED.setUnionFee(5000);
+		USER1_UNION_EDITED.setWeeklyRate(5000);
 		unBean.setUnion(USER1_UNION_EDITED);
 		unBean.addUnion();
 		
-		anEmployee = new Employee();
+		anEmployee = new WeeklyEmployee();
 		anEmployee.setCode(USER1_COD);
 		anEmployee.setName(USER1_NAME);
 		anEmployee.setSurname(USER1_SURNAME);
@@ -67,7 +69,7 @@ public class EmployeeManagementTest extends ArquillianTest {
 		anEmployee.setUnion(USER1_UNION);
 		anEmployee.setPayment_method(PAYMENT_METHOD1);
 		
-		anotherEmployee= new Employee();
+		anotherEmployee= new MonthlyEmployee();
 		anotherEmployee.setCode(USER2_COD);
 		anotherEmployee.setName(USER1_NAME);
 		anotherEmployee.setSurname(USER1_SURNAME);

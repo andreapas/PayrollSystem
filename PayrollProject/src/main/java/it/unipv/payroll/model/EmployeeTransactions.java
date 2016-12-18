@@ -9,7 +9,6 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="usertransactions")
-@RequestScoped
 public class EmployeeTransactions implements Serializable{
 
 	@Id

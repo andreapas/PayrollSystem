@@ -13,7 +13,6 @@ import it.unipv.payroll.utils.Role;
 
 @Entity
 @Table(name="employee_roles")
-@RequestScoped
 public class EmployeeRole implements Serializable{
 
 	@Id

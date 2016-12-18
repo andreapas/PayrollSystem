@@ -11,7 +11,6 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="timeCards")
-@RequestScoped
 public class TimeCard implements Serializable {
 
 	

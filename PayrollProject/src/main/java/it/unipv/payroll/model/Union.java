@@ -12,7 +12,6 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="unions")
-@RequestScoped
 public class Union implements Serializable{
 
 	@Id
@@ -35,8 +34,8 @@ public class Union implements Serializable{
 		this.unionName = unionName;
 	}
 
-	public void setWeeklyRate(double unionFee) {
-		this.weeklyRate = unionFee;
+	public void setWeeklyRate(double weeklyRate) {
+		this.weeklyRate = weeklyRate;
 	}
 
 	public String getUnionName() {

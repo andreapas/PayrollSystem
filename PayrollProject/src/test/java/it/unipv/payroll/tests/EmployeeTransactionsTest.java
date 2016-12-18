@@ -35,18 +35,14 @@ public class EmployeeTransactionsTest extends ArquillianTest{
 	
 	@After
 	public void removeEntries(){
-		EmployeeTransactions transaction=new EmployeeTransactions();
 		List<EmployeeTransactions> transactions=utDAO.findAll();
 		for (int i = 0; i < transactions.size(); i++) {
 			if (transactions.get(i).getCode().equals(USER_CODE1)) {
-				transaction.setCode(USER_CODE1);
-				utDAO.remove(transaction.getCode());
+				utDAO.remove(USER_CODE1);
 			}else if (transactions.get(i).getCode().equals(USER_CODE2)) {
-				transaction.setCode(USER_CODE2);
-				utDAO.remove(transaction.getCode());
+				utDAO.remove(USER_CODE2);
 			}else if (transactions.get(i).getCode().equals(USER_CODE3)) {
-				transaction.setCode(USER_CODE3);
-				utDAO.remove(transaction.getCode());
+				utDAO.remove(USER_CODE3);
 			}
 		}
 	}
@@ -219,7 +215,6 @@ public class EmployeeTransactionsTest extends ArquillianTest{
 			
 		}
 		
-		Assert.assertTrue("3 Transactions info found!!!",aux==3);
 		
 		List<TransactionsInfo>list= tiDAO.findAll();
 		for (TransactionsInfo transactionsInfo : list) {
@@ -239,7 +234,7 @@ public class EmployeeTransactionsTest extends ArquillianTest{
 				tot++;
 			}
 		}
-		
+		Assert.assertTrue("3 Transactions info found!!!",aux==3);
 		Assert.assertTrue("All has been deleted", tot==0);
 		
 	}
