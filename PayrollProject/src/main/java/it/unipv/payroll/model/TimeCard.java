@@ -33,7 +33,7 @@ public class TimeCard implements Serializable {
 	public Employee getEmployee() {
 		return employee;
 	}
-	public void setEmployee(Employee employeeCode) {
+	public void setEmployee(Employee employee) {
 		this.employee = employee;
 	}
 	public int getHoursWorked() {

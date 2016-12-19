@@ -5,11 +5,12 @@ import java.util.List;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 
 @Entity
-@DiscriminatorValue(value = "Weekly")
-public class WeeklyEmployee extends Employee{
+@DiscriminatorValue(value = "Part-time")
+public class PartTimeEmployee extends Employee {
 
 	private float hourlyRate;
 	@OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)

@@ -15,10 +15,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.validator.internal.util.privilegedactions.GetResolvedMemberMethods;
+
 @Entity
 @Table(name = "employees")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "employee")
+@DiscriminatorColumn(name = "employee_type")
 public abstract class Employee implements Serializable{
 
 	@Id
@@ -32,6 +34,7 @@ public abstract class Employee implements Serializable{
 	private Union union;
 	private String payment_method;
 	
+	private String role;
 	
 	public String getCode() {
 		return code;
@@ -68,6 +71,12 @@ public abstract class Employee implements Serializable{
 	}
 	public void setPayment_method(String payment_method) {
 		this.payment_method = payment_method;
+	}
+	public String getRole() {
+		return role;
+	}
+	public void setRole(String role) {
+		this.role = role;
 	}
 	
 	

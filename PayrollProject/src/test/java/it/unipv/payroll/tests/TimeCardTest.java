@@ -11,8 +11,8 @@ import org.junit.runner.RunWith;
 
 import it.unipv.payroll.controller.TimeCardController;
 import it.unipv.payroll.model.Employee;
+import it.unipv.payroll.model.PartTimeEmployee;
 import it.unipv.payroll.model.TimeCard;
-import it.unipv.payroll.model.WeeklyEmployee;
 import it.unipv.payroll.view.TimeCardBean;
 
 @RunWith(Arquillian.class)
@@ -26,7 +26,7 @@ public class TimeCardTest extends ArquillianTest {
 	@Test
 	public void testPostTimeCard() {
 		aTimeCard= new TimeCard();
-		anEmployee= new WeeklyEmployee();
+		anEmployee= new PartTimeEmployee();
 		anEmployee.setCode("123456");
 		anEmployee.setEmail("ernesto.andrea@davide.com");
 		anEmployee.setName("Tullio");
