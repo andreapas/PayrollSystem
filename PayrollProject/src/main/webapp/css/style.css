@@ -13,7 +13,9 @@ button, table{
 
 
 
-.monthly {
+.monthly,
+.weekly,
+.manager {
 	
 	display:none;
 }

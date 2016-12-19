@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<link rel="stylesheet" type="text/css" href="css/style.css"></link>
+	<script type="text/javascript" src="js/scripts.js"></script>
+</h:head>
+<h:body>
+	<ui:param name="loggedUser" value="#{employeeBean.loggedUser}" />
+	<script type="text/javascript">
+	$( document ).ready(function() {
+		showElementsOfRole("#{employeeBean.loggedUser.role}");
+		});
+	</script>
+
+	<h:form>
+
+		<div class="ui-g">
+
+			<div class="ui-g-3">
+
+				<p:panel id="mainMenu" header="Menu">
+					<h:panelGrid columns="1" cellpadding="10">
+						<p>Welcome, #{loggedUser.role}</p>
+						<h:commandButton value="logout"
+							action="#{credentialsBean.logout()}" />
+						<p:button id="overviewButton" value="Overview" icon="fa fa-eye"
+							onclick="return false">
+							<p:effect type="fade" event="click" for="settingsPanel" speed="1">
+								<f:param name="mode" value="'hide'" />
+							</p:effect>
+							<p:effect type="fade" event="click" for="insertHoursPanel"
+								speed="1">
+								<f:param name="mode" value="'hide'" />
+							</p:effect>
+							<p:effect type="fade" event="click" for="overviewPanel" speed="1">
+								<f:param name="mode" value="'show'" />
+							</p:effect>
+						</p:button>
+						<p:button id="settingsButton" value="Settings" icon="fa fa-gears"
+							onclick="return false">
+							<p:effect type="fade" event="click" for="overviewPanel" speed="1">
+								<f:param name="mode" value="'hide'" />
+							</p:effect>
+							<p:effect type="fade" event="click" for="insertHoursPanel"
+								speed="1">
+								<f:param name="mode" value="'hide'" />
+							</p:effect>
+							<p:effect type="fade" event="click" for="settingsPanel" speed="1">
+								<f:param name="mode" value="'show'" />
+							</p:effect>
+						</p:button>
+						<p:button id="insertHoursButton" value="Insert Hours"
+							icon="fa fa-clock-o" onclick="return false" class="weekly">
+							<p:effect type="fade" event="click" for="overviewPanel" speed="1">
+								<f:param name="mode" value="'hide'" />
+							</p:effect>
+							<p:effect type="fade" event="click" for="settingsPanel" speed="1">
+								<f:param name="mode" value="'hide'" />
+							</p:effect>
+							<p:effect type="fade" event="click" for="insertHoursPanel"
+								speed="1">
+								<f:param name="mode" value="'show'" />
+							</p:effect>
+						</p:button>
+						<p:button id="insertSalesButton" value="Insert Sales"
+							icon="fa fa-eur" onclick="return false" class="monthly manager">
+							<p:effect type="fade" event="click" for="overviewPanel" speed="1">
+								<f:param name="mode" value="'hide'" />
+							</p:effect>
+							<p:effect type="fade" event="click" for="settingsPanel" speed="1">
+								<f:param name="mode" value="'hide'" />
+							</p:effect>
+							<p:effect type="fade" event="click" for="insertSalesPanel"
+								speed="1">
+								<f:param name="mode" value="'show'" />
+							</p:effect>
+						</p:button>
+					</h:panelGrid>
+				</p:panel>
+
+			</div>
+
+			<div class="ui-g-9">
+
+				<p:panel layout="block" id="overviewPanel" header="Overview"
+					style="display: none;">
+					<h:panelGrid cellpadding="10">
+						<p:dataTable var="employee" value="#{loggedUser}" rows="1">
+							<p:column headerText="Code">
+								<h:outputText value="#{employee.code}" />
+							</p:column>
+							<p:column headerText="Name">
+								<h:outputText value="#{employee.name}" />
+							</p:column>
+							<p:column headerText="Surname">
+								<h:outputText value="#{employee.surname}" />
+							</p:column>
+							<p:column headerText="Email">
+								<h:outputText value="#{employee.email}" />
+							</p:column>
+							<p:column headerText="Union Name">
+								<h:outputText value="#{employee.union.unionName}" />
+							</p:column>
+						</p:dataTable>
+					</h:panelGrid>
+				</p:panel>
+
+				<p:panel id="settingsPanel" header="Settings" widgetVar="settings"
+					style="display: none;">
+					<h:panelGrid cellpadding="10">
+						<p:outputLabel for="paymentMethod" value="Method of payment:" />
+						<p:selectOneRadio id="paymentMethod"
+							value="#{loggedUser.payment_method}">
+							<f:selectItem itemLabel="Mailed to the postal address"
+								itemValue="Mail" />
+							<f:selectItem itemLabel="Held for pickup by the paymaster"
+								itemValue="Paymaster" />
+							<f:selectItem itemLabel="Deposited into the bank account"
+								itemValue="Bank" />
+						</p:selectOneRadio>
+						<!-- <p:commandButton value="Submit Payment Method" actionListener="" /> -->
+					</h:panelGrid>
+				</p:panel>
+
+				<p:panel id="insertHoursPanel" header="Insert Hours"
+					widgetVar="insertHours" style="display: none;">
+					<h:panelGrid cellpadding="10">
+						<p:outputLabel for="id" value="ID:" />
+						<p:inputText id="id" value="#{insertHoursBean.id}"
+							placeholder="ID" required="true" />
+
+						<h:outputText id="output"
+							value="Hours worked today: #{insertHoursBean.hours}" />
+						<h:inputHidden id="h" value="#{insertHoursBean.hours}" />
+						<p:slider for="h" display="output" step="1" maxValue="10"
+							displayTemplate="Hours worked today: {value}" />
+
+
+						<p:commandButton value="Add"
+							actionListener="#{insertHoursBean.addHours()}" />
+					</h:panelGrid>
+				</p:panel>
+
+				<p:panel id="insertSalesPanel" header="Insert sales"
+					widgetVar="insertSales" style="display: none;">
+
+					<h:panelGrid cellpadding="10">
+
+
+						<h:outputLabel for="id" value="ID:" />
+						<p:inputText id="id" required="true" placeholder="ID" />
+
+						<h:outputLabel for="amount" value="Amount:" />
+						<p:inputText id="amount" required="true" />
+
+						<p:outputLabel for="date" value="Date:" />
+						<p:calendar id="date" value="#{CalendarBean.date}" />
+
+						<h:outputLabel for="password" value="Password:" />
+						<p:inputText id="password" required="true" />
+
+						<p:commandButton value="Add" actionListener="#{someBean.addHours}" />
+
+					</h:panelGrid>
+
+				</p:panel>
+
+			</div>
+		</div>
+	</h:form>
+
+</h:body>
+</html>
