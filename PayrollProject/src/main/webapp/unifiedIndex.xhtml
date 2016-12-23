@@ -9,10 +9,10 @@
 	<script type="text/javascript" src="js/scripts.js"></script>
 </h:head>
 <h:body>
-	<ui:param name="loggedUser" value="#{employeeBean.loggedUser}" />
+	<!-- <ui:param name="loggedUser" value="#{employeeBean.loggedUser}" /> -->
 	<script type="text/javascript">
 	$( document ).ready(function() {
-		showElementsOfRole("#{employeeBean.loggedUser.role}");
+		showElementsOfRole("#{employeeBean.employee.role}");
 		});
 	</script>
 
@@ -24,7 +24,7 @@
 
 				<p:panel id="mainMenu" header="Menu">
 					<h:panelGrid columns="1" cellpadding="10">
-						<p>Welcome, #{loggedUser.role}</p>
+						<p>Welcome, #{employeeBean.employee.name}</p>
 						<h:commandButton value="logout"
 							action="#{credentialsBean.logout()}" />
 						<p:button id="overviewButton" value="Overview" icon="fa fa-eye"
@@ -89,7 +89,7 @@
 				<p:panel layout="block" id="overviewPanel" header="Overview"
 					style="display: none;">
 					<h:panelGrid cellpadding="10">
-						<p:dataTable var="employee" value="#{loggedUser}" rows="1">
+						<p:dataTable var="employee" value="#{employeeBean.employee}" rows="1">
 							<p:column headerText="Code">
 								<h:outputText value="#{employee.code}" />
 							</p:column>
@@ -114,7 +114,7 @@
 					<h:panelGrid cellpadding="10">
 						<p:outputLabel for="paymentMethod" value="Method of payment:" />
 						<p:selectOneRadio id="paymentMethod"
-							value="#{loggedUser.payment_method}">
+							value="#{employeeBean.employee.payment_method}">
 							<f:selectItem itemLabel="Mailed to the postal address"
 								itemValue="Mail" />
 							<f:selectItem itemLabel="Held for pickup by the paymaster"
@@ -152,18 +152,18 @@
 
 
 						<h:outputLabel for="id" value="ID:" />
-						<p:inputText id="id" required="true" placeholder="ID" />
+						<p:inputText id="id" required="true" placeholder="ID" value="#{salesReceiptBean.salesReceipt.postId}"/>
 
 						<h:outputLabel for="amount" value="Amount:" />
-						<p:inputText id="amount" required="true" />
+						<p:inputText id="amount" required="true" value="#{salesReceiptBean.salesReceipt.amount}"/>
 
 						<p:outputLabel for="date" value="Date:" />
-						<p:calendar id="date" value="#{CalendarBean.date}" />
+						<p:calendar id="date" value="#{salesReceiptBean.salesReceipt.date}" />
 
-						<h:outputLabel for="password" value="Password:" />
-						<p:inputText id="password" required="true" />
+<!-- 						<h:outputLabel for="password" value="Password:" /> -->
+<!-- 						<p:inputText id="password" required="true" /> -->
 
-						<p:commandButton value="Add" actionListener="#{someBean.addHours}" />
+						<p:commandButton value="Add" actionListener="#{salesReceiptBean.postSalesReceipt()}" />
 
 					</h:panelGrid>
 
