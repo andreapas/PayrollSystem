@@ -5,32 +5,17 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-
 	<link rel="stylesheet" type="text/css" href="css/style.css"></link>
 	<script type="text/javascript" src="js/scripts.js"></script>
-	<!--script type="text/javascript">
-		function getDate(){
-			var today = new Date();
-			var dd = today.getDate();
-			var mm = today.getMonth()+1; //January is 0!
-			var yyyy = today.getFullYear();
-			var today = dd+'/'+mm+'/'+yyyy;
-			return today;
-		}
-	</script-->
 </h:head>
 <h:body>
-	<ui:param name="loggedUser" value="#{employeeBean.loggedUser}" />
 	<script type="text/javascript">
 	$( document ).ready(function() {
-		showElementsOfRole("#{employeeBean.loggedUser.role}");
+		showElementsOfRole("#{employeeBean.employee.role}");
 		});
-		
 	</script>
 
 	<h:form>
-
-		<div class="monthly">ciao sono un monthly</div>
 
 		<div class="ui-g">
 
@@ -38,7 +23,7 @@
 
 				<p:panel id="mainMenu" header="Menu">
 					<h:panelGrid columns="1" cellpadding="10">
-						<p>Welcome, #{loggedUser.role}</p>
+						<p>Welcome, #{employeeBean.employee.name}</p>
 						<h:commandButton value="logout"
 							action="#{credentialsBean.logout()}" />
 						<p:button id="overviewButton" value="Overview" icon="fa fa-eye"
@@ -90,7 +75,7 @@
 				<p:panel layout="block" id="overviewPanel" header="Overview"
 					style="display: none;">
 					<h:panelGrid cellpadding="10">
-						<p:dataTable var="employee" value="#{loggedUser}" rows="1">
+						<p:dataTable var="employee" value="#{employeeBean.employee}" rows="1">
 							<p:column headerText="Code">
 								<h:outputText value="#{employee.code}" />
 							</p:column>
