@@ -9,7 +9,6 @@
 	<script type="text/javascript" src="js/scripts.js"></script>
 </h:head>
 <h:body>
-	<!-- <ui:param name="loggedUser" value="#{employeeBean.loggedUser}" /> -->
 	<script type="text/javascript">
 	$( document ).ready(function() {
 		showElementsOfRole("#{employeeBean.employee.role}");
@@ -25,8 +24,7 @@
 				<p:panel id="mainMenu" header="Menu">
 					<h:panelGrid columns="1" cellpadding="10">
 						<p>Welcome, #{employeeBean.employee.name}</p>
-						<h:commandButton value="logout"
-							action="#{credentialsBean.logout()}" />
+						<h:commandButton value="logout" action="#{credentialsBean.logout()}" />
 						<p:button id="overviewButton" value="Overview" icon="fa fa-eye"
 							onclick="return false">
 							<p:effect type="fade" event="click" for="settingsPanel" speed="1">

@@ -29,13 +29,13 @@ public class SalesReceiptTest extends ArquillianTest {
 	public void testPostSalesReceipt() {
 		salesReceipt = new SalesReceipt();
 		anEmployee = new FlatEmployee();
-		anEmployee.setCode("666666");
+		anEmployee.setCode("123456789");
 		anEmployee.setEmail("payrollproject@se.com");
 		anEmployee.setName("Jorge");
 		anEmployee.setSurname("Garcia");
 		anEmployee.setPayment_method("Bank account");
 		salesReceipt.setEmployee(anEmployee);
-		salesReceipt.setData((new Date()).getTime());
+		salesReceipt.setDate((new Date()).getTime());
 		salesReceipt.setAmount(1500);
 		salesReceipt.setPostId(666666111);
 		srBean.setSalesReceipt(salesReceipt);

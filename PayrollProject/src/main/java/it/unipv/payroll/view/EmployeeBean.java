@@ -2,6 +2,7 @@ package it.unipv.payroll.view;
 
 import java.io.Serializable;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -19,7 +20,12 @@ public class EmployeeBean implements Serializable{
 	
 	private Employee anEmployee;
 	//private List<Employee> employeeList;
-
+	
+	@PostConstruct
+	public void init(){
+		anEmployee= emController.find( FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+	}
+	
 	
 	public void setEmployee(Employee anEmployee) {
 		this.anEmployee=anEmployee;
@@ -28,10 +34,10 @@ public class EmployeeBean implements Serializable{
 	public Employee getEmployee() {
 		return anEmployee;
 	}
-	public Employee getLoggedUser() {
-		anEmployee= emController.find( FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
-		return anEmployee;
-	}
+//	public Employee getLoggedUser() {
+//		anEmployee= emController.find( FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+//		return anEmployee;
+//	}
 //	public List<Employee> getEmployeeList() {
 //		
 //		return employeeList;

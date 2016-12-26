@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -13,15 +14,15 @@ import javax.persistence.Table;
 public class SalesReceipt implements Serializable{
 
 	
+	
 	@Id
 	private int postId;
 	
 	@ManyToOne
 	@JoinColumn(name="employee_code")
 	private Employee employee;
-	
 	private int amount;
-	private long data;
+	private long date;
 	
 	public int getPostId() {
 		return postId;
@@ -41,11 +42,11 @@ public class SalesReceipt implements Serializable{
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}
-	public long getData() {
-		return data;
+	public long getDate() {
+		return date;
 	}
-	public void setData(long data) {
-		this.data = data;
+	public void setDate(long data) {
+		this.date = data;
 	}
 	
 }
