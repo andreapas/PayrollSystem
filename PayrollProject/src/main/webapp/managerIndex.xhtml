@@ -9,50 +9,20 @@
 </h:head>
 
 <h:body>
-	<ui:param name="loggedUser" value="#{employeeBean.loggedUser}" />
 	<h:form>
 		<div class="ui-g">
 
 			<div class="ui-g-3">
+			
 				<p:panel id="mainMenu" header="Menu">
+				
 					<h:panelGrid columns="1" cellpadding="10">
-						<p>Welcome, #{loggedUser.name}</p>
+					
+						<p>Welcome, #{employeeBean.employee.name}</p>
 						<h:commandButton value="logout" action="#{credentialsBean.logout()}" />
-						<p:button id="overviewButton" value="Overview" icon="fa fa-eye"
-							onclick="return false">
-							<p:effect type="fade" event="click" for="settingsPanel" speed="1">
-								<f:param name="mode" value="'hide'" />
-							</p:effect>
-							<p:effect type="fade" event="click" for="insertHoursPanel"
-								speed="1">
-								<f:param name="mode" value="'hide'" />
-							</p:effect>
-							<p:effect type="fade" event="click" for="overviewPanel" speed="1">
-								<f:param name="mode" value="'show'" />
-							</p:effect>
-							<p:effect event="click" type="fade" for="userManagementPanel"
-								speed="1">
-								<f:param name="mode" value="'hide'"></f:param>
-							</p:effect>
-							<p:effect event="click" type="fade" for="hireEmployeePanel"
-								speed="1">
-								<f:param name="mode" value="'hide'"></f:param>
-							</p:effect>
-							<p:effect event="click" type="fade" for="fireEmployeePanel"
-								speed="1">
-								<f:param name="mode" value="'hide'"></f:param>
-							</p:effect>
-							<p:effect event="click" type="fade" for="editEmployeePanel"
-								speed="1">
-								<f:param name="mode" value="'hide'"></f:param>
-							</p:effect>
-						</p:button>
-
+						
 						<p:button id="settingsButton" value="Settings" icon="fa fa-gears"
 							onclick="return false">
-							<p:effect type="fade" event="click" for="overviewPanel" speed="1">
-								<f:param name="mode" value="'hide'" />
-							</p:effect>
 							<p:effect type="fade" event="click" for="insertHoursPanel"
 								speed="1">
 								<f:param name="mode" value="'hide'" />
@@ -79,9 +49,6 @@
 						</p:button>
 						<p:button id="insertHoursButton" value="Insert Hours"
 							icon="fa fa-clock-o" onclick="return false">
-							<p:effect type="fade" event="click" for="overviewPanel" speed="1">
-								<f:param name="mode" value="'hide'" />
-							</p:effect>
 							<p:effect type="fade" event="click" for="settingsPanel" speed="1">
 								<f:param name="mode" value="'hide'" />
 							</p:effect>
@@ -108,9 +75,6 @@
 						</p:button>
 						<p:button id="userManagementButton" value="User Management"
 							icon="fa fa-users" onclick="return false">
-							<p:effect event="click" type="fade" for="overviewPanel" speed="1">
-								<f:param name="mode" value="'hide'" />
-							</p:effect>
 							<p:effect type="fade" event="click" for="settingsPanel" speed="1">
 								<f:param name="mode" value="'hide'" />
 							</p:effect>
@@ -148,29 +112,7 @@
 				</p:button>
 
 
-				<p:panel layout="block" id="overviewPanel" header="Overview"
-					style="display: none;">
-					<h:panelGrid cellpadding="10">
-						<p:dataTable var="employee" value="#{loggedUser}"
-							rows="1">
-							<p:column headerText="Code">
-								<h:outputText value="#{employee.code}" />
-							</p:column>
-							<p:column headerText="Name">
-								<h:outputText value="#{employee.name}" />
-							</p:column>
-							<p:column headerText="Surname">
-								<h:outputText value="#{employee.surname}" />
-							</p:column>
-							<p:column headerText="Email">
-								<h:outputText value="#{employee.email}" />
-							</p:column>
-							<p:column headerText="Union Name">
-								<h:outputText value="#{employee.union_Name}" />
-							</p:column>
-						</p:dataTable>
-					</h:panelGrid>
-				</p:panel>
+	
 
 				<p:panel id="settingsPanel" header="Settings" widgetVar="settings"
 					style="display: none;">
@@ -217,9 +159,6 @@
 					<h:panelGrid cellpadding="5" columns="3">
 						<p:button id="hire" value="Add employee" onclick="return false"
 							icon="fa fa-user-plus">
-							<p:effect event="click" type="fade" for="overviewPanel" speed="1">
-								<f:param name="mode" value="'hide'" />
-							</p:effect>
 							<p:effect type="fade" event="click" for="settingsPanel" speed="1">
 								<f:param name="mode" value="'hide'" />
 							</p:effect>
@@ -247,9 +186,6 @@
 						</p:button>
 						<p:button id="fire" value="Delete employee" onclick="return false"
 							icon="fa fa-remove">
-							<p:effect event="click" type="fade" for="overviewPanel" speed="1">
-								<f:param name="mode" value="'hide'" />
-							</p:effect>
 							<p:effect type="fade" event="click" for="settingsPanel" speed="1">
 								<f:param name="mode" value="'hide'" />
 							</p:effect>
@@ -276,9 +212,6 @@
 						</p:button>
 						<p:button id="edit" value="Edit employee" onclick="return false"
 							icon="fa fa-edit">
-							<p:effect event="click" type="fade" for="overviewPanel" speed="1">
-								<f:param name="mode" value="'hide'" />
-							</p:effect>
 							<p:effect type="fade" event="click" for="settingsPanel" speed="1">
 								<f:param name="mode" value="'hide'" />
 							</p:effect>
