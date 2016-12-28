@@ -12,6 +12,10 @@ button, table{
 }
 
 
+.dynamicPanel {
+	display: none;
+}
+
 
 .monthly,
 .weekly,
