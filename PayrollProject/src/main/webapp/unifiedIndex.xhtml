@@ -26,7 +26,7 @@
 				<p:panel id="mainMenu" header="Menu">
 					<h:panelGrid columns="1" cellpadding="10">
 					
-						<p>Welcome, #{employeeBean.employee.name}</p>
+						<p>Welcome #{employeeBean.employee.name}</p>
 						<h:commandButton value="logout" action="#{credentialsBean.logout()}" />
 						
 						<p:button id="overviewButton" value="Overview" icon="fa fa-eye" onclick="return false">
