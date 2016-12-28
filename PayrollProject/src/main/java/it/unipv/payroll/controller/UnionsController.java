@@ -22,6 +22,10 @@ public class UnionsController extends GenericController<Union>{
 		return dao.find(unionName);
 	}
 
+	public List<Union> getUnionsList() {
+		return dao.findAll();
+	}
+
 	
 	
 //	public List<Union> addUnion(Union union) throws Exception{

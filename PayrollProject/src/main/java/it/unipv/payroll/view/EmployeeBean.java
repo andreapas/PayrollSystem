@@ -10,6 +10,8 @@ import javax.inject.Named;
 
 import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.model.Employee;
+import it.unipv.payroll.model.FlatEmployee;
+import it.unipv.payroll.model.PartTimeEmployee;
 import it.unipv.payroll.model.Union;
 
 @Named
@@ -18,6 +20,8 @@ public class EmployeeBean implements Serializable{
 
 	@Inject EmployeeController emController;
 	
+	private Employee partTimeEmployee;
+	private Employee fullTimeEmployee;
 	private Employee anEmployee;
 	private Employee loggedUser;
 	//private List<Employee> employeeList;
@@ -25,6 +29,8 @@ public class EmployeeBean implements Serializable{
 	@PostConstruct
 	public void init(){
 		loggedUser= emController.find( FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+		partTimeEmployee=new PartTimeEmployee();
+		fullTimeEmployee=new FlatEmployee();
 	}
 	
 	public Employee getLoggedUser() {
@@ -33,13 +39,7 @@ public class EmployeeBean implements Serializable{
 	public void setLoggedUser(Employee loggedUser) {
 		this.loggedUser = loggedUser;
 	}
-	public void setEmployee(Employee anEmployee) {
-		this.anEmployee=anEmployee;
-	}
-
-	public Employee getEmployee() {
-		return anEmployee;
-	}
+	
 //	public Employee getLoggedUser() {
 //		anEmployee= emController.find( FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
 //		return anEmployee;
@@ -49,12 +49,32 @@ public class EmployeeBean implements Serializable{
 //		return employeeList;
 //	}
 
-	public String hireEmployee() {
+	public Employee getPartTimeEmployee() {
+		return partTimeEmployee;
+	}
 
-		String answer=emController.add(anEmployee);
+	public void setPartTimeEmployee(Employee partTimeEmployee) {
+		this.partTimeEmployee = partTimeEmployee;
+	}
+
+	public Employee getFullTimeEmployee() {
+		return fullTimeEmployee;
+	}
+
+	public void setFullTimeEmployee(Employee fullTimeEmployee) {
+		this.fullTimeEmployee = fullTimeEmployee;
+	}
+
+	public String hirePartTimeEmployee() {
+		System.out.println("-------------------------------------------------------------------YEEEAAAAA");
+		String answer=emController.add(partTimeEmployee);
 		return answer;
 	}
 
+	
+	
+	
+	
 	public String fireEmployee() {
 		String answer=emController.remove(anEmployee.getCode());
 		return answer;

@@ -40,4 +40,7 @@ public class UnionsBean implements Serializable {
 		return answer;
 	}
 	
+	public List<Union> getUnionsList(){
+		return unionsController.getUnionsList();
+	}
 }

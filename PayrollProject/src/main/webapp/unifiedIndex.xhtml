@@ -269,20 +269,29 @@
 						
 					</h:panelGrid>
 				</p:panel>
-
-				<p:panel id="hireEmployeePanel" header="Add employee" style="display: none;">
+				<p:panel id="hireEmployeePanel" header="Select type of Employee" style="display: none;">
+						<p:button id="partEmployee" value="Part-time Employee" onclick="return false">
+							<p:effect event="click" type="fade" for="hireEmployeePanel-partDetails" speed="1">
+								<f:param name="mode" value="'show'"></f:param>
+							</p:effect>
+						</p:button>
+				</p:panel>
+				<p:panel id="hireEmployeePanel-partDetails" header="Insert Employee Details" style="display: none;">
 					<h:panelGrid cellpadding="5" columns="2">
 						<p:outputLabel for="hirecode" value="Code:"></p:outputLabel>
-						<p:inputText id="hirecode" placeholder="Code" required="true" value="#{employeeBean.employee.code}"></p:inputText>
+						<p:inputText id="hirecode" placeholder="Code" required="true" value="#{employeeBean.partTimeEmployee.code}"></p:inputText>
 						<p:outputLabel for="name" value="Name:"></p:outputLabel>
-						<p:inputText id="name" placeholder="Name" required="true" value="#{employeeBean.employee.name}"></p:inputText>
+						<p:inputText id="name" placeholder="Name" required="true" value="#{employeeBean.partTimeEmployee.name}"></p:inputText>
 						<p:outputLabel for="surname" value="Surname:"></p:outputLabel>
-						<p:inputText id="surname" placeholder="Surname" required="true" value="#{employeeBean.employee.surname}"></p:inputText>
+						<p:inputText id="surname" placeholder="Surname" required="true" value="#{employeeBean.partTimeEmployee.surname}"></p:inputText>
 						<p:outputLabel for="email" value="Email:"></p:outputLabel>
-						<p:inputText id="email" placeholder="Email" required="true" value="#{employeeBean.employee.email}"></p:inputText>
+						<p:inputText id="email" placeholder="Email" required="true" value="#{employeeBean.partTimeEmployee.email}"></p:inputText>
 						<p:outputLabel for="union" value="Union name:"></p:outputLabel>
-						<p:inputText id="union" placeholder="Union name" value="#{employeeBean.employee.union}"></p:inputText>
-						<p:commandButton value="Add" action="#{employeeBean.hireEmployee()}" />
+						<p:selectOneMenu id="union" value="#{employeeBean.partTimeEmployee.union}" style="width:125px">
+				            <f:selectItem itemLabel="Select One" itemValue="" />
+				            <f:selectItems value="#{unionsBean.unionsList}" var="union" itemLabel="#{union.unionName}"/>
+				        </p:selectOneMenu>
+						<p:commandButton value="Add" action="#{employeeBean.hirePartTimeEmployee()}" />
 					</h:panelGrid>
 				</p:panel>
 
