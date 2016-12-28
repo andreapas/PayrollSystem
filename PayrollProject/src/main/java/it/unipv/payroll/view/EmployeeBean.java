@@ -24,7 +24,6 @@ public class EmployeeBean implements Serializable {
 	private Employee partTimeEmployee;
 	private Employee fullTimeEmployee;
 	private Employee anEmployee;
-	// private List<Employee> employeeList;
 
 	@PostConstruct
 	public void init() {
@@ -35,15 +34,6 @@ public class EmployeeBean implements Serializable {
 	public void setAnEmployee(Employee anEmployee) {
 		this.anEmployee = anEmployee;
 	}
-	// public Employee getLoggedUser() {
-	// anEmployee= emController.find(
-	// FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
-	// return anEmployee;
-	// }
-	// public List<Employee> getEmployeeList() {
-	//
-	// return employeeList;
-	// }
 
 	public Employee getPartTimeEmployee() {
 		return partTimeEmployee;
@@ -93,7 +83,7 @@ public class EmployeeBean implements Serializable {
 	}
 
 	public String hireFullTimeEmployee() {
-		String answer = emController.add(partTimeEmployee);
+		String answer = emController.add(fullTimeEmployee);
 		return answer;
 
 	}

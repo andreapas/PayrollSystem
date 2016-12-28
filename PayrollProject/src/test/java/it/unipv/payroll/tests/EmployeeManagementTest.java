@@ -183,13 +183,13 @@ public class EmployeeManagementTest extends ArquillianTest {
 		boolean isPaymentMethodEdited = false;
 		for (Employee e : employees) {
 			if (e.getCode().equals(USER1_COD)) {
-
 				if (e.getPayment_method().equals(PAYMENT_METHOD2)) {
 					isPaymentMethodEdited = true;
+					break;
+
 				}
 
 			}
-			break;
 
 		}
 
