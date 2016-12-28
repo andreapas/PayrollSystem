@@ -19,14 +19,20 @@ public class EmployeeBean implements Serializable{
 	@Inject EmployeeController emController;
 	
 	private Employee anEmployee;
+	private Employee loggedUser;
 	//private List<Employee> employeeList;
 	
 	@PostConstruct
 	public void init(){
-		anEmployee= emController.find( FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+		loggedUser= emController.find( FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
 	}
 	
-	
+	public Employee getLoggedUser() {
+		return loggedUser;
+	}
+	public void setLoggedUser(Employee loggedUser) {
+		this.loggedUser = loggedUser;
+	}
 	public void setEmployee(Employee anEmployee) {
 		this.anEmployee=anEmployee;
 	}

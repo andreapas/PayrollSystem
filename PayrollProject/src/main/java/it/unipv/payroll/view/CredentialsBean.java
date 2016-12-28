@@ -51,7 +51,7 @@ public class CredentialsBean implements Serializable {
 	public String logout() {
 	    HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 	    session.invalidate();
-	    return "/index.xhtml?faces-redirect=true";
+	    return "/unifiedIndex.xhtml?faces-redirect=true";
 	}
 
 //	public boolean isUserLoggedIn() {

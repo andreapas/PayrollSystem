@@ -14,7 +14,7 @@
 
 	<script type="text/javascript">
 	$( document ).ready(function() {
-		showElementsOfRole("#{employeeBean.employee.role}");
+		showElementsOfRole("#{employeeBean.loggedUser.role}");
 	});
 	</script>
 
@@ -26,7 +26,7 @@
 				<p:panel id="mainMenu" header="Menu">
 					<h:panelGrid columns="1" cellpadding="10">
 					
-						<p>Welcome #{employeeBean.employee.name}</p>
+						<p>Welcome #{employeeBean.loggedUser.name}</p>
 						<h:commandButton value="logout" action="#{credentialsBean.logout()}" />
 						
 						<p:button id="overviewButton" value="Overview" icon="fa fa-eye" onclick="return false">
@@ -173,7 +173,7 @@
 
 				<p:panel layout="block" id="overviewPanel" header="Overview" style="display: none;">
 					<h:panelGrid cellpadding="10">
-						<p:dataTable var="employee" value="#{employeeBean.employee}" rows="1">
+						<p:dataTable var="employee" value="#{employeeBean.loggedUser}" rows="1">
 							<p:column headerText="Code">
 								<h:outputText value="#{employee.code}" />
 							</p:column>
@@ -196,7 +196,7 @@
 				<p:panel id="settingsPanel" header="Settings" style="display: none;">
 					<h:panelGrid cellpadding="10">
 						<p:outputLabel for="paymentMethod" value="Method of payment:" />
-						<p:selectOneRadio id="paymentMethod" value="#{employeeBean.employee.payment_method}">
+						<p:selectOneRadio id="paymentMethod" value="#{employeeBean.loggedUser.payment_method}">
 							<f:selectItem itemLabel="Mailed to the postal address" itemValue="Mail" />
 							<f:selectItem itemLabel="Held for pickup by the paymaster" itemValue="Paymaster" />
 							<f:selectItem itemLabel="Deposited into the bank account" itemValue="Bank" />
@@ -271,18 +271,18 @@
 				</p:panel>
 
 				<p:panel id="hireEmployeePanel" header="Add employee" style="display: none;">
-					<h:panelGrid cellpadding="5" columns="1">
-<!-- 						<p:outputLabel for="hirecode" value="Code:"></p:outputLabel> -->
-<!-- 						<p:inputText id="hirecode" placeholder="Code" required="true"></p:inputText> -->
-<!-- 						<p:outputLabel for="name" value="Name:"></p:outputLabel> -->
-<!-- 						<p:inputText id="name" placeholder="Name" required="true"></p:inputText> -->
-<!-- 						<p:outputLabel for="surname" value="Surname:"></p:outputLabel> -->
-<!-- 						<p:inputText id="surname" placeholder="Surname" required="true"></p:inputText> -->
-<!-- 						<p:outputLabel for="email" value="Email:"></p:outputLabel> -->
-<!-- 						<p:inputText id="email" placeholder="Email" required="true"></p:inputText> -->
+					<h:panelGrid cellpadding="5" columns="2">
+						<p:outputLabel for="hirecode" value="Code:"></p:outputLabel>
+						<p:inputText id="hirecode" placeholder="Code" required="true" value="#{employeeBean.employee.code}"></p:inputText>
+						<p:outputLabel for="name" value="Name:"></p:outputLabel>
+						<p:inputText id="name" placeholder="Name" required="true" value="#{employeeBean.employee.name}"></p:inputText>
+						<p:outputLabel for="surname" value="Surname:"></p:outputLabel>
+						<p:inputText id="surname" placeholder="Surname" required="true" value="#{employeeBean.employee.surname}"></p:inputText>
+						<p:outputLabel for="email" value="Email:"></p:outputLabel>
+						<p:inputText id="email" placeholder="Email" required="true" value="#{employeeBean.employee.email}"></p:inputText>
 						<p:outputLabel for="union" value="Union name:"></p:outputLabel>
-						<p:inputText id="union" placeholder="Union name"></p:inputText>
-						<p:commandButton value="Add"  />
+						<p:inputText id="union" placeholder="Union name" value="#{employeeBean.employee.union}"></p:inputText>
+						<p:commandButton value="Add" action="#{employeeBean.hireEmployee()}" />
 					</h:panelGrid>
 				</p:panel>
 
@@ -298,8 +298,8 @@
 					<h:panelGrid columns="1" cellpadding="5">
 <!-- 						<p:outputLabel for="editcode" value="Code:"></p:outputLabel> -->
 <!-- 						<p:inputText id="editcode" placeholder="Code" required="true"></p:inputText> -->
-						<p:outputLabel for="email" value="Email:"></p:outputLabel>
-						<p:inputText id="email" placeholder="Email"></p:inputText>
+						<p:outputLabel for="emailEdit" value="Email:"></p:outputLabel>
+						<p:inputText id="emailEdit" placeholder="Email"></p:inputText>
 <!-- 						<p:outputLabel for="union" value="Union name:"></p:outputLabel> -->
 <!-- 						<p:inputText id="union" placeholder="Union name"></p:inputText> -->
 <!-- 						<p:button id="edit" value="Edit" onclick="return false"></p:button> -->
