@@ -52,10 +52,34 @@ public class UnionsTests extends ArquillianTest {
 		List<Union> unions = unionsDao.findAll();
 		int flag = 0;
 		for (Union u : unions) {
-			if (u.getUnionName() != null && u.getWeeklyRate() != -1) {
+			if (u.getUnionName().equals(CIGL)|| u.getUnionName().equals(COBAS)) {
 				flag++;
 			}
 		}
 		Assert.assertTrue("2 unions added!", flag == 2);
+	}
+	@Test
+	public void testListUnions() {
+		
+		Union union = new Union();
+		union.setUnionName(CIGL);
+		union.setWeeklyRate(CIGL_TAX);
+		unionsBean.setUnion(union);
+		
+		unionsBean.addUnion();
+		union.setUnionName(COBAS);
+		union.setWeeklyRate(COBAS_TAX);
+		unionsBean.setUnion(union);
+		
+		unionsBean.addUnion();
+		
+		List<Union> unions = unionsBean.getUnionsList();
+		boolean arePresent = false;
+		for (Union u : unions) {
+			if (u.getUnionName().equals(CIGL)|| u.getUnionName().equals(COBAS)) {
+				arePresent=true;
+			}
+		}
+		Assert.assertTrue("The Union List contains the two entries inserted", arePresent);
 	}
 }
