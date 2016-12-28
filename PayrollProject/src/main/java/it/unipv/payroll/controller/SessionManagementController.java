@@ -5,7 +5,7 @@ import javax.ejb.Stateless;
 import it.unipv.payroll.model.Credentials;
 
 @Stateless
-public class CredentialsController extends GenericController<Credentials> {
+public class SessionManagementController extends GenericController<Credentials> {
 
 	
 	public boolean areValidCredential(String username, String password) {

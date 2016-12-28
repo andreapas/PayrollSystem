@@ -8,9 +8,9 @@ import it.unipv.payroll.model.Credentials;
 import it.unipv.payroll.model.Payroll;
 
 @Stateless
-public class CredentialsDAO extends GenericDAO<Credentials>{
+public class SessionManagementDAO extends GenericDAO<Credentials>{
 
-	public CredentialsDAO() {
+	public SessionManagementDAO() {
 		super(Credentials.class);
 	}
 }

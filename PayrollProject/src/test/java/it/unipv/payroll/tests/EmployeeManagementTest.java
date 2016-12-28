@@ -87,12 +87,12 @@ public class EmployeeManagementTest extends ArquillianTest {
 	@After
 	public void cleanup(){
 		if(emController.find(USER1_COD)!=null){
-			emBean.setEmployee(anEmployee);
-			emBean.fireEmployee();
+			emBean.setPartTimeEmployee(anEmployee);
+			emBean.fireEmployee(anEmployee);
 		}
 		if(emController.find(USER2_COD)!=null){
-			emBean.setEmployee(anotherEmployee);
-			emBean.fireEmployee();
+			emBean.setFullTimeEmployee(anotherEmployee);
+			emBean.fireEmployee(anotherEmployee);
 		}
 		unBean.setUnion(USER1_UNION);
 		unBean.removeUnion(USER1_UNION);
@@ -104,8 +104,8 @@ public class EmployeeManagementTest extends ArquillianTest {
 	@Test
 	public void testHireUser() {
 		
-		emBean.setEmployee(anEmployee);
-		emBean.hireEmployee();
+		emBean.setPartTimeEmployee(anEmployee);
+		emBean.hirePartTimeEmployee();
 
 		List<Employee> employees = emDAO.findAll();
 		boolean isPresent = false;
@@ -123,9 +123,9 @@ public class EmployeeManagementTest extends ArquillianTest {
 	@Test
 	public void testFireUser() {
 
-		emBean.setEmployee(anEmployee);
-		emBean.hireEmployee();
-		emBean.fireEmployee();
+		emBean.setPartTimeEmployee(anEmployee);
+		emBean.hirePartTimeEmployee();
+		emBean.fireEmployee(anEmployee);
 
 		List<Employee> employees = emDAO.findAll();
 		boolean isPresent = false;
@@ -143,8 +143,10 @@ public class EmployeeManagementTest extends ArquillianTest {
 	public void editUser() {
 		anEmployee.setUnion(USER1_UNION);
 		
-		emBean.setEmployee(anEmployee);
-		emBean.hireEmployee();
+		emBean.setPartTimeEmployee(anEmployee);
+		emBean.hirePartTimeEmployee();
+
+		emBean.findEmployeeByCode(anEmployee.getCode());
 
 		emBean.editEmail(USER1_EMAIL_EDITED);
 		emBean.editUnion(USER1_UNION_EDITED);
@@ -166,16 +168,16 @@ public class EmployeeManagementTest extends ArquillianTest {
 
 		Assert.assertTrue("Employee email edited successfully!", isEmailEdited);
 		Assert.assertTrue("Employee union edited successfully!", isUnionEdited);
-
-		emBean.fireEmployee();
 	}
 
 	@Test
 	public void testEditPaymentMethod() {
 
-		emBean.setEmployee(anEmployee);
-		emBean.hireEmployee();
-
+		emBean.setPartTimeEmployee(anEmployee);
+		emBean.hirePartTimeEmployee();
+		
+		
+		emBean.findEmployeeByCode(anEmployee.getCode());
 		emBean.editPaymentMethod(PAYMENT_METHOD2);
 		List<Employee> employees = emDAO.findAll();
 		boolean isPaymentMethodEdited = false;
@@ -196,18 +198,18 @@ public class EmployeeManagementTest extends ArquillianTest {
 	}
 	@Test
 	public void autoMapUnion() {
-		emBean.setEmployee(anEmployee);
-		emBean.hireEmployee();
+		emBean.setPartTimeEmployee(anEmployee);
+		emBean.hirePartTimeEmployee();
 
 		boolean mapWorking=false;
-		if(emBean.getEmployee().getUnion().getUnionName().equals(USER1_UNION.getUnionName())){
+		if(emBean.getPartTimeEmployee().getUnion().getUnionName().equals(USER1_UNION.getUnionName())){
 			mapWorking=true;
 		}
 		
 		
 		
-		emBean.setEmployee(anotherEmployee);
-		emBean.hireEmployee();
+		emBean.setFullTimeEmployee(anotherEmployee);
+		emBean.hireFullTimeEmployee();
 		
 		boolean inverseMapWorking=false;
 		List<Employee> associates= unController.findUnion(USER1_UNION.getUnionName()).getAssociates();
