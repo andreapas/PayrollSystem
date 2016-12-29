@@ -52,6 +52,8 @@ public class EmployeeBean implements Serializable {
 	}
 
 	public String hirePartTimeEmployee() {
+		partTimeEmployee.setRole("Weekly");
+//		System.out.println(partTimeEmployee.getUnion().getUnionName());
 		String answer = emController.add(partTimeEmployee);
 		return answer;
 	}
