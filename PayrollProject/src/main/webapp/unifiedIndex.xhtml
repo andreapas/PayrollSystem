@@ -116,28 +116,31 @@
 					<h:panelGrid cellpadding="5" columns="2">
 						<p:outputLabel for="hirecode" value="Code:"></p:outputLabel>
 						<p:inputText id="hirecode" placeholder="Code" required="true" value="#{employeeBean.partTimeEmployee.code}"></p:inputText>
-						<p:message for="hirecode"></p:message>
 						
-						<p:outputLabel for="name" value="Name:"></p:outputLabel>
-						<p:inputText id="name" placeholder="Name" required="true" value="#{employeeBean.partTimeEmployee.name}"></p:inputText>
-						<p:message for="name"></p:message>
+						<p:outputLabel for="hirename" value="Name:"></p:outputLabel>
+						<p:inputText id="hirename" placeholder="Name" required="true" value="#{employeeBean.partTimeEmployee.name}"></p:inputText>
 						
-						<p:outputLabel for="surname" value="Surname:"></p:outputLabel>
-						<p:inputText id="surname" placeholder="Surname" required="true" value="#{employeeBean.partTimeEmployee.surname}"></p:inputText>
-						<p:message for="surname"></p:message>
+						<p:outputLabel for="hiresurname" value="Surname:"></p:outputLabel>
+						<p:inputText id="hiresurname" placeholder="Surname" required="true" value="#{employeeBean.partTimeEmployee.surname}"></p:inputText>
 						
-						<p:outputLabel for="email" value="Email:"></p:outputLabel>
-						<p:inputText id="email" placeholder="Email" required="true" value="#{employeeBean.partTimeEmployee.email}"></p:inputText>
-						<p:message for="email"></p:message>
+						<p:outputLabel for="hireemail" value="Email:"></p:outputLabel>
+						<p:inputText id="hireemail" placeholder="Email" required="true" value="#{employeeBean.partTimeEmployee.email}"></p:inputText>
 						
-						<p:outputLabel for="union" value="Union name:"></p:outputLabel>
-						<p:selectOneMenu id="union" value="#{employeeBean.partTimeEmployee.union}" style="width:125px" converter="unionTranslator">
-<!-- 				            <f:selectItem itemLabel="Select One" itemValue="" /> -->
-				            <f:selectItems  var="union" itemLabel="#{union.unionName}" itemValue="#{union}"/>
+						<p:outputLabel for="hirepaymentMethod" value="Payment Method:"></p:outputLabel>
+						<p:selectOneMenu id="hirepaymentMethod" value="#{employeeBean.partTimeEmployee.payment_method}" style="width:125px">
+				            <f:selectItem itemLabel="By Hand" itemValue="By Hand" />
+				            <f:selectItem itemLabel="Postal Address" itemValue="postal address" />
+				            <f:selectItem itemLabel="Bank Account" itemValue="bank account" />
 				        </p:selectOneMenu>
-						<p:message for="union"></p:message>
 						
-						<p:commandButton value="Add" action="#{employeeBean.hirePartTimeEmployee()}"/>
+						
+						<p:outputLabel for="hireunion" value="Union name:"></p:outputLabel>
+						<p:selectOneMenu id="hireunion" value="#{employeeBean.partTimeEmployee.union}" style="width:125px" converter="unionTranslator">
+<!-- 				            <f:selectItem itemLabel="Select One" itemValue="" /> -->
+				            <f:selectItems value="#{unionsBean.unionsList}" var="union" itemLabel="#{union.unionName}"/>
+				        </p:selectOneMenu>
+						
+						<p:commandButton value="Add" actionListener="#{employeeBean.hirePartTimeEmployee()}" />
 					</h:panelGrid>
 				</p:panel>
 
