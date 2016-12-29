@@ -131,8 +131,8 @@
 						<p:message for="email"></p:message>
 						
 						<p:outputLabel for="union" value="Union name:"></p:outputLabel>
-						<p:selectOneMenu id="union" value="#{employeeBean.partTimeEmployee.union}" style="width:125px">
-				            <f:selectItem itemLabel="Select One" itemValue="" />
+						<p:selectOneMenu id="union" value="#{employeeBean.partTimeEmployee.union}" style="width:125px" converter="unionTranslator">
+<!-- 				            <f:selectItem itemLabel="Select One" itemValue="" /> -->
 				            <f:selectItems  var="union" itemLabel="#{union.unionName}" itemValue="#{union}"/>
 				        </p:selectOneMenu>
 						<p:message for="union"></p:message>

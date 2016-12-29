@@ -2,13 +2,14 @@ package it.unipv.payroll.model;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
 
 @Entity
 @Table(name="unions")
@@ -47,5 +48,15 @@ public class Union implements Serializable{
 		
 		return weeklyRate;
 	}
-	
+	@Override
+	public boolean equals(Object obj) {
+		// Basic checks.
+        if (obj == this) return true;
+        if (!(obj instanceof Union)) return false;
+
+        // Property checks.
+        Union other = (Union) obj;
+        return Objects.equals(unionName, other.unionName)
+            && Objects.equals(weeklyRate, other.weeklyRate);
+	}
 }
