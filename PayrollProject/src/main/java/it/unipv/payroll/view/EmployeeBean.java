@@ -16,38 +16,24 @@ import it.unipv.payroll.model.Union;
 
 @Named
 @SessionScoped
-public class EmployeeBean implements Serializable{
+public class EmployeeBean implements Serializable {
 
-	@Inject EmployeeController emController;
-	
+	@Inject
+	EmployeeController emController;
+
 	private Employee partTimeEmployee;
 	private Employee fullTimeEmployee;
 	private Employee anEmployee;
-	private Employee loggedUser;
-	//private List<Employee> employeeList;
-	
+
 	@PostConstruct
-	public void init(){
-		loggedUser= emController.find( FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
-		partTimeEmployee=new PartTimeEmployee();
-		fullTimeEmployee=new FlatEmployee();
+	public void init() {
+		partTimeEmployee = new PartTimeEmployee();
+		fullTimeEmployee = new FlatEmployee();
 	}
-	
-	public Employee getLoggedUser() {
-		return loggedUser;
+
+	public void setAnEmployee(Employee anEmployee) {
+		this.anEmployee = anEmployee;
 	}
-	public void setLoggedUser(Employee loggedUser) {
-		this.loggedUser = loggedUser;
-	}
-	
-//	public Employee getLoggedUser() {
-//		anEmployee= emController.find( FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
-//		return anEmployee;
-//	}
-//	public List<Employee> getEmployeeList() {
-//		
-//		return employeeList;
-//	}
 
 	public Employee getPartTimeEmployee() {
 		return partTimeEmployee;
@@ -66,39 +52,47 @@ public class EmployeeBean implements Serializable{
 	}
 
 	public String hirePartTimeEmployee() {
-		System.out.println("-------------------------------------------------------------------YEEEAAAAA");
-		String answer=emController.add(partTimeEmployee);
+		partTimeEmployee.setRole("Weekly");
+//		System.out.println(partTimeEmployee.getUnion().getUnionName());
+		String answer = emController.add(partTimeEmployee);
 		return answer;
 	}
 
-	
-	
-	
-	
-	public String fireEmployee() {
-		String answer=emController.remove(anEmployee.getCode());
+	public String fireEmployee(Employee employee) {
+		String answer = emController.remove(employee.getCode());
 		return answer;
-		
+
 	}
 
 	public String editEmail(String newEmail) {
 		anEmployee.setEmail(newEmail);
-		String answer=emController.update(anEmployee);
+		String answer = emController.update(anEmployee);
 		return answer;
-		
+
 	}
-	
+
 	public String editUnion(Union newUnion) {
 		anEmployee.setUnion(newUnion);
-		String answer=emController.update(anEmployee);
+		String answer = emController.update(anEmployee);
 		return answer;
-		
+
 	}
 
 	public String editPaymentMethod(String newPaymentMethod) {
 		anEmployee.setPayment_method(newPaymentMethod);
-		String answer=emController.update(anEmployee);
+		String answer = emController.update(anEmployee);
 		return answer;
+	}
+
+	public String hireFullTimeEmployee() {
+		String answer = emController.add(fullTimeEmployee);
+		return answer;
+
+	}
+
+	public Employee findEmployeeByCode(String code) {
+		anEmployee=emController.find(code);
+		return anEmployee;
 	}
 
 }

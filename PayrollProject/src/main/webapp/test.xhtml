@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+<h:head>
+	<link rel="stylesheet" type="text/css" href="css/style.css"></link>
+	<script type="text/javascript" src="js/scripts.js"></script>
+</h:head>
+
+<h:body>
+<h:form>
+				<p:panel id="hireEmployeePanel-partDetails" header="Insert Employee Details">
+					<h:panelGrid cellpadding="5" columns="3">
+						<p:outputLabel for="hirecode" value="Code:"></p:outputLabel>
+						<p:inputText id="hirecode" placeholder="Code" required="true" value="#{employeeBean.partTimeEmployee.code}"></p:inputText>
+						<p:message for="hirecode"></p:message>
+						
+						<p:outputLabel for="name" value="Name:"></p:outputLabel>
+						<p:inputText id="name" placeholder="Name" required="true" value="#{employeeBean.partTimeEmployee.name}"></p:inputText>
+						<p:message for="name"></p:message>
+						
+						<p:outputLabel for="surname" value="Surname:"></p:outputLabel>
+						<p:inputText id="surname" placeholder="Surname" required="true" value="#{employeeBean.partTimeEmployee.surname}"></p:inputText>
+						<p:message for="surname"></p:message>
+						
+						<p:outputLabel for="email" value="Email:"></p:outputLabel>
+						<p:inputText id="email" placeholder="Email" required="true" value="#{employeeBean.partTimeEmployee.email}"></p:inputText>
+						<p:message for="email"></p:message>
+						
+						<p:outputLabel for="paymentMethod" value="Payment Method:"></p:outputLabel>
+						<p:selectOneMenu id="paymentMethod" value="#{employeeBean.partTimeEmployee.payment_method}" style="width:125px">
+				            <f:selectItem itemLabel="By Hand" itemValue="By Hand" />
+				            <f:selectItem itemLabel="Postal Address" itemValue="postal address" />
+				            <f:selectItem itemLabel="Bank Account" itemValue="bank account" />
+				        </p:selectOneMenu>
+						<p:message for="paymentMethod"></p:message>
+						
+						
+						<p:outputLabel for="union" value="Union name:"></p:outputLabel>
+						<p:selectOneMenu id="union" value="#{employeeBean.partTimeEmployee.union}" style="width:125px">
+				            <f:selectItem itemLabel="Select One" itemValue="" />
+				            <f:selectItems value="#{unionsBean.unionsList}" var="union" itemLabel="#{union.unionName}"/>
+				        </p:selectOneMenu>
+						<p:message for="union"></p:message>
+						
+						<p:commandButton value="Add" actionListener="#{employeeBean.hirePartTimeEmployee()}" />
+					</h:panelGrid>
+				</p:panel>
+
+</h:form>
+</h:body>
+</html>
