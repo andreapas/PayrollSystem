@@ -49,7 +49,10 @@ public class PayrollTests extends ArquillianTest{
 		Assert.assertTrue("Polite message found!", found);
 				
 	}
-	
+	@Test
+	public void testGrowlAndCatchClause(){
+		Assert.assertEquals("probably you're testing...",payrollBean.testGrowl());
+	}
 	@Test
 	public void testRemove(){
 		List<Payroll> payrolls=payrollDAO.findAll();

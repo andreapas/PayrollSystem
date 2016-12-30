@@ -27,7 +27,12 @@ public abstract class GenericController<T extends Serializable> {
 	}
 	
 	public String add(T element) {
-		dao.add(element);
+		
+		try {
+			dao.add(element);
+		} catch (Exception e) {
+			return ERROR;
+		}
 		return SUCCESS;
 	}
 

@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -52,7 +54,17 @@ public class EmployeeBean implements Serializable {
 	public String hireFullTimeEmployee() {
 		fullTimeEmployee.setRole("Monthly");
 		String answer = emController.add(fullTimeEmployee);
-		return answer;
+		try {
+			FacesContext context = FacesContext.getCurrentInstance();
+	        if(answer.equals("Operation completed successfully.")){
+		        context.addMessage(null, new FacesMessage("Success!",  "The employee "+fullTimeEmployee.getName()+" "+fullTimeEmployee.getSurname()+" has been successfully hired") );
+	        }else {
+	        	context.addMessage(null, new FacesMessage("Error!",  "Something has gone wrong while trying to hire "+fullTimeEmployee.getName()+" "+fullTimeEmployee.getSurname()+".\nThe complete message is "+answer) );
+			}
+		} catch (NullPointerException e) {
+			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
+		}
+		return null;
 
 	}
 

@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -59,7 +61,18 @@ public class PayrollBean implements Serializable {
 	}
 	
 	public String testGrowl(){
-		return "Oh, sono un growl!";
+		String out= "hellooooo :)";
+		try {
+			FacesContext context = FacesContext.getCurrentInstance();
+	         
+	        context.addMessage(null, new FacesMessage("Successful",  "Your message: " + "Oh, sono un growl!") );
+	        context.addMessage(null, new FacesMessage("Second Message", "Additional Message Detail"));
+		} catch (NullPointerException e) {
+				 out="probably you're testing..."; 
+		}
+		System.out.println("-------------------------------"+out);
+		return out;
+		
 	}
 	
 }
