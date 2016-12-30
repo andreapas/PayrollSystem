@@ -15,7 +15,7 @@ import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.controller.UnionsController;
 import it.unipv.payroll.dao.EmployeeDAO;
 import it.unipv.payroll.model.Employee;
-import it.unipv.payroll.model.FlatEmployee;
+import it.unipv.payroll.model.FullTimeEmployee;
 import it.unipv.payroll.model.PartTimeEmployee;
 import it.unipv.payroll.model.Union;
 import it.unipv.payroll.view.EmployeeBean;
@@ -34,8 +34,8 @@ public class EmployeeManagementTest extends ArquillianTest {
 	private static Union USER1_UNION_EDITED;
 	private static String PAYMENT_METHOD1 = "Bank account";
 	private static String PAYMENT_METHOD2 = "By hand";
-	private static Employee anEmployee;
-	private static Employee anotherEmployee;
+	private static PartTimeEmployee anEmployee;
+	private static FullTimeEmployee anotherEmployee;
 	private static String MonthlyRole= "Monthly";
 	private static String WeeklyRole= "Weekly";
 	
@@ -74,7 +74,7 @@ public class EmployeeManagementTest extends ArquillianTest {
 		anEmployee.setPayment_method(PAYMENT_METHOD1);
 		anEmployee.setRole(WeeklyRole);
 		
-		anotherEmployee= new FlatEmployee();
+		anotherEmployee= new FullTimeEmployee();
 		anotherEmployee.setCode(USER2_COD);
 		anotherEmployee.setName(USER1_NAME);
 		anotherEmployee.setSurname(USER1_SURNAME);

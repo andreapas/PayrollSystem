@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 
 import it.unipv.payroll.controller.SalesReceiptController;
 import it.unipv.payroll.model.Employee;
-import it.unipv.payroll.model.FlatEmployee;
+import it.unipv.payroll.model.FullTimeEmployee;
 import it.unipv.payroll.model.SalesReceipt;
 import it.unipv.payroll.view.SalesReceiptBean;
 
@@ -28,7 +28,7 @@ public class SalesReceiptTest extends ArquillianTest {
 	@Test
 	public void testPostSalesReceipt() {
 		salesReceipt = new SalesReceipt();
-		anEmployee = new FlatEmployee();
+		anEmployee = new FullTimeEmployee();
 		anEmployee.setCode("123456789");
 		anEmployee.setEmail("payrollproject@se.com");
 		anEmployee.setName("Jorge");

@@ -18,7 +18,7 @@
 	});
 	</script>
 
-	<h:form>
+<!-- 	<h:form> -->
 		<div class="ui-g">
 
 			<div class="ui-g-3">
@@ -27,8 +27,9 @@
 					<h:panelGrid columns="1" cellpadding="10">
 					
 						<p>Welcome #{sessionManagementBean.loggedUser.name}</p>
+						<h:form>
 						<h:commandButton value="logout" action="#{sessionManagementBean.logout()}" />
-						
+						</h:form>
 						<p:button value="Overview" icon="fa fa-eye" onclick="return showOnlyDivByClass('overviewPanel','dynamicPanel')" />
 						<p:button value="Settings" icon="fa fa-gears" onclick="return showOnlyDivByClass('settingsPanel','dynamicPanel')" />						
 						<p:button value="Insert Hours" icon="fa fa-clock-o" onclick="return showOnlyDivByClass('insertHoursPanel','dynamicPanel')" class="weekly" />
@@ -63,7 +64,7 @@
 						</p:dataTable>
 					</h:panelGrid>
 				</p:panel>
-
+				<h:form>
 				<p:panel header="Settings" class="dynamicPanel settingsPanel">
 					<h:panelGrid cellpadding="10">
 						<p:outputLabel for="paymentMethod" value="Method of payment:" />
@@ -75,7 +76,8 @@
 						<p:commandButton value="Submit Payment Method" actionListener="#{someBean.addPaymentMethod()}" />
 					</h:panelGrid>
 				</p:panel>
-
+				</h:form>
+				<h:form>
 				<p:panel header="Insert Hours" class="dynamicPanel insertHoursPanel">
 					<h:panelGrid cellpadding="10">
 						<h:outputText id="output" value="Hours worked today: #{insertHoursBean.hours}" />
@@ -84,7 +86,8 @@
 						<p:commandButton value="Add" actionListener="#{insertHoursBean.addHours()}" />
 					</h:panelGrid>	
 				</p:panel>
-
+				</h:form>
+				<h:form>
 				<p:panel header="Insert sales" class="dynamicPanel insertSalesPanel">
 					<h:panelGrid cellpadding="10">
 						<h:outputLabel for="id" value="ID:" />
@@ -98,7 +101,7 @@
 						<p:commandButton value="Add" actionListener="#{salesReceiptBean.postSalesReceipt()}" />	
 					</h:panelGrid>
 				</p:panel>
-
+				</h:form>
 				<p:panel header="User Management" class="dynamicPanel employeesManagementPanel">
 					<h:panelGrid cellpadding="5" columns="3">
 					
@@ -110,40 +113,100 @@
 				</p:panel>
 				
 				<p:panel header="Select type of Employee" class="dynamicPanel usersSubPanel selectTypePanel">
-						<p:button value="Part-time Employee" onclick="return showOnlyDivByClass('insertDetailsPanel','typeSubPanel')" />
-				</p:panel>
-				<p:panel header="Insert Employee Details" class="dynamicPanel usersSubPanel typeSubPanel insertDetailsPanel">
 					<h:panelGrid cellpadding="5" columns="2">
-						<p:outputLabel for="hirecode" value="Code:"></p:outputLabel>
-						<p:inputText id="hirecode" placeholder="Code" required="true" value="#{employeeBean.partTimeEmployee.code}"></p:inputText>
+						<p:button value="Part-time Employee" onclick="return showOnlyDivByClass('insertDetailsPanelPartTime','typeSubPanel')" />
+						<p:button value="Full-time Employee" onclick="return showOnlyDivByClass('insertDetailsPanelFullTime','typeSubPanel')" />
+					</h:panelGrid>
+				</p:panel>
+				<h:form>
+				<p:panel header="Insert Employee Details - Part Time Employee" class="dynamicPanel usersSubPanel typeSubPanel insertDetailsPanelPartTime">
+					<h:panelGrid id="partGrid" cellpadding="5" columns="3">
+						<p:outputLabel for="parthirecode" value="Code:"></p:outputLabel>
+						<p:inputText id="parthirecode" placeholder="Code" required="true" value="#{employeeBean.partTimeEmployee.code}"></p:inputText>
+						<p:message for="parthirecode"></p:message>
 						
-						<p:outputLabel for="hirename" value="Name:"></p:outputLabel>
-						<p:inputText id="hirename" placeholder="Name" required="true" value="#{employeeBean.partTimeEmployee.name}"></p:inputText>
+						<p:outputLabel for="parthirename" value="Name:"></p:outputLabel>
+						<p:inputText id="parthirename" placeholder="Name" required="true" value="#{employeeBean.partTimeEmployee.name}"></p:inputText>
+						<p:message for="parthirename"></p:message>
 						
-						<p:outputLabel for="hiresurname" value="Surname:"></p:outputLabel>
-						<p:inputText id="hiresurname" placeholder="Surname" required="true" value="#{employeeBean.partTimeEmployee.surname}"></p:inputText>
+						<p:outputLabel for="parthiresurname" value="Surname:"></p:outputLabel>
+						<p:inputText id="parthiresurname" placeholder="Surname" required="true" value="#{employeeBean.partTimeEmployee.surname}"></p:inputText>
+						<p:message for="parthiresurname"></p:message>
+												
+						<p:outputLabel for="parthireemail" value="Email:"></p:outputLabel>
+						<p:inputText id="parthireemail" placeholder="Email" required="true" value="#{employeeBean.partTimeEmployee.email}"></p:inputText>
+						<p:message for="parthireemail"></p:message>
 						
-						<p:outputLabel for="hireemail" value="Email:"></p:outputLabel>
-						<p:inputText id="hireemail" placeholder="Email" required="true" value="#{employeeBean.partTimeEmployee.email}"></p:inputText>
-						
-						<p:outputLabel for="hirepaymentMethod" value="Payment Method:"></p:outputLabel>
-						<p:selectOneMenu id="hirepaymentMethod" value="#{employeeBean.partTimeEmployee.payment_method}" style="width:125px">
+						<p:outputLabel for="parthirepaymentMethod" value="Payment Method:"></p:outputLabel>
+						<p:selectOneMenu id="parthirepaymentMethod" value="#{employeeBean.partTimeEmployee.payment_method}" style="width:125px">
 				            <f:selectItem itemLabel="By Hand" itemValue="By Hand" />
 				            <f:selectItem itemLabel="Postal Address" itemValue="postal address" />
 				            <f:selectItem itemLabel="Bank Account" itemValue="bank account" />
 				        </p:selectOneMenu>
+						<p:message for="parthirepaymentMethod"></p:message>
 						
+						<p:outputLabel for="parthirerate" value="Hourly Rate:"></p:outputLabel>
+						<p:inputNumber id="parthirerate" required="true" value="#{employeeBean.partTimeEmployee.hourlyRate}" symbol=" €/h" symbolPosition="s" 
+                               decimalSeparator="," thousandSeparator="."></p:inputNumber>
+						<p:message for="parthirerate"></p:message>
 						
-						<p:outputLabel for="hireunion" value="Union name:"></p:outputLabel>
-						<p:selectOneMenu id="hireunion" value="#{employeeBean.partTimeEmployee.union}" style="width:125px" converter="unionTranslator">
+						<p:outputLabel for="parthireunion" value="Union name:"></p:outputLabel>
+						<p:selectOneMenu id="parthireunion" value="#{employeeBean.partTimeEmployee.union}" style="width:125px" converter="unionTranslator">
 <!-- 				            <f:selectItem itemLabel="Select One" itemValue="" /> -->
 				            <f:selectItems value="#{unionsBean.unionsList}" var="union" itemLabel="#{union.unionName}"/>
 				        </p:selectOneMenu>
+						<p:message for="parthireunion"></p:message>
 						
-						<p:commandButton value="Add" actionListener="#{employeeBean.hirePartTimeEmployee()}" />
+						<p:commandButton value="Add" actionListener="#{employeeBean.hirePartTimeEmployee()}" update="partGrid"/>
 					</h:panelGrid>
 				</p:panel>
-
+				</h:form>
+				<h:form>
+				<p:panel header="Insert Employee Details - Full Time Employee" class="dynamicPanel usersSubPanel typeSubPanel insertDetailsPanelFullTime">
+					<h:panelGrid id="fullGrid" cellpadding="5" columns="3">
+						<p:outputLabel for="fullhirecode" value="Code:"></p:outputLabel>
+						<p:inputText id="fullhirecode" placeholder="Code" required="true" value="#{employeeBean.fullTimeEmployee.code}"></p:inputText>
+						<p:message for="fullhirecode"></p:message>
+						
+						<p:outputLabel for="fullhirename" value="Name:"></p:outputLabel>
+						<p:inputText id="fullhirename" placeholder="Name" required="true" value="#{employeeBean.fullTimeEmployee.name}"></p:inputText>
+						<p:message for="fullhirename"></p:message>
+						
+						<p:outputLabel for="fullhiresurname" value="Surname:"></p:outputLabel>
+						<p:inputText id="fullhiresurname" placeholder="Surname" required="true" value="#{employeeBean.fullTimeEmployee.surname}"></p:inputText>
+						<p:message for="fullhiresurname"></p:message>
+						
+						<p:outputLabel for="fullhireemail" value="Email:"></p:outputLabel>
+						<p:inputText id="fullhireemail" placeholder="Email" required="true" value="#{employeeBean.fullTimeEmployee.email}"></p:inputText>
+						<p:message for="fullhireemail"></p:message>
+						
+						<p:outputLabel for="fullhirepaymentMethod" value="Payment Method:"></p:outputLabel>
+						<p:selectOneMenu id="fullhirepaymentMethod" value="#{employeeBean.fullTimeEmployee.payment_method}" style="width:125px">
+				            <f:selectItem itemLabel="By Hand" itemValue="By Hand" />
+				            <f:selectItem itemLabel="Postal Address" itemValue="postal address" />
+				            <f:selectItem itemLabel="Bank Account" itemValue="bank account" />
+				        </p:selectOneMenu>
+						<p:message for="fullhirepaymentMethod"></p:message>
+						
+						<p:outputLabel for="fullhiresalary" value="Salary:"></p:outputLabel>
+						<p:inputNumber id="fullhiresalary" required="true" value="#{employeeBean.fullTimeEmployee.salary}" symbol=" €" symbolPosition="s" 
+                               decimalSeparator="," thousandSeparator="."></p:inputNumber>
+						<p:message for="fullhiresalary"></p:message>
+						
+						<p:outputLabel for="fullhireunion" value="Union name:"></p:outputLabel>
+						<p:selectOneMenu id="fullhireunion" value="#{employeeBean.fullTimeEmployee.union}" style="width:125px" converter="unionTranslator">
+<!-- 				            <f:selectItem itemLabel="Select One" itemValue="" /> -->
+				            <f:selectItems value="#{unionsBean.unionsList}" var="union" itemLabel="#{union.unionName}"/>
+				        </p:selectOneMenu>
+				        <p:message for="fullhireunion"></p:message>
+						
+						
+						<p:commandButton value="Add" actionListener="#{employeeBean.hireFullTimeEmployee()}" update="fullGrid"/>
+					</h:panelGrid>
+				</p:panel>
+				</h:form>
+				
+				<h:form>
 				<p:panel header="Delete Employee" class="dynamicPanel usersSubPanel deleteEmployeePanel">
 					<h:panelGrid columns="3">
 <!-- 						<p:outputLabel for="firecode" value="Code:"></p:outputLabel> -->
@@ -151,7 +214,8 @@
 						<p:commandButton value="Delete"></p:commandButton>
 					</h:panelGrid>
 				</p:panel>
-
+				</h:form>
+				<h:form>
 				<p:panel header="Edit Employee" class="dynamicPanel usersSubPanel editEmployeePanel">
 					<h:panelGrid columns="1" cellpadding="5">
 <!-- 						<p:outputLabel for="editcode" value="Code:"></p:outputLabel> -->
@@ -163,11 +227,12 @@
 <!-- 						<p:button id="edit" value="Edit" onclick="return false"></p:button> -->
 					</h:panelGrid>
 				</p:panel>
+				</h:form>
 
 			</div>
 			
 		</div>
-	</h:form>
+<!-- 	</h:form> -->
 
 </h:body>
 </html>

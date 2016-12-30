@@ -54,5 +54,12 @@ public class PayrollBean implements Serializable {
 		return answer;
 	}
 	
+	public String testRedirect(){
+		return "/test.xhtml?faces-redirect=true";
+	}
+	
+	public String testGrowl(){
+		return "Oh, sono un growl!";
+	}
 	
 }

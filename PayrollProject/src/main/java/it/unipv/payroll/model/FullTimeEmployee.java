@@ -9,7 +9,7 @@ import javax.persistence.OneToMany;
 
 @Entity
 @DiscriminatorValue(value = "Flat")
-public class FlatEmployee extends Employee{
+public class FullTimeEmployee extends Employee{
 
 	private float salary;
 	@OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
