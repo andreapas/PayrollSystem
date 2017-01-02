@@ -13,15 +13,13 @@
 <h:body>
 	<h:form>
 		<p:panel>
-		<p:growl id="growl" showDetail="true" sticky="true" />  
-		<p:messages autoUpdate="true"></p:messages>  
-		
- 
-
-		<p:commandButton value="redirect me" action="#{payrollBean.testRedirect()}"></p:commandButton>
-		<p:commandButton value="growl me" action="#{payrollBean.testGrowl()}" update="growl"></p:commandButton>
+			<h:panelGrid cellpadding="10">
+				<p:outputLabel for="oldPwd" value="Old Password: "></p:outputLabel>
+				<p:inputText id="oldPwd" value="#{sessionManagementBean.oldLoginCredentials.password}"></p:inputText>
+				<p:commandButton value="Change Password" action="#{sessionManagementBean.modifyPassword()}"></p:commandButton>
+				<p:messages autoUpdate="true"/>
+			</h:panelGrid>
 		</p:panel>
-
 	</h:form>
 </h:body>
 </html>

@@ -65,8 +65,10 @@ public class PayrollBean implements Serializable {
 		try {
 			FacesContext context = FacesContext.getCurrentInstance();
 	         
-	        context.addMessage(null, new FacesMessage("Successful",  "Your message: " + "Oh, sono un growl!") );
-	        context.addMessage(null, new FacesMessage("Second Message", "Additional Message Detail"));
+	        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,"Successful",  "Your message: Oh, sono un growl!"+ " WARN ICON") );
+	        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Second Message", "Additional Message Detail"+ " INFO ICON"));
+	        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Second Message", "Additional Message Detail"+ " ERROR ICON"));
+	        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,"Second Message", "Additional Message Detail"+ " FATAL ICON"));
 		} catch (NullPointerException e) {
 				 out="probably you're testing..."; 
 		}

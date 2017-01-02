@@ -64,19 +64,39 @@
 						</p:dataTable>
 					</h:panelGrid>
 				</p:panel>
-				<h:form>
 				<p:panel header="Settings" class="dynamicPanel settingsPanel">
-					<h:panelGrid cellpadding="10">
-						<p:outputLabel for="paymentMethod" value="Method of payment:" />
-						<p:selectOneRadio id="paymentMethod" value="#{sessionManagementBean.loggedUser.payment_method}">
-							<f:selectItem itemLabel="Mailed to the postal address" itemValue="Mail" />
-							<f:selectItem itemLabel="Held for pickup by the paymaster" itemValue="Paymaster" />
-							<f:selectItem itemLabel="Deposited into the bank account" itemValue="Bank" />
-						</p:selectOneRadio>
-						<p:commandButton value="Submit Payment Method" actionListener="#{someBean.addPaymentMethod()}" />
-					</h:panelGrid>
-				</p:panel>
+				<h:form>
+					<p:panel header="Payment Method" class="dynamicPanel settingsPanel">
+						<h:panelGrid cellpadding="10">
+							<p:outputLabel for="paymentMethod" value="Method of payment:" />
+							<p:selectOneRadio id="paymentMethod" value="#{sessionManagementBean.loggedUser.payment_method}">
+								<f:selectItem itemLabel="Mailed to the postal address" itemValue="Postal address" />
+								<f:selectItem itemLabel="Held for pickup by the paymaster" itemValue="Paymaster" />
+								<f:selectItem itemLabel="Deposited into the bank account" itemValue="Bank account" />
+							</p:selectOneRadio>
+							<p:commandButton value="Submit Payment Method" actionListener="#{someBean.addPaymentMethod()}" />
+						</h:panelGrid>
+					</p:panel>
 				</h:form>
+				<h:form>
+					<p:panel header="Account Informations" class="dynamicPanel settingsPanel">
+						<h:panelGrid cellpadding="10">
+							<h:outputText value="Old Password: " />
+							<p:password id="oldPassword" value="#{sessionManagementBean.oldLoginCredentials.password}" required="true" label="password"/>
+							
+							<h:outputText value="New Password: " />
+ 							<p:password id="newPassword" value="#{sessionManagementBean.newLoginCredentials.password}" feedback="true" match="repeatNewPassword" required="true"/>
+
+							<h:outputText value="Repeat New Password: " />
+ 							<p:password id="repeatNewPassword" value="#{sessionManagementBean.newLoginCredentials.password}" feedback="true" required="true"/>
+ 
+							<p:commandButton value="Submit Payment Method" actionListener="#{sessionManagementBean.modifyPassword()}" update="passwordGrowl"/>
+							<p:growl id="passwordGrowl" showDetail="true" sticky="true" />  
+						</h:panelGrid>
+					</p:panel>
+				</h:form>
+				
+				</p:panel>
 				<h:form>
 				<p:panel header="Insert Hours" class="dynamicPanel insertHoursPanel">
 					<h:panelGrid cellpadding="10">
@@ -150,8 +170,8 @@
 				            <f:selectItems value="#{unionsBean.unionsList}" var="union" itemLabel="#{union.unionName}"/>
 				        </p:selectOneMenu>
 						
-						<p:commandButton value="Add" actionListener="#{employeeBean.hirePartTimeEmployee()}" update="growl"/>
-						<p:growl id="growl" showDetail="true" sticky="true" />  
+						<p:commandButton value="Add" actionListener="#{employeeBean.hirePartTimeEmployee()}" update="partGrowl"/>
+						<p:growl id="partGrowl" showDetail="true" sticky="true" />  
 					</h:panelGrid>
 				</p:panel>
 				</h:form>
@@ -172,9 +192,9 @@
 						
 						<p:outputLabel for="fullhirepaymentMethod" value="Payment Method:"></p:outputLabel>
 						<p:selectOneMenu id="fullhirepaymentMethod" value="#{employeeBean.fullTimeEmployee.payment_method}" style="width:125px">
-				            <f:selectItem itemLabel="By Hand" itemValue="By Hand" />
-				            <f:selectItem itemLabel="Postal Address" itemValue="postal address" />
-				            <f:selectItem itemLabel="Bank Account" itemValue="bank account" />
+				            <f:selectItem itemLabel="Paymaster" itemValue="Paymaster" />
+				            <f:selectItem itemLabel="Postal Address" itemValue="Postal address" />
+				            <f:selectItem itemLabel="Bank Account" itemValue="Bank account" />
 				        </p:selectOneMenu>
 						
 						<p:outputLabel for="fullhiresalary" value="Salary:"></p:outputLabel>
@@ -188,8 +208,8 @@
 				        </p:selectOneMenu>
 						
 						
-						<p:commandButton value="Add" actionListener="#{employeeBean.hireFullTimeEmployee()}" update="growl"/>
-						<p:growl id="growl" showDetail="true" sticky="true" />  
+						<p:commandButton value="Add" actionListener="#{employeeBean.hireFullTimeEmployee()}" update="fullGrowl"/>
+						<p:growl id="fullGrowl" showDetail="true" sticky="true" />  
 					</h:panelGrid>
 				</p:panel>
 				</h:form>
@@ -197,9 +217,38 @@
 				<h:form>
 				<p:panel header="Delete Employee" class="dynamicPanel usersSubPanel deleteEmployeePanel">
 					<h:panelGrid columns="3">
+							<p:dataTable var="employee" value="#{employeeBean.employeeList}" rows="10"
+					                         paginator="true"
+					                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					                         rowsPerPageTemplate="5,10,15">
+							
+								<p:column sortBy="#{employee.code}" headerText="Code">
+					            	<h:outputText value="#{employee.code}" />
+					        	</p:column>
+					        	
+					        	<p:column sortBy="#{employee.name}" headerText="Name">
+					            	<h:outputText value="#{employee.name}" />
+					        	</p:column>
+					        	
+					        	<p:column sortBy="#{employee.surname}" headerText="Surname">
+					            	<h:outputText value="#{employee.surname}" />
+					        	</p:column>
+							
+								<p:column headerText="Email">
+					            	<h:outputText value="#{employee.email}" />
+					        	</p:column>
+					            
+					            <p:column headerText="Union">
+					            	<h:outputText value="#{employee.union}" />
+					        	</p:column>
+					            
+					            <p:column headerText="Fire Employee">
+					            	<h:commandButton value="Fire" action="#{employeeBean.fireEmployee(employee)}"/>
+					        	</p:column>
+					            
+							</p:dataTable>	
 <!-- 						<p:outputLabel for="firecode" value="Code:"></p:outputLabel> -->
 <!-- 						<p:inputText id="firecode" placeholder="Code" required="true"></p:inputText> -->
-						<p:commandButton value="Delete"></p:commandButton>
 					</h:panelGrid>
 				</p:panel>
 				</h:form>

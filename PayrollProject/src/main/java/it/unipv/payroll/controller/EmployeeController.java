@@ -1,5 +1,8 @@
 package it.unipv.payroll.controller;
 
+import java.util.Iterator;
+import java.util.List;
+
 import javax.ejb.Stateless;
 
 import it.unipv.payroll.model.Employee;
@@ -11,4 +14,14 @@ public class EmployeeController extends GenericController<Employee> {
 		return dao.find(code);
 	}
 	
+	public List<Employee> findAll(){
+		List<Employee> list=dao.findAll();
+		for (Iterator<Employee> iterator = list.iterator(); iterator.hasNext();) {
+			Employee employee = (Employee) iterator.next();
+			if(employee.getRole().equals("Manager")){
+				iterator.remove();
+			}
+		}
+		return list;
+	}
 }
