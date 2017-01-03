@@ -14,7 +14,7 @@
 
 	<script type="text/javascript">
 	$( document ).ready(function() {
-		showElementsOfRole("#{sessionManagementBean.loggedUser.role}");
+		showElementsOfRole("#{employeeBean.loggedUser.role}");
 	});
 	</script>
 
@@ -26,7 +26,7 @@
 				<p:panel id="mainMenu" header="Menu">
 					<h:panelGrid columns="1" cellpadding="10">
 					
-						<p>Welcome #{sessionManagementBean.loggedUser.name}</p>
+						<p>Welcome #{employeeBean.loggedUser.name}</p>
 						<h:form>
 						<h:commandButton value="logout" action="#{sessionManagementBean.logout()}" />
 						</h:form>
@@ -45,7 +45,7 @@
 
 				<p:panel header="Overview" class="dynamicPanel overviewPanel">
 					<h:panelGrid cellpadding="10">
-						<p:dataTable var="employee" value="#{sessionManagementBean.loggedUser}" rows="1">
+						<p:dataTable var="employee" value="#{employeeBean.loggedUser}" rows="1">
 							<p:column headerText="Code">
 								<h:outputText value="#{employee.code}" />
 							</p:column>
@@ -69,17 +69,17 @@
 					<p:panel header="Payment Method" class="dynamicPanel settingsPanel">
 						<h:panelGrid cellpadding="10">
 							<p:outputLabel for="paymentMethod" value="Method of payment:" />
-							<p:selectOneRadio id="paymentMethod" value="#{sessionManagementBean.loggedUser.payment_method}">
+							<p:selectOneRadio id="paymentMethod" value="#{employeeBean.loggedUser.payment_method}">
 								<f:selectItem itemLabel="Mailed to the postal address" itemValue="Postal address" />
 								<f:selectItem itemLabel="Held for pickup by the paymaster" itemValue="Paymaster" />
 								<f:selectItem itemLabel="Deposited into the bank account" itemValue="Bank account" />
 							</p:selectOneRadio>
-							<p:commandButton value="Submit Payment Method" actionListener="#{someBean.addPaymentMethod()}" />
+							<p:commandButton value="Submit Payment Method" actionListener="#{employeeBean.editPaymentMethod()}" />
 						</h:panelGrid>
 					</p:panel>
 				</h:form>
 				<h:form>
-					<p:panel header="Account Informations" class="dynamicPanel settingsPanel">
+					<p:panel header="Password Management" class="dynamicPanel settingsPanel">
 						<h:panelGrid cellpadding="10">
 							<h:outputText value="Old Password: " />
 							<p:password id="oldPassword" value="#{sessionManagementBean.oldLoginCredentials.password}" required="true" label="password"/>

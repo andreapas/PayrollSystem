@@ -21,25 +21,18 @@ public class SessionManagementBean implements Serializable {
 
 	@Inject
 	SessionManagementController sessionManagementController;
-	@Inject
-	EmployeeController emController;
 
 
 	private Credentials login;
 	private Credentials newLoginCredentials;
 	private Credentials oldLoginCredentials;
-	private Employee loggedUser;
 
 	@PostConstruct
 	public void init(){
-		loggedUser = emController.find(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
 		login= new Credentials();
 		newLoginCredentials= new Credentials();
 		oldLoginCredentials=new Credentials();
 
-	}
-	public Employee getLoggedUser() {
-		return loggedUser;
 	}
 	
 	public String logout() {
@@ -77,23 +70,29 @@ public class SessionManagementBean implements Serializable {
 	}
 	//TODO: to test
 	public String modifyPassword(){
-//		System.out.println("<<<<<<<<<<<<<<<<<<<"+oldLoginCredentials.getPassword());
-//		System.out.println(">>>>>>>>>>>>>>>>>>>"+newLoginCredentials.getPassword());
+		try {
+			oldLoginCredentials.setCode(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+			newLoginCredentials.setCode(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+		} catch (NullPointerException e1) {
+			System.out.println("Null face context returned, testing run detected");
+		}
+		
+		FacesMessage message;
+		
+		if(sessionManagementController.areValidCredential(oldLoginCredentials.getCode(), oldLoginCredentials.getPassword())){
+			sessionManagementController.update(newLoginCredentials);
+	        message= new FacesMessage(FacesMessage.SEVERITY_INFO,"Success!",  "Password changed successfully") ;
+
+		}else{
+	        message= new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error!",  "Wrong Password inserted. Please, try again") ;
+
+		}
+		
 		try{
-			oldLoginCredentials.setCode(loggedUser.getCode());
-			newLoginCredentials.setCode(loggedUser.getCode());
 			FacesContext context = FacesContext.getCurrentInstance();
-//			System.out.println("<<<<<<<<<<<<<<<<<<<"+oldLoginCredentials.getPassword());
-//			System.out.println(">>>>>>>>>>>>>>>>>>>"+newLoginCredentials.getPassword());
+			context.addMessage(null,message);
 			
-			if(sessionManagementController.areValidCredential(oldLoginCredentials.getCode(), oldLoginCredentials.getPassword())){
-				sessionManagementController.update(newLoginCredentials);
-		        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Success!",  "Password changed successfully") );
-
-			}else{
-		        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error!",  "Wrong Password inserted. Please, try again") );
-
-			}
+			
 		}catch (NullPointerException e) {
 			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
 		}

@@ -4,11 +4,15 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.security.RolesAllowed;
+import javax.ejb.Stateful;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.jboss.ejb3.annotation.SecurityDomain;
 
 import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.model.Employee;
@@ -18,6 +22,9 @@ import it.unipv.payroll.model.Union;
 
 @Named
 @SessionScoped
+@Stateful
+@RolesAllowed("Manager")
+@SecurityDomain("dbdomain")
 public class EmployeeBean implements Serializable {
 
 	@Inject
@@ -27,6 +34,7 @@ public class EmployeeBean implements Serializable {
 
 	private PartTimeEmployee partTimeEmployee;
 	private FullTimeEmployee fullTimeEmployee;
+	private Employee loggedUser;
 	private Employee anEmployee;
 	private List<Employee> employeeList;
 
@@ -34,9 +42,18 @@ public class EmployeeBean implements Serializable {
 	public void init() {
 		partTimeEmployee = new PartTimeEmployee();
 		fullTimeEmployee = new FullTimeEmployee();
+		try{
+			loggedUser = emController.find(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+		}catch (NullPointerException e) {
+			System.out.println("Testing phase detected, null context face returned");
+		}
 		employeeList=emController.findAll();
 	}
-
+	@RolesAllowed({"Weekly", "Monthly", "Manager"})
+	public Employee getLoggedUser() {
+		return loggedUser;
+	}
+	
 	public void setAnEmployee(Employee anEmployee) {
 		this.anEmployee = anEmployee;
 	}
@@ -56,6 +73,7 @@ public class EmployeeBean implements Serializable {
 	public void setFullTimeEmployee(FullTimeEmployee fullTimeEmployee) {
 		this.fullTimeEmployee = fullTimeEmployee;
 	}
+	
 	public String hirePartTimeEmployee() {
 		partTimeEmployee.setRole("Weekly");
 		String answer = emController.add(partTimeEmployee);
@@ -133,9 +151,8 @@ public class EmployeeBean implements Serializable {
 
 	}
 
-	public String editPaymentMethod(String newPaymentMethod) {
-		anEmployee.setPayment_method(newPaymentMethod);
-		String answer = emController.update(anEmployee);
+	public String editPaymentMethod() {
+		String answer = emController.update(loggedUser);
 		return answer;
 	}
 

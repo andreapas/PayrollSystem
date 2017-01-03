@@ -4,13 +4,26 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
-
+	
 <h:head>
 	<link rel="stylesheet" type="text/css" href="css/style.css"></link>
 	<script type="text/javascript" src="js/scripts.js"></script>
 </h:head>
 
 <h:body>
-	<p:outputLabel>SUCCESS!</p:outputLabel>
+
+	<script type="text/javascript">
+	$( document ).ready(function() {
+		setTimeout(function() {
+			$(location).attr('href', './unifiedIndex.xhtml');
+		}, 3000);
+	});
+	</script>
+				<h:form>
+				<p:panel >
+					<p:outputLabel><center>Login successfully completed, you'll be redirected to your homepage in a while...</center></p:outputLabel>
+				</p:panel>
+				</h:form>
+
 </h:body>
 </html>
