@@ -23,7 +23,7 @@ import it.unipv.payroll.model.Union;
 @Named
 @SessionScoped
 @Stateful
-//@RolesAllowed("Manager")
+//@RolesAllowed({"Weekly", "Monthly", "Manager"})
 //@SecurityDomain("dbdomain")
 public class EmployeeBean implements Serializable {
 
@@ -48,7 +48,7 @@ public class EmployeeBean implements Serializable {
 		}
 		employeeList=emController.findAll();
 	}
-//	@RolesAllowed({"Weekly", "Monthly", "Manager"})
+
 	public Employee getLoggedUser() {
 		return loggedUser;
 	}
@@ -68,11 +68,12 @@ public class EmployeeBean implements Serializable {
 	public FullTimeEmployee getFullTimeEmployee() {
 		return fullTimeEmployee;
 	}
-
+	
 	public void setFullTimeEmployee(FullTimeEmployee fullTimeEmployee) {
 		this.fullTimeEmployee = fullTimeEmployee;
 	}
 	
+//	@RolesAllowed({"Manager"})
 	public String hirePartTimeEmployee() {
 		partTimeEmployee.setRole("Weekly");
 		String answer = emController.add(partTimeEmployee);
