@@ -175,14 +175,16 @@ public class EmployeeManagementTest extends ArquillianTest {
 
 		emBean.setPartTimeEmployee(anEmployee);
 		emBean.hirePartTimeEmployee();
-		
-		
 		emBean.findEmployeeByCode(anEmployee.getCode());
-		emBean.editPaymentMethod(PAYMENT_METHOD2);
-		List<Employee> employees = emDAO.findAll();
+
+		emBean.getLoggedUser().setPayment_method(PAYMENT_METHOD2);
+		emBean.editPaymentMethod();
+		List<Employee> employees = emBean.getEmployeeList();
+		Employee el= new PartTimeEmployee();
 		boolean isPaymentMethodEdited = false;
 		for (Employee e : employees) {
 			if (e.getCode().equals(USER1_COD)) {
+				el=e;
 				if (e.getPayment_method().equals(PAYMENT_METHOD2)) {
 					isPaymentMethodEdited = true;
 					break;
@@ -192,7 +194,6 @@ public class EmployeeManagementTest extends ArquillianTest {
 			}
 
 		}
-
 		Assert.assertTrue("The Payment Method has been changed successfully", isPaymentMethodEdited);
 
 	}

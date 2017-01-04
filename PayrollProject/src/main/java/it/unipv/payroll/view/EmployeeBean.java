@@ -23,8 +23,8 @@ import it.unipv.payroll.model.Union;
 @Named
 @SessionScoped
 @Stateful
-@RolesAllowed("Manager")
-@SecurityDomain("dbdomain")
+//@RolesAllowed("Manager")
+//@SecurityDomain("dbdomain")
 public class EmployeeBean implements Serializable {
 
 	@Inject
@@ -35,7 +35,6 @@ public class EmployeeBean implements Serializable {
 	private PartTimeEmployee partTimeEmployee;
 	private FullTimeEmployee fullTimeEmployee;
 	private Employee loggedUser;
-	private Employee anEmployee;
 	private List<Employee> employeeList;
 
 	@PostConstruct
@@ -49,13 +48,13 @@ public class EmployeeBean implements Serializable {
 		}
 		employeeList=emController.findAll();
 	}
-	@RolesAllowed({"Weekly", "Monthly", "Manager"})
+//	@RolesAllowed({"Weekly", "Monthly", "Manager"})
 	public Employee getLoggedUser() {
 		return loggedUser;
 	}
 	
-	public void setAnEmployee(Employee anEmployee) {
-		this.anEmployee = anEmployee;
+	public void setLoggedUser(Employee anEmployee) {
+		loggedUser = anEmployee;
 	}
 
 	public PartTimeEmployee getPartTimeEmployee() {
@@ -138,28 +137,29 @@ public class EmployeeBean implements Serializable {
 	}
 
 	public String editEmail(String newEmail) {
-		anEmployee.setEmail(newEmail);
-		String answer = emController.update(anEmployee);
+		loggedUser.setEmail(newEmail);
+		String answer = emController.update(loggedUser);
 		return answer;
 
 	}
 
 	public String editUnion(Union newUnion) {
-		anEmployee.setUnion(newUnion);
-		String answer = emController.update(anEmployee);
+		loggedUser.setUnion(newUnion);
+		String answer = emController.update(loggedUser);
 		return answer;
 
 	}
 
 	public String editPaymentMethod() {
+		System.out.println(">>>><<<<<>>>>>>><<<<<<<<<>>>>>>>><<<<<<<<<<<<<<>>>>>>>>>"+loggedUser.getPayment_method());
 		String answer = emController.update(loggedUser);
 		return answer;
 	}
 
 
 	public Employee findEmployeeByCode(String code) {
-		anEmployee=emController.find(code);
-		return anEmployee;
+		loggedUser=emController.find(code);
+		return loggedUser;
 	}
 
 	//TODO: to be tested
