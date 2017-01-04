@@ -38,7 +38,7 @@ public class SessionManagementBean implements Serializable {
 	public String logout() {
 	    HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 	    session.invalidate();
-	    return "/unifiedIndex.xhtml?faces-redirect=true";
+	    return "/index.xhtml?faces-redirect=true";
 	}
 
 	public Credentials getOldLoginCredentials() {
