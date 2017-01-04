@@ -15,11 +15,3 @@ button, table{
 .dynamicPanel {
 	display: none;
 }
-
-
-.monthly,
-.weekly,
-.manager {
-	
-	display:none;
-}
