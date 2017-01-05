@@ -27,13 +27,12 @@ public abstract class GenericController<T extends Serializable> {
 	}
 	
 	public String add(T element) {
-		
-		try {
-			dao.add(element);
-		} catch (Exception e) {
+		if(isAlreadyInDatabase(element)){
 			return ERROR;
+		}else{
+			dao.add(element);
+			return SUCCESS;
 		}
-		return SUCCESS;
 	}
 
 	public String remove(Object id) {
@@ -42,7 +41,12 @@ public abstract class GenericController<T extends Serializable> {
 	}
 
 	public String update(T element) {
-		dao.update(element);
+		try {
+			dao.update(element);
+		} catch (Exception e) {
+			return ERROR;
+		}
 		return SUCCESS;
 	}
+	public abstract boolean isAlreadyInDatabase(T element);
 }

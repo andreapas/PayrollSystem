@@ -24,3 +24,4 @@ function showOnlyDivByClass(divClass, excludeClass) {
 	hideDivsByClass(excludeClass);
 	showDivsByClass(divClass);
 }
+

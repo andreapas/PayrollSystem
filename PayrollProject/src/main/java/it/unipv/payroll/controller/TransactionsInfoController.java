@@ -13,5 +13,14 @@ public class TransactionsInfoController extends GenericController<TransactionsIn
 	public List<TransactionsInfo> findAll() {
 		return dao.findAll();
 	}
+	
+	@Override
+	public boolean isAlreadyInDatabase(TransactionsInfo element) {
+		TransactionsInfo tinfo= dao.find(element.getId());
+		if(tinfo!=null){
+			return true;
+		}
+		return false;
+	}
 
 }

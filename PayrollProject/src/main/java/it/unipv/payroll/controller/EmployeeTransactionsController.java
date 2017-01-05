@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 
+import it.unipv.payroll.model.Employee;
 import it.unipv.payroll.model.EmployeeTransactions;
 
 @Stateless
@@ -52,6 +53,13 @@ public class EmployeeTransactionsController extends GenericController<EmployeeTr
 		return dao.findAll();
 	}
 
-	
+	@Override
+	public boolean isAlreadyInDatabase(EmployeeTransactions element) {
+		EmployeeTransactions et= dao.find(element.getCode());
+		if(et!=null){
+			return true;
+		}
+		return false;
+	}
 
 }

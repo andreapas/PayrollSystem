@@ -3,6 +3,7 @@ package it.unipv.payroll.controller;
 import javax.ejb.Stateless;
 
 import it.unipv.payroll.model.Credentials;
+import it.unipv.payroll.model.SalesReceipt;
 import it.unipv.payroll.utils.PasswordManager;
 
 @Stateless
@@ -39,6 +40,15 @@ public class SessionManagementController extends GenericController<Credentials> 
 	public String update(Credentials element) {
 		element.setPassword(pswdManager.hashIt(element.getPassword()));
 		return super.update(element);
+	}
+	
+	@Override
+	public boolean isAlreadyInDatabase(Credentials element) {
+		Credentials login= dao.find(element.getCode());
+		if(login!=null){
+			return true;
+		}
+		return false;
 	}
 //	public String addLogin(Login login){
 //		

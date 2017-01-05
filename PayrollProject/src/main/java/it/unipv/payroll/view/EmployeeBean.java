@@ -4,15 +4,12 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import org.jboss.ejb3.annotation.SecurityDomain;
 
 import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.model.Employee;
@@ -149,8 +146,18 @@ public class EmployeeBean implements Serializable {
 	}
 
 	public String editPaymentMethod() {
-		System.out.println(">>>><<<<<>>>>>>><<<<<<<<<>>>>>>>><<<<<<<<<<<<<<>>>>>>>>>"+loggedUser.getPayment_method());
+//		System.out.println(">>>><<<<<>>>>>>><<<<<<<<<>>>>>>>><<<<<<<<<<<<<<>>>>>>>>>"+loggedUser.getPayment_method());
 		String answer = emController.update(loggedUser);
+		try {
+			FacesContext context = FacesContext.getCurrentInstance();
+	        if(answer.equals("Operation completed successfully.")){
+		        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Success!",  "Payment method changed successfully. Your next salary will be delivered with the following method: "+loggedUser.getPayment_method()) );
+	        }else {
+	        	context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,"Error!",  "Something has gone wrong while trying to change the payment method. The complete message is "+answer) );
+			}
+		} catch (NullPointerException e) {
+			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
+		}
 		return answer;
 	}
 
