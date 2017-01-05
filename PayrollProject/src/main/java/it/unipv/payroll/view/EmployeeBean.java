@@ -11,6 +11,8 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.event.RowEditEvent;
+
 import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.model.Employee;
 import it.unipv.payroll.model.FullTimeEmployee;
@@ -31,7 +33,7 @@ public class EmployeeBean implements Serializable {
 	private FullTimeEmployee fullTimeEmployee;
 	private Employee loggedUser;
 	private List<Employee> employeeList;
-
+	private String fireCode;
 	@PostConstruct
 	public void init() {
 		partTimeEmployee = new PartTimeEmployee();
@@ -43,6 +45,20 @@ public class EmployeeBean implements Serializable {
 		}
 		employeeList=emController.findAll();
 	}
+
+	
+	
+	public String getFireCode() {
+		return fireCode;
+	}
+
+
+
+	public void setFireCode(String fireCode) {
+		this.fireCode = fireCode;
+	}
+
+
 
 	public Employee getLoggedUser() {
 		return loggedUser;
@@ -68,7 +84,7 @@ public class EmployeeBean implements Serializable {
 		this.fullTimeEmployee = fullTimeEmployee;
 	}
 	
-	public String hirePartTimeEmployee() {
+	public List<Employee> hirePartTimeEmployee() {
 		partTimeEmployee.setRole("Weekly");
 		String answer = emController.add(partTimeEmployee);
 		String tmpPassword="";
@@ -89,7 +105,7 @@ public class EmployeeBean implements Serializable {
 			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
 		}
 		employeeList=emController.findAll();
-		return null;
+		return employeeList;
 	}
 	
 	
@@ -118,16 +134,29 @@ public class EmployeeBean implements Serializable {
 		employeeList=emController.findAll();
 
 		
-		return null;
+		return employeeList;
 
 	}
 
 	
 
-	public String fireEmployee(Employee employee) {
+	public List<Employee> fireEmployee() {
+		Employee employee=findEmployeeByCode(fireCode);
 		String answer = emController.remove(employee.getCode());
 		sessionManag.removeLogin(employee.getCode());
-		return answer;
+		try {
+			FacesContext context = FacesContext.getCurrentInstance();
+	        if(answer.equals("Operation completed successfully.")){
+		        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Success!",  "The employee "+employee.getName()+" "+employee.getSurname()+" has been successfully fired") );
+	        }else {
+	        	context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,"Error!",  "Something has gone wrong while trying to fire "+employee.getName()+" "+employee.getSurname()+". The complete message is "+answer) );
+			}
+		} catch (NullPointerException e) {
+			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
+		}
+		fireCode="";
+		employeeList=emController.findAll();
+		return employeeList;
 
 	}
 
@@ -163,14 +192,38 @@ public class EmployeeBean implements Serializable {
 
 
 	public Employee findEmployeeByCode(String code) {
-		loggedUser=emController.find(code);
-		return loggedUser;
+		return emController.find(code);
 	}
 
 	//TODO: to be tested
 	public List<Employee> getEmployeeList(){
-		employeeList= emController.findAll();
 		return employeeList;
 	}
-	
+	public void setEmployeeList(List<Employee> employeeList) {
+		this.employeeList = employeeList;
+	}
+	public void onRowEdit(RowEditEvent event) {
+		Employee employee=((Employee)event.getObject());
+		String answer=emController.update(employee);
+		try {
+			FacesContext context = FacesContext.getCurrentInstance();
+	        if(answer.equals("Operation completed successfully.")){
+		        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Success!",  "Employee "+employee.getName()+" "+ employee.getSurname()+" updated successfully!") );
+	        }else {
+	        	context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,"Error!",  "Something has gone wrong while trying to update employee "+employee.getName()+" "+ employee.getSurname()+". The complete message is "+answer) );
+			}
+		} catch (NullPointerException e) {
+			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
+		}
+    }
+     
+    public void onRowCancel(RowEditEvent event) {
+		Employee employee=((Employee)event.getObject());
+        try {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,"Edit Cancelled", "Employee "+employee.getName()+" "+employee.getSurname()+" has not been edited.");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		} catch (NullPointerException e) {
+			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
+		}
+    }
 }

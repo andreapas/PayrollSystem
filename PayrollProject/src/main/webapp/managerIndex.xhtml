@@ -17,11 +17,6 @@
 		showElementsOfRole("#{employeeBean.loggedUser.role}");
 	});
 	</script>
-	<script>
-	function closeMessages(){
-		setTimeout(function() { $('#infoPanel').slideUp();return false; }, 3000);
-	}
-	</script>
 
 	<!-- 	<h:form> -->
 	<div class="ui-g">
@@ -49,8 +44,10 @@
 		</div>
 
 		<div class="ui-g-9">
-			<p:messages id="infoPanel" autoUpdate="true" showDetail="true" severity="info"/>
-			<p:messages id="warnErrorPanel" autoUpdate="true" showDetail="true" severity="warn,error,fatal" closable="true"/>
+			<p:growl id="infoGrowl" autoUpdate="true" severity="info"
+				sticky="false" life="3000" showDetail="true"></p:growl>
+			<p:messages id="warnErrorPanel" autoUpdate="true" showDetail="true"
+				severity="warn,error,fatal" closable="true" />
 
 			<p:panel header="Overview" class="dynamicPanel overviewPanel">
 				<h:panelGrid cellpadding="10">
@@ -89,8 +86,7 @@
 									itemValue="Bank account" />
 							</p:selectOneRadio>
 							<p:commandButton value="Submit Payment Method"
-								actionListener="#{employeeBean.editPaymentMethod()}"
-								oncomplete="closeMessages()" />
+								actionListener="#{employeeBean.editPaymentMethod()}" />
 						</h:panelGrid>
 					</p:panel>
 				</h:form>
@@ -113,7 +109,7 @@
 								value="#{sessionManagementBean.newLoginCredentials.password}"
 								feedback="true" required="true" />
 
-							<p:commandButton value="Submit Payment Method"
+							<p:commandButton value="Change Password"
 								actionListener="#{sessionManagementBean.modifyPassword()}" />
 						</h:panelGrid>
 					</p:panel>
@@ -128,12 +124,12 @@
 					<p:button value="Add employee"
 						onclick="return showOnlyDivByClass('selectTypePanel','usersSubPanel')"
 						icon="fa fa-user-plus" />
-					<p:button value="Delete employee"
-						onclick="return showOnlyDivByClass('deleteEmployeePanel','usersSubPanel');"
-						icon="fa fa-remove" />
 					<p:button value="Edit employee"
 						onclick="return showOnlyDivByClass('editEmployeePanel','usersSubPanel');"
 						icon="fa fa-edit" />
+					<p:button value="Delete employee"
+						onclick="return showOnlyDivByClass('deleteEmployeePanel','usersSubPanel');"
+						icon="fa fa-remove" />
 
 				</h:panelGrid>
 			</p:panel>
@@ -171,10 +167,10 @@
 						<p:selectOneMenu id="parthirepaymentMethod"
 							value="#{employeeBean.partTimeEmployee.payment_method}"
 							style="width:125px">
-							<f:selectItem itemLabel="By Hand" itemValue="By Hand" />
+							<f:selectItem itemLabel="Paymaster" itemValue="Paymaster" />
 							<f:selectItem itemLabel="Postal Address"
-								itemValue="postal address" />
-							<f:selectItem itemLabel="Bank Account" itemValue="bank account" />
+								itemValue="Postal address" />
+							<f:selectItem itemLabel="Bank Account" itemValue="Bank account" />
 						</p:selectOneMenu>
 
 						<p:outputLabel for="parthirerate" value="Hourly Rate:"></p:outputLabel>
@@ -192,7 +188,8 @@
 						</p:selectOneMenu>
 
 						<p:commandButton value="Add"
-							actionListener="#{employeeBean.hirePartTimeEmployee()}" oncomplete="closeMessages()"/>
+							actionListener="#{employeeBean.hirePartTimeEmployee()}"
+							ajax="false" />
 					</h:panelGrid>
 				</p:panel>
 			</h:form>
@@ -242,66 +239,147 @@
 
 
 						<p:commandButton value="Add"
-							actionListener="#{employeeBean.hireFullTimeEmployee()}" oncomplete="closeMessages()"/>
+							actionListener="#{employeeBean.hireFullTimeEmployee()}"
+							oncomplete="closeMessages()" ajax="false" />
 					</h:panelGrid>
 				</p:panel>
 			</h:form>
-
-			<h:form>
-				<p:panel header="Delete Employee"
-					class="dynamicPanel usersSubPanel deleteEmployeePanel">
+			<h:form id="form">
+				<p:panel header="Edit Employee"
+					class="dynamicPanel usersSubPanel editEmployeePanel">
 					<h:panelGrid columns="3">
-						<p:dataTable var="employee" value="#{employeeBean.employeeList}"
-							rows="10" paginator="true"
-							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-							rowsPerPageTemplate="5,10,15">
+						<p:dataTable value="#{employeeBean.employeeList}" var="employee"
+							rowKey="#{employee.code}" widgetVar="editTable" rows="10"
+							rowsPerPageTemplate="5,10,15" editable="true">
+							<p:ajax event="rowEdit" listener="#{employeeBean.onRowEdit}" />
+							<p:ajax event="rowEditCancel"
+								listener="#{employeeBean.onRowCancel}" />
+							<f:facet name="header">
+								<p:outputPanel>
+									<h:outputText value="Search all fields:" />
+									<p:inputText id="globalFilter"
+										onkeyup="PF('editTable').filter()" style="width:150px"
+										placeholder="Enter keyword" />
+								</p:outputPanel>
+							</f:facet>
 
-							<p:column sortBy="#{employee.code}" headerText="Code">
+							<p:column sortBy="#{employee.code}" filterBy="#{employee.code}"
+								filterStyle="display:none" headerText="Code">
 								<h:outputText value="#{employee.code}" />
 							</p:column>
 
-							<p:column sortBy="#{employee.name}" headerText="Name">
-								<h:outputText value="#{employee.name}" />
+							<p:column sortBy="#{employee.name}" filterBy="#{employee.name}"
+								filterStyle="display:none" headerText="Name">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{employee.name}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText id="employeeName" value="#{employee.name}" />
+									</f:facet>
+								</p:cellEditor>
 							</p:column>
 
-							<p:column sortBy="#{employee.surname}" headerText="Surname">
-								<h:outputText value="#{employee.surname}" />
+							<p:column sortBy="#{employee.surname}"
+								filterBy="#{employee.surname}" filterStyle="display:none"
+								headerText="Surname">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{employee.surname}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText id="employeeSurname" value="#{employee.surname}" />
+									</f:facet>
+								</p:cellEditor>
 							</p:column>
 
-							<p:column headerText="Email">
-								<h:outputText value="#{employee.email}" />
+							<p:column filterBy="#{employee.email}" filterStyle="display:none"
+								headerText="Email">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{employee.email}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText id="employeeEmail" value="#{employee.email}" />
+									</f:facet>
+								</p:cellEditor>
 							</p:column>
 
-							<p:column headerText="Union">
-								<h:outputText value="#{employee.union}" />
+							<p:column filterBy="#{employee.union.unionName}"
+								filterStyle="display:none" headerText="Union">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{employee.union.unionName}" />
+									</f:facet>
+									<f:facet name="input">
+										<h:selectOneMenu value="#{employee.union}" style="width:100%" converter="unionTranslator">
+											<f:selectItems value="#{unionsBean.unionsList}" var="union"
+												itemLabel="#{union.unionName}" itemValue="#{union}" />
+										</h:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
 							</p:column>
-
-							<p:column headerText="Fire Employee">
-								<h:commandButton value="Fire"
-									action="#{employeeBean.fireEmployee(employee)}" />
+							<p:column style="width:32px">
+								<p:rowEditor />
 							</p:column>
-
 						</p:dataTable>
-						<!-- 						<p:outputLabel for="firecode" value="Code:"></p:outputLabel> -->
-						<!-- 						<p:inputText id="firecode" placeholder="Code" required="true"></p:inputText> -->
 					</h:panelGrid>
 				</p:panel>
 			</h:form>
-			<h:form>
-				<p:panel header="Edit Employee"
-					class="dynamicPanel usersSubPanel editEmployeePanel">
-					<h:panelGrid columns="1" cellpadding="5">
-						<!-- 						<p:outputLabel for="editcode" value="Code:"></p:outputLabel> -->
-						<!-- 						<p:inputText id="editcode" placeholder="Code" required="true"></p:inputText> -->
-						<p:outputLabel for="emailEdit" value="Email:"></p:outputLabel>
-						<p:inputText id="emailEdit" placeholder="Email"></p:inputText>
-						<!-- 						<p:outputLabel for="union" value="Union name:"></p:outputLabel> -->
-						<!-- 						<p:inputText id="union" placeholder="Union name"></p:inputText> -->
-						<!-- 						<p:button id="edit" value="Edit" onclick="return false"></p:button> -->
-					</h:panelGrid>
-				</p:panel>
-			</h:form>
+			<p:panel header="Delete Employee"
+				class="dynamicPanel usersSubPanel deleteEmployeePanel">
+				<h:panelGrid columns="3">
+					<p:dataTable var="employee" widgetVar="employeesTable"
+						value="#{employeeBean.employeeList}" rows="10"
+						rowsPerPageTemplate="5,10,15">
+						<f:facet name="header">
+							<p:outputPanel>
+								<h:outputText value="Search all fields:" />
+								<p:inputText id="globalFilter"
+									onkeyup="PF('employeesTable').filter()" style="width:150px"
+									placeholder="Enter keyword" />
+							</p:outputPanel>
+						</f:facet>
+						<p:column sortBy="#{employee.code}" filterBy="#{employee.code}"
+							filterStyle="display:none" headerText="Code">
+							<h:outputText value="#{employee.code}" />
+						</p:column>
 
+						<p:column sortBy="#{employee.name}" filterBy="#{employee.name}"
+							filterStyle="display:none" headerText="Name">
+							<h:outputText value="#{employee.name}" />
+						</p:column>
+
+						<p:column sortBy="#{employee.surname}"
+							filterBy="#{employee.surname}" filterStyle="display:none"
+							headerText="Surname">
+							<h:outputText value="#{employee.surname}" />
+						</p:column>
+
+						<p:column filterBy="#{employee.email}" filterStyle="display:none"
+							headerText="Email">
+							<h:outputText value="#{employee.email}" />
+						</p:column>
+
+						<p:column filterBy="#{employee.union.unionName}"
+							filterStyle="display:none" headerText="Union">
+							<h:outputText value="#{employee.union.unionName}" />
+						</p:column>
+
+					</p:dataTable>
+				</h:panelGrid>
+				<h:form>
+					<h:panelGrid cellpadding="10">
+						<p:panel>
+							<p:outputLabel value="Code of the Employee to fire" />
+							<p:inputText value="#{employeeBean.fireCode}" />
+							<p:commandButton value="Fire"
+								action="#{employeeBean.fireEmployee()}" ajax="false" />
+						</p:panel>
+					</h:panelGrid>
+				</h:form>
+
+			</p:panel>
 		</div>
 
 	</div>
