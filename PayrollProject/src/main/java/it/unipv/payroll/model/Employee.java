@@ -17,6 +17,8 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.internal.util.privilegedactions.GetResolvedMemberMethods;
 
+import it.unipv.payroll.utils.Address;
+
 @Entity
 @Table(name = "employees")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -29,6 +31,7 @@ public abstract class Employee implements Serializable{
 	private String name;
 	private String surname;
 	private String email;
+	private String address;
 	@ManyToOne/*(cascade={CascadeType.ALL})*/
 	@JoinColumn(name="union_name")
 	private Union union;
@@ -78,7 +81,12 @@ public abstract class Employee implements Serializable{
 	public void setRole(String role) {
 		this.role = role;
 	}
-	
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
 	
 	
 	

@@ -87,12 +87,12 @@ public class EmployeeManagementTest extends ArquillianTest {
 	@After
 	public void cleanup(){
 		if(emController.find(USER1_COD)!=null){
-			emBean.setPartTimeEmployee(anEmployee);
-			emBean.fireEmployee(anEmployee);
+			emBean.setFireCode(anEmployee.getCode());
+			emBean.fireEmployee();
 		}
 		if(emController.find(USER2_COD)!=null){
-			emBean.setFullTimeEmployee(anotherEmployee);
-			emBean.fireEmployee(anotherEmployee);
+			emBean.setFireCode(anotherEmployee.getCode());
+			emBean.fireEmployee();
 		}
 		unBean.setUnion(USER1_UNION);
 		unBean.removeUnion(USER1_UNION);
@@ -125,7 +125,8 @@ public class EmployeeManagementTest extends ArquillianTest {
 
 		emBean.setPartTimeEmployee(anEmployee);
 		emBean.hirePartTimeEmployee();
-		emBean.fireEmployee(anEmployee);
+		emBean.setFireCode(anEmployee.getCode());
+		emBean.fireEmployee();
 
 		List<Employee> employees = emDAO.findAll();
 		boolean isPresent = false;

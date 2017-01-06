@@ -73,20 +73,76 @@
 			</p:panel>
 			<p:panel header="Settings" class="dynamicPanel settingsPanel">
 				<h:form>
-					<p:panel header="Payment Method" class="dynamicPanel settingsPanel">
-						<h:panelGrid cellpadding="10">
+					<p:panel header="Personal Informations"
+						class="dynamicPanel settingsPanel">
+						<h:panelGrid cellpadding="10" id="updateInfos">
 							<p:outputLabel for="paymentMethod" value="Method of payment:" />
 							<p:selectOneRadio id="paymentMethod"
-								value="#{employeeBean.loggedUser.payment_method}">
+								value="#{employeeBean.radioVal}">
 								<f:selectItem itemLabel="Mailed to the postal address"
 									itemValue="Postal address" />
 								<f:selectItem itemLabel="Held for pickup by the paymaster"
 									itemValue="Paymaster" />
 								<f:selectItem itemLabel="Deposited into the bank account"
 									itemValue="Bank account" />
+								<p:ajax process="paymentMethod" update="updateInfos" />
 							</p:selectOneRadio>
-							<p:commandButton value="Submit Payment Method"
-								actionListener="#{employeeBean.editPaymentMethod()}" />
+							<p:panel header="Additional Informations"
+								rendered="#{employeeBean.radioVal eq 'Postal address'}">
+								<h:panelGrid columns="2">
+									<p:outputLabel for="street" value="Street:" />
+									<p:inputText id="street" value="#{employeeBean.address.street}" required="true" />
+
+									<p:outputLabel for="num" value="Number:" />
+									<p:inputText id="num" value="#{employeeBean.address.number}" required="true"
+										label="num">
+										<f:validateDoubleRange minimum="1" maximum="999999" />
+									</p:inputText>
+
+									<p:outputLabel for="cap" value="CAP:" />
+									<p:inputMask id="cap" value="#{employeeBean.address.cap}" required="true"
+										mask="99999" />
+
+									<p:outputLabel for="munic" value="Municipality:" />
+									<p:inputText id="munic" required="true"
+										value="#{employeeBean.address.municipality}" />
+
+									<p:outputLabel for="disCode" value="District Code:" />
+									<p:selectOneMenu id="disCode"
+										value="#{employeeBean.address.districtCode}"
+										style="width:125px">
+										<f:selectItems
+											value="#{employeeBean.address.districtCodeList}"
+											var="disList" itemLabel="#{disList}" />
+									</p:selectOneMenu>
+
+								</h:panelGrid>
+
+							</p:panel>
+							<p:panel header="Additional Informations"
+								rendered="#{employeeBean.radioVal eq 'Bank account'}">
+								<h:panelGrid columns="2">
+									<p:outputLabel for="bank" value="IBAN:" />
+									<p:inputMask id="bank" value="#{employeeBean.loggedUser.payment_method}" size="27"
+										required="true" mask="aa99**********************" />
+								</h:panelGrid>
+							</p:panel>
+
+
+							<p:outputLabel for="email" value="New email address:" />
+							<p:inputText id="email" placeholder="Email"
+								value="#{employeeBean.loggedUser.email}" />
+
+							<p:outputLabel for="union" value="Change Union:" />
+							<p:selectOneMenu id="union"
+								value="#{employeeBean.loggedUser.union}" style="width:125px"
+								converter="unionTranslator">
+								<f:selectItems value="#{unionsBean.unionsList}" var="union"
+									itemLabel="#{union.unionName}" />
+							</p:selectOneMenu>
+
+							<p:commandButton value="Submit updated informations"
+								actionListener="#{employeeBean.updateInfo()}" />
 						</h:panelGrid>
 					</p:panel>
 				</h:form>
@@ -312,7 +368,8 @@
 										<h:outputText value="#{employee.union.unionName}" />
 									</f:facet>
 									<f:facet name="input">
-										<h:selectOneMenu value="#{employee.union}" style="width:100%" converter="unionTranslator">
+										<h:selectOneMenu value="#{employee.union}" style="width:100%"
+											converter="unionTranslator">
 											<f:selectItems value="#{unionsBean.unionsList}" var="union"
 												itemLabel="#{union.unionName}" itemValue="#{union}" />
 										</h:selectOneMenu>

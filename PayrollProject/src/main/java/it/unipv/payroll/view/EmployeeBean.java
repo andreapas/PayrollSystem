@@ -18,6 +18,7 @@ import it.unipv.payroll.model.Employee;
 import it.unipv.payroll.model.FullTimeEmployee;
 import it.unipv.payroll.model.PartTimeEmployee;
 import it.unipv.payroll.model.Union;
+import it.unipv.payroll.utils.Address;
 
 @Named
 @SessionScoped
@@ -34,6 +35,10 @@ public class EmployeeBean implements Serializable {
 	private Employee loggedUser;
 	private List<Employee> employeeList;
 	private String fireCode;
+	private String radioVal;
+	private Address address;
+	
+	
 	@PostConstruct
 	public void init() {
 		partTimeEmployee = new PartTimeEmployee();
@@ -44,6 +49,7 @@ public class EmployeeBean implements Serializable {
 			System.out.println("Testing phase detected, null context face returned");
 		}
 		employeeList=emController.findAll();
+		address=new Address();
 	}
 
 	
@@ -57,8 +63,6 @@ public class EmployeeBean implements Serializable {
 	public void setFireCode(String fireCode) {
 		this.fireCode = fireCode;
 	}
-
-
 
 	public Employee getLoggedUser() {
 		return loggedUser;
@@ -109,7 +113,7 @@ public class EmployeeBean implements Serializable {
 	}
 	
 	
-	public String hireFullTimeEmployee() {
+	public List<Employee> hireFullTimeEmployee() {
 		fullTimeEmployee.setRole("Monthly");
 		String answer = emController.add(fullTimeEmployee);
 		String tmpPassword="";
@@ -160,29 +164,23 @@ public class EmployeeBean implements Serializable {
 
 	}
 
-	public String editEmail(String newEmail) {
-		loggedUser.setEmail(newEmail);
-		String answer = emController.update(loggedUser);
-		return answer;
 
-	}
-
-	public String editUnion(Union newUnion) {
-		loggedUser.setUnion(newUnion);
-		String answer = emController.update(loggedUser);
-		return answer;
-
-	}
-
-	public String editPaymentMethod() {
+	public String updateInfo() {
 //		System.out.println(">>>><<<<<>>>>>>><<<<<<<<<>>>>>>>><<<<<<<<<<<<<<>>>>>>>>>"+loggedUser.getPayment_method());
-		String answer = emController.update(loggedUser);
+		
+		if(radioVal.equals("Postal address")){
+			loggedUser.setPayment_method(address.toString());
+		}else if (radioVal.equals("Paymaster")) {
+			loggedUser.setPayment_method("Paymaster");
+		}
+		clearAddress();
+		String answer = emController.update(loggedUser);		
 		try {
 			FacesContext context = FacesContext.getCurrentInstance();
 	        if(answer.equals("Operation completed successfully.")){
-		        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Success!",  "Payment method changed successfully. Your next salary will be delivered with the following method: "+loggedUser.getPayment_method()) );
+		        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Success!",  "Your informations has been updated successfully."));
 	        }else {
-	        	context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,"Error!",  "Something has gone wrong while trying to change the payment method. The complete message is "+answer) );
+	        	context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,"Error!",  "Something has gone wrong while trying to update your informations. The complete message is "+answer) );
 			}
 		} catch (NullPointerException e) {
 			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
@@ -190,7 +188,14 @@ public class EmployeeBean implements Serializable {
 		return answer;
 	}
 
-
+	private void clearAddress(){
+		address.setStreet("");
+		address.setCap(0);
+		address.setDistrictCode("");
+		address.setMunicipality("");
+		address.setNumber(0);
+	}
+	
 	public Employee findEmployeeByCode(String code) {
 		return emController.find(code);
 	}
@@ -226,4 +231,21 @@ public class EmployeeBean implements Serializable {
 			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
 		}
     }
+
+    public String getRadioVal() {
+		return radioVal;
+	}
+
+	public void setRadioVal(String radioVal) {
+		this.radioVal = radioVal;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+    
 }
