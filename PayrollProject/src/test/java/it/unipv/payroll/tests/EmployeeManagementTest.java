@@ -94,10 +94,10 @@ public class EmployeeManagementTest extends ArquillianTest {
 			emBean.setFireCode(anotherEmployee.getCode());
 			emBean.fireEmployee();
 		}
-		unBean.setUnion(USER1_UNION);
-		unBean.removeUnion(USER1_UNION);
-		unBean.setUnion(USER1_UNION_EDITED);
-		unBean.removeUnion(USER1_UNION_EDITED);
+		unBean.setFireUnionName(USER1_UNION.getUnionName());
+		unBean.removeUnion();
+		unBean.setFireUnionName(USER1_UNION_EDITED.getUnionName());
+		unBean.removeUnion();
 		
 		
 	}
@@ -149,8 +149,10 @@ public class EmployeeManagementTest extends ArquillianTest {
 
 		emBean.findEmployeeByCode(anEmployee.getCode());
 
-		emBean.editEmail(USER1_EMAIL_EDITED);
-		emBean.editUnion(USER1_UNION_EDITED);
+		emBean.setLoggedUser(emBean.findEmployeeByCode(anEmployee.getCode()));;
+		emBean.getLoggedUser().setEmail(USER1_EMAIL_EDITED);
+		emBean.getLoggedUser().setUnion(USER1_UNION_EDITED);
+		emBean.updateInfo();
 
 		List<Employee> employees = emDAO.findAll();
 		boolean isEmailEdited = false;
@@ -177,25 +179,11 @@ public class EmployeeManagementTest extends ArquillianTest {
 		emBean.setPartTimeEmployee(anEmployee);
 		emBean.hirePartTimeEmployee();
 		emBean.findEmployeeByCode(anEmployee.getCode());
-
+		emBean.setLoggedUser(emBean.findEmployeeByCode(anEmployee.getCode()));
 		emBean.getLoggedUser().setPayment_method(PAYMENT_METHOD2);
-		emBean.editPaymentMethod();
-		List<Employee> employees = emBean.getEmployeeList();
-		Employee el= new PartTimeEmployee();
-		boolean isPaymentMethodEdited = false;
-		for (Employee e : employees) {
-			if (e.getCode().equals(USER1_COD)) {
-				el=e;
-				if (e.getPayment_method().equals(PAYMENT_METHOD2)) {
-					isPaymentMethodEdited = true;
-					break;
+		emBean.updateInfo();
 
-				}
-
-			}
-
-		}
-		Assert.assertTrue("The Payment Method has been changed successfully", isPaymentMethodEdited);
+		Assert.assertEquals(PAYMENT_METHOD2, emBean.findEmployeeByCode(anEmployee.getCode()).getPayment_method());
 
 	}
 	@Test

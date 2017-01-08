@@ -1,26 +1,37 @@
-package it.unipv.payroll.utils;
+package it.unipv.payroll.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.Serializable;
 
-public class Address {
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "employees_address")
+public class Address implements Serializable {
+
+	@Id
+	private String employee_code;
+	
 	private String street;
 	private int number;
 	private int cap;
 	private String municipality;
 	private String districtCode;
-	private List<String> districtCodeList = new ArrayList<String>(Arrays.asList("AG","AL","AN","AO","AQ","AR","AP","AT","AV","BA","BT","BL","BN","BG","BI","BO","BZ","BS","BR","CA","CL","CB","CI","CE","CT","CZ","CH","CO","CS","CR","KR","CN","EN","FM","FE","FI","FG","FC","FR","GE","GO","GR","IM","IS","SP","LT","LE","LC","LI","LO","LU","MC","MN","MS","MT","VS","ME","MI","MO","MB","NA","NO","NU","OG","OT","OR","PD","PA","PR","PV","PG","PU","PE","PC","PI","PT","PN","PZ","PO","RG","RA","RC","RE","RI","RN","RM","RO","SA","SS","SV","SI","SR","SO","TA","TE","TR","TO","TP","TN","TV","TS","UD","VA","VE","VB","VC","VR","VV","VI"));
+	@OneToOne
+    @PrimaryKeyJoinColumn
+	private Employee employee;
 
-	public Address() {
-		street="";
-		number=0;
-		cap=0;
-		municipality="";
-		districtCode="";
+	public String getCode() {
+		return employee_code;
 	}
-	
+	public void setCode(String employee_code) {
+		this.employee_code = employee_code;
+	}
 	public String getStreet() {
 		return street;
 	}
@@ -51,8 +62,11 @@ public class Address {
 	public void setDistrictCode(String districtCode) {
 		this.districtCode = districtCode;
 	}
-	public List<String> getDistrictCodeList() {
-		return districtCodeList;
+	public Employee getEmployee() {
+		return employee;
+	}
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 	
 	@Override

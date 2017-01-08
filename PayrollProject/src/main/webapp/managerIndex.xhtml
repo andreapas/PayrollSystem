@@ -37,6 +37,8 @@
 						onclick="return showOnlyDivByClass('settingsPanel','dynamicPanel')" />
 					<p:button value="Employees Management" icon="fa fa-users"
 						onclick="return showOnlyDivByClass('employeesManagementPanel','dynamicPanel')" />
+					<p:button value="Unions Management" icon="fa fa-university"
+						onclick="return showOnlyDivByClass('unionsManagementPanel','dynamicPanel')" />
 
 				</h:panelGrid>
 			</p:panel>
@@ -49,7 +51,8 @@
 			<p:messages id="warnErrorPanel" autoUpdate="true" showDetail="true"
 				severity="warn,error,fatal" closable="true" />
 
-			<p:panel header="Overview" class="dynamicPanel overviewPanel">
+			<p:panel header="Overview" class="dynamicPanel overviewPanel"
+				style="display:block">
 				<h:panelGrid cellpadding="10">
 					<p:dataTable var="employee" value="#{employeeBean.loggedUser}"
 						rows="1">
@@ -72,9 +75,10 @@
 				</h:panelGrid>
 			</p:panel>
 			<p:panel header="Settings" class="dynamicPanel settingsPanel">
-				<h:form>
 					<p:panel header="Personal Informations"
 						class="dynamicPanel settingsPanel">
+										<h:form id="persInfo">
+						
 						<h:panelGrid cellpadding="10" id="updateInfos">
 							<p:outputLabel for="paymentMethod" value="Method of payment:" />
 							<p:selectOneRadio id="paymentMethod"
@@ -90,44 +94,48 @@
 							<p:panel header="Additional Informations"
 								rendered="#{employeeBean.radioVal eq 'Postal address'}">
 								<h:panelGrid columns="2">
-									<p:outputLabel for="street" value="Street:" />
-									<p:inputText id="street" value="#{employeeBean.address.street}" required="true" />
-
-									<p:outputLabel for="num" value="Number:" />
-									<p:inputText id="num" value="#{employeeBean.address.number}" required="true"
-										label="num">
-										<f:validateDoubleRange minimum="1" maximum="999999" />
-									</p:inputText>
-
-									<p:outputLabel for="cap" value="CAP:" />
-									<p:inputMask id="cap" value="#{employeeBean.address.cap}" required="true"
-										mask="99999" />
-
-									<p:outputLabel for="munic" value="Municipality:" />
-									<p:inputText id="munic" required="true"
-										value="#{employeeBean.address.municipality}" />
-
-									<p:outputLabel for="disCode" value="District Code:" />
-									<p:selectOneMenu id="disCode"
-										value="#{employeeBean.address.districtCode}"
-										style="width:125px">
-										<f:selectItems
-											value="#{employeeBean.address.districtCodeList}"
-											var="disList" itemLabel="#{disList}" />
-									</p:selectOneMenu>
-
+									<p:outputLabel value="Address:" />
+									<p:outputLabel
+										value="#{employeeBean.loggedUser.address.toString()}" />
 								</h:panelGrid>
-
 							</p:panel>
 							<p:panel header="Additional Informations"
 								rendered="#{employeeBean.radioVal eq 'Bank account'}">
 								<h:panelGrid columns="2">
 									<p:outputLabel for="bank" value="IBAN:" />
-									<p:inputMask id="bank" value="#{employeeBean.loggedUser.payment_method}" size="27"
+									<p:inputMask id="bank"
+										value="#{employeeBean.loggedUser.payment_method}" size="27"
 										required="true" mask="aa99**********************" />
 								</h:panelGrid>
 							</p:panel>
 
+							<h:panelGrid columns="2">
+								<p:outputLabel for="street" value="Street:" />
+								<p:inputText id="street"
+									value="#{employeeBean.loggedUser.address.street}" />
+
+								<p:outputLabel for="num" value="Number:" />
+								<p:inputText id="num"
+									value="#{employeeBean.loggedUser.address.number}" label="num">
+									<f:validateDoubleRange minimum="1" maximum="999999" />
+								</p:inputText>
+
+								<p:outputLabel for="cap" value="CAP:" />
+								<p:inputMask id="cap"
+									value="#{employeeBean.loggedUser.address.cap}" mask="99999" />
+
+								<p:outputLabel for="city" value="City:" />
+								<p:inputText id="city"
+									value="#{employeeBean.loggedUser.address.municipality}" />
+
+								<p:outputLabel for="disCode" value="District Code:" />
+								<p:selectOneMenu id="disCode"
+									value="#{employeeBean.loggedUser.address.districtCode}"
+									style="width:125px">
+									<f:selectItems value="#{employeeBean.districtCodeList}"
+										var="disList" itemLabel="#{disList}" />
+								</p:selectOneMenu>
+							</h:panelGrid>
 
 							<p:outputLabel for="email" value="New email address:" />
 							<p:inputText id="email" placeholder="Email"
@@ -142,13 +150,14 @@
 							</p:selectOneMenu>
 
 							<p:commandButton value="Submit updated informations"
-								actionListener="#{employeeBean.updateInfo()}" />
+								actionListener="#{employeeBean.updateInfo()}"
+								update="updateInfos" />
 						</h:panelGrid>
+						</h:form>
 					</p:panel>
-				</h:form>
-				<h:form>
 					<p:panel header="Password Management"
 						class="dynamicPanel settingsPanel">
+						<h:form id="passMgmt">
 						<h:panelGrid cellpadding="10">
 							<h:outputText value="Old Password: " />
 							<p:password id="oldPassword"
@@ -168,8 +177,8 @@
 							<p:commandButton value="Change Password"
 								actionListener="#{sessionManagementBean.modifyPassword()}" />
 						</h:panelGrid>
+						</h:form>
 					</p:panel>
-				</h:form>
 
 			</p:panel>
 
@@ -199,117 +208,327 @@
 						onclick="return showOnlyDivByClass('insertDetailsPanelFullTime','typeSubPanel')" />
 				</h:panelGrid>
 			</p:panel>
-			<h:form>
-				<p:panel header="Insert Employee Details - Part Time Employee"
-					class="dynamicPanel usersSubPanel typeSubPanel insertDetailsPanelPartTime">
-					<h:panelGrid id="partGrid" cellpadding="5" columns="2">
-						<p:outputLabel for="parthirecode" value="Code:"></p:outputLabel>
-						<p:inputText id="parthirecode" placeholder="Code" required="true"
-							value="#{employeeBean.partTimeEmployee.code}"></p:inputText>
+			<p:panel header="Insert Employee Details - Part Time Employee"
+				class="dynamicPanel usersSubPanel typeSubPanel insertDetailsPanelPartTime">
+				<h:form id="partHireAdditionalInfo">
+					<p:panelGrid id="partGrid" cellpadding="5">
+						<p:row>
+							<p:column>
+								<p:outputLabel for="parthirecode" value="Code:"></p:outputLabel>
+							</p:column>
+							<p:column>
+								<p:inputText id="parthirecode" placeholder="Code"
+									required="true" value="#{employeeBean.partTimeEmployee.code}"></p:inputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel for="parthirename" value="Name:"></p:outputLabel>
+							</p:column>
+							<p:column>
+								<p:inputText id="parthirename" placeholder="Name"
+									required="true" value="#{employeeBean.partTimeEmployee.name}"></p:inputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel for="parthiresurname" value="Surname:"></p:outputLabel>
+							</p:column>
+							<p:column>
+								<p:inputText id="parthiresurname" placeholder="Surname"
+									required="true"
+									value="#{employeeBean.partTimeEmployee.surname}"></p:inputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel for="parthireemail" value="Email:"></p:outputLabel>
+							</p:column>
+							<p:column>
+								<p:inputText id="parthireemail" placeholder="Email"
+									required="true" value="#{employeeBean.partTimeEmployee.email}"></p:inputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel for="parthirepaymentMethod"
+									value="Payment Method:"></p:outputLabel>
+							</p:column>
+							<p:column>
+								<p:selectOneMenu required="true" id="parthirepaymentMethod"
+									value="#{employeeBean.radioVal}" style="width:125px">
+									<f:selectItem itemLabel="Paymaster" itemValue="Paymaster" />
+									<f:selectItem itemLabel="Postal Address"
+										itemValue="Postal address" />
+									<f:selectItem itemLabel="Bank Account" itemValue="Bank account" />
+									<p:ajax process="parthirepaymentMethod"
+										update="partHireAdditionalInfo" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="2">
+								<p:panel header="Additional Informations"
+									rendered="#{employeeBean.radioVal eq 'Bank account'}">
+									<h:panelGrid columns="2">
+										<p:outputLabel for="bank" value="IBAN:" />
+										<p:inputMask id="bank"
+											value="#{employeeBean.partTimeEmployee.payment_method}"
+											size="27" required="true" mask="aa99**********************" />
+									</h:panelGrid>
+								</p:panel>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel for="partStreet" value="Street:" />
+							</p:column>
+							<p:column>
+								<p:inputText required="true" id="partStreet"
+									value="#{employeeBean.address.street}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel for="partNum" value="Number:" />
+							</p:column>
+							<p:column>
+								<p:inputText required="true" id="partNum"
+									value="#{employeeBean.address.number}" label="num">
+									<f:validateDoubleRange minimum="1" maximum="999999" />
+								</p:inputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel for="partCap" value="CAP:" />
+							</p:column>
+							<p:column>
+								<p:inputMask required="true" id="partCap"
+									value="#{employeeBean.address.cap}" mask="99999" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel for="partMunic" value="Municipality:" />
+							</p:column>
+							<p:column>
+								<p:inputText required="true" id="partMunic"
+									value="#{employeeBean.address.municipality}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel for="partDisCode" value="District Code:" />
+							</p:column>
+							<p:column>
+								<p:selectOneMenu required="true" id="partDisCode"
+									value="#{employeeBean.address.districtCode}"
+									style="width:125px">
+									<f:selectItems value="#{employeeBean.districtCodeList}"
+										var="disList" itemLabel="#{disList}" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel for="parthirerate" value="Hourly Rate:"></p:outputLabel>
+							</p:column>
+							<p:column>
+								<p:inputNumber id="parthirerate" required="true"
+									value="#{employeeBean.partTimeEmployee.hourlyRate}"
+									symbol=" €/h" symbolPosition="s" decimalSeparator=","
+									thousandSeparator="."></p:inputNumber>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel for="parthireunion" value="Union name:"></p:outputLabel>
+							</p:column>
+							<p:column>
+								<p:selectOneMenu id="parthireunion"
+									value="#{employeeBean.partTimeEmployee.union}"
+									style="width:125px" converter="unionTranslator">
+									<!-- 				            <f:selectItem itemLabel="Select One" itemValue="" /> -->
+									<f:selectItems value="#{unionsBean.unionsList}" var="union"
+										itemLabel="#{union.unionName}" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="2">
+								<p:commandButton value="Add"
+									actionListener="#{employeeBean.hirePartTimeEmployee()}"
+									update="partGrid @widgetVar(editTable) @widgetVar(employeesTable) @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</h:form>
 
-						<p:outputLabel for="parthirename" value="Name:"></p:outputLabel>
-						<p:inputText id="parthirename" placeholder="Name" required="true"
-							value="#{employeeBean.partTimeEmployee.name}"></p:inputText>
+			</p:panel>
+			<p:panel header="Insert Employee Details - Full Time Employee"
+				class="dynamicPanel usersSubPanel typeSubPanel insertDetailsPanelFullTime">
+				<h:form id="fullHireAdditionalInfo">
+					<p:panelGrid id="fullGrid" cellpadding="5">
+						<p:row>
+							<p:column>
+								<p:outputLabel for="fullhirecode" value="Code:"></p:outputLabel>
+							</p:column>
+							<p:column>
+								<p:inputText id="fullhirecode" placeholder="Code"
+									required="true" value="#{employeeBean.fullTimeEmployee.code}"></p:inputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel for="fullhirename" value="Name:"></p:outputLabel>
+							</p:column>
+							<p:column>
+								<p:inputText id="fullhirename" placeholder="Name"
+									required="true" value="#{employeeBean.fullTimeEmployee.name}"></p:inputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel for="fullhiresurname" value="Surname:"></p:outputLabel>
+							</p:column>
+							<p:column>
+								<p:inputText id="fullhiresurname" placeholder="Surname"
+									required="true"
+									value="#{employeeBean.fullTimeEmployee.surname}"></p:inputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel for="fullhireemail" value="Email:"></p:outputLabel>
+							</p:column>
+							<p:column>
+								<p:inputText id="fullhireemail" placeholder="Email"
+									required="true" value="#{employeeBean.fullTimeEmployee.email}"></p:inputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel for="fullhirepaymentMethod"
+									value="Payment Method:"></p:outputLabel>
+							</p:column>
+							<p:column>
+								<p:selectOneMenu required="true" id="fullhirepaymentMethod"
+									value="#{employeeBean.radioVal}" style="width:125px">
+									<f:selectItem itemLabel="Paymaster" itemValue="Paymaster" />
+									<f:selectItem itemLabel="Postal Address"
+										itemValue="Postal address" />
+									<f:selectItem itemLabel="Bank Account" itemValue="Bank account" />
+									<p:ajax process="fullhirepaymentMethod"
+										update=":fullHireAdditionalInfo" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="2">
+								<p:panel header="Additional Informations"
+									rendered="#{employeeBean.radioVal eq 'Bank account'}">
+									<h:panelGrid columns="2">
+										<p:outputLabel for="bank" value="IBAN:" />
+										<p:inputMask id="bank"
+											value="#{employeeBean.fullTimeEmployee.payment_method}"
+											size="27" required="true" mask="aa99**********************" />
+									</h:panelGrid>
+								</p:panel>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel for="fullStreet" value="Street:" />
+							</p:column>
+							<p:column>
+								<p:inputText required="true" id="fullStreet"
+									value="#{employeeBean.address.street}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel for="fullNum" value="Number:" />
+							</p:column>
+							<p:column>
+								<p:inputText required="true" id="fullNum"
+									value="#{employeeBean.address.number}" label="num">
+									<f:validateDoubleRange minimum="1" maximum="999999" />
+								</p:inputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel for="fullCap" value="CAP:" />
+							</p:column>
+							<p:column>
+								<p:inputMask required="true" id="fullCap"
+									value="#{employeeBean.address.cap}" mask="99999" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel for="fullMunic" value="Municipality:" />
+							</p:column>
+							<p:column>
+								<p:inputText required="true" id="fullMunic"
+									value="#{employeeBean.address.municipality}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel for="fullDisCode" value="District Code:" />
+							</p:column>
+							<p:column>
+								<p:selectOneMenu required="true" id="fullDisCode"
+									value="#{employeeBean.address.districtCode}"
+									style="width:125px">
+									<f:selectItems value="#{employeeBean.districtCodeList}"
+										var="disList" itemLabel="#{disList}" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel for="fullhiresalary" value="Salary:"></p:outputLabel>
+							</p:column>
+							<p:column>
+								<p:inputNumber id="fullhiresalary" required="true"
+									value="#{employeeBean.fullTimeEmployee.salary}" symbol=" €"
+									symbolPosition="s" decimalSeparator="," thousandSeparator="."></p:inputNumber>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel for="fullhireunion" value="Union name:"></p:outputLabel>
+							</p:column>
+							<p:column>
+								<p:selectOneMenu id="fullhireunion"
+									value="#{employeeBean.fullTimeEmployee.union}"
+									style="width:125px" converter="unionTranslator">
+									<!-- 				            <f:selectItem itemLabel="Select One" itemValue="" /> -->
+									<f:selectItems value="#{unionsBean.unionsList}" var="union"
+										itemLabel="#{union.unionName}" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="2">
 
-						<p:outputLabel for="parthiresurname" value="Surname:"></p:outputLabel>
-						<p:inputText id="parthiresurname" placeholder="Surname"
-							required="true" value="#{employeeBean.partTimeEmployee.surname}"></p:inputText>
+								<p:commandButton value="Add"
+									actionListener="#{employeeBean.hireFullTimeEmployee()}"
+									update="fullGrid @widgetVar(editTable) @widgetVar(employeesTable) @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</h:form>
+			</p:panel>
 
-						<p:outputLabel for="parthireemail" value="Email:"></p:outputLabel>
-						<p:inputText id="parthireemail" placeholder="Email"
-							required="true" value="#{employeeBean.partTimeEmployee.email}"></p:inputText>
-
-						<p:outputLabel for="parthirepaymentMethod" value="Payment Method:"></p:outputLabel>
-						<p:selectOneMenu id="parthirepaymentMethod"
-							value="#{employeeBean.partTimeEmployee.payment_method}"
-							style="width:125px">
-							<f:selectItem itemLabel="Paymaster" itemValue="Paymaster" />
-							<f:selectItem itemLabel="Postal Address"
-								itemValue="Postal address" />
-							<f:selectItem itemLabel="Bank Account" itemValue="Bank account" />
-						</p:selectOneMenu>
-
-						<p:outputLabel for="parthirerate" value="Hourly Rate:"></p:outputLabel>
-						<p:inputNumber id="parthirerate" required="true"
-							value="#{employeeBean.partTimeEmployee.hourlyRate}" symbol=" €/h"
-							symbolPosition="s" decimalSeparator="," thousandSeparator="."></p:inputNumber>
-
-						<p:outputLabel for="parthireunion" value="Union name:"></p:outputLabel>
-						<p:selectOneMenu id="parthireunion"
-							value="#{employeeBean.partTimeEmployee.union}"
-							style="width:125px" converter="unionTranslator">
-							<!-- 				            <f:selectItem itemLabel="Select One" itemValue="" /> -->
-							<f:selectItems value="#{unionsBean.unionsList}" var="union"
-								itemLabel="#{union.unionName}" />
-						</p:selectOneMenu>
-
-						<p:commandButton value="Add"
-							actionListener="#{employeeBean.hirePartTimeEmployee()}"
-							ajax="false" />
-					</h:panelGrid>
-				</p:panel>
-			</h:form>
-			<h:form>
-				<p:panel header="Insert Employee Details - Full Time Employee"
-					class="dynamicPanel usersSubPanel typeSubPanel insertDetailsPanelFullTime">
-					<h:panelGrid id="fullGrid" cellpadding="5" columns="2">
-						<p:outputLabel for="fullhirecode" value="Code:"></p:outputLabel>
-						<p:inputText id="fullhirecode" placeholder="Code" required="true"
-							value="#{employeeBean.fullTimeEmployee.code}"></p:inputText>
-
-						<p:outputLabel for="fullhirename" value="Name:"></p:outputLabel>
-						<p:inputText id="fullhirename" placeholder="Name" required="true"
-							value="#{employeeBean.fullTimeEmployee.name}"></p:inputText>
-
-						<p:outputLabel for="fullhiresurname" value="Surname:"></p:outputLabel>
-						<p:inputText id="fullhiresurname" placeholder="Surname"
-							required="true" value="#{employeeBean.fullTimeEmployee.surname}"></p:inputText>
-
-						<p:outputLabel for="fullhireemail" value="Email:"></p:outputLabel>
-						<p:inputText id="fullhireemail" placeholder="Email"
-							required="true" value="#{employeeBean.fullTimeEmployee.email}"></p:inputText>
-
-						<p:outputLabel for="fullhirepaymentMethod" value="Payment Method:"></p:outputLabel>
-						<p:selectOneMenu id="fullhirepaymentMethod"
-							value="#{employeeBean.fullTimeEmployee.payment_method}"
-							style="width:125px">
-							<f:selectItem itemLabel="Paymaster" itemValue="Paymaster" />
-							<f:selectItem itemLabel="Postal Address"
-								itemValue="Postal address" />
-							<f:selectItem itemLabel="Bank Account" itemValue="Bank account" />
-						</p:selectOneMenu>
-
-						<p:outputLabel for="fullhiresalary" value="Salary:"></p:outputLabel>
-						<p:inputNumber id="fullhiresalary" required="true"
-							value="#{employeeBean.fullTimeEmployee.salary}" symbol=" €"
-							symbolPosition="s" decimalSeparator="," thousandSeparator="."></p:inputNumber>
-
-						<p:outputLabel for="fullhireunion" value="Union name:"></p:outputLabel>
-						<p:selectOneMenu id="fullhireunion"
-							value="#{employeeBean.fullTimeEmployee.union}"
-							style="width:125px" converter="unionTranslator">
-							<!-- 				            <f:selectItem itemLabel="Select One" itemValue="" /> -->
-							<f:selectItems value="#{unionsBean.unionsList}" var="union"
-								itemLabel="#{union.unionName}" />
-						</p:selectOneMenu>
-
-
-						<p:commandButton value="Add"
-							actionListener="#{employeeBean.hireFullTimeEmployee()}"
-							oncomplete="closeMessages()" ajax="false" />
-					</h:panelGrid>
-				</p:panel>
-			</h:form>
-			<h:form id="form">
-				<p:panel header="Edit Employee"
-					class="dynamicPanel usersSubPanel editEmployeePanel">
+			<p:panel header="Edit Employee"
+				class="dynamicPanel usersSubPanel editEmployeePanel">
 					<h:panelGrid columns="3">
 						<p:dataTable value="#{employeeBean.employeeList}" var="employee"
-							rowKey="#{employee.code}" widgetVar="editTable" rows="10"
-							rowsPerPageTemplate="5,10,15" editable="true">
-							<p:ajax event="rowEdit" listener="#{employeeBean.onRowEdit}" />
-							<p:ajax event="rowEditCancel"
-								listener="#{employeeBean.onRowCancel}" />
+							widgetVar="editTable" rows="10" rowsPerPageTemplate="5,10,15">
 							<f:facet name="header">
 								<p:outputPanel>
 									<h:outputText value="Search all fields:" />
@@ -326,63 +545,96 @@
 
 							<p:column sortBy="#{employee.name}" filterBy="#{employee.name}"
 								filterStyle="display:none" headerText="Name">
-								<p:cellEditor>
-									<f:facet name="output">
-										<h:outputText value="#{employee.name}" />
-									</f:facet>
-									<f:facet name="input">
-										<p:inputText id="employeeName" value="#{employee.name}" />
-									</f:facet>
-								</p:cellEditor>
+								<h:outputText value="#{employee.name}" />
 							</p:column>
 
 							<p:column sortBy="#{employee.surname}"
 								filterBy="#{employee.surname}" filterStyle="display:none"
 								headerText="Surname">
-								<p:cellEditor>
-									<f:facet name="output">
-										<h:outputText value="#{employee.surname}" />
-									</f:facet>
-									<f:facet name="input">
-										<p:inputText id="employeeSurname" value="#{employee.surname}" />
-									</f:facet>
-								</p:cellEditor>
+								<h:outputText value="#{employee.surname}" />
 							</p:column>
 
 							<p:column filterBy="#{employee.email}" filterStyle="display:none"
 								headerText="Email">
-								<p:cellEditor>
-									<f:facet name="output">
-										<h:outputText value="#{employee.email}" />
-									</f:facet>
-									<f:facet name="input">
-										<p:inputText id="employeeEmail" value="#{employee.email}" />
-									</f:facet>
-								</p:cellEditor>
+								<h:outputText value="#{employee.email}" />
 							</p:column>
 
 							<p:column filterBy="#{employee.union.unionName}"
 								filterStyle="display:none" headerText="Union">
-								<p:cellEditor>
-									<f:facet name="output">
-										<h:outputText value="#{employee.union.unionName}" />
-									</f:facet>
-									<f:facet name="input">
-										<h:selectOneMenu value="#{employee.union}" style="width:100%"
-											converter="unionTranslator">
-											<f:selectItems value="#{unionsBean.unionsList}" var="union"
-												itemLabel="#{union.unionName}" itemValue="#{union}" />
-										</h:selectOneMenu>
-									</f:facet>
-								</p:cellEditor>
+								<h:outputText value="#{employee.union.unionName}" />
 							</p:column>
-							<p:column style="width:32px">
-								<p:rowEditor />
+							<p:column headerText="Edit">
+								<p:commandButton icon="fa fa-edit"
+									action="#{employeeBean.setGenericEmployee(employee)}"
+									update=":selectedEmployee"
+									onclick="return showDivsByClass('editDetailsEmployeePanel')" />
 							</p:column>
 						</p:dataTable>
 					</h:panelGrid>
+				<p:panel header="Edit this Employee"
+					class="dynamicPanel editDetailsEmployeePanel">
+					<h:form id="selectedEmployee">
+						<h:panelGrid cellpadding="5" columns="2">
+
+							<p:outputLabel for="editName" value="Name:" />
+							<p:inputText id="editName"
+								value="#{employeeBean.genericEmployee.name}" />
+							<p:outputLabel for="editSurname" value="Surname:" />
+							<p:inputText id="editSurname"
+								value="#{employeeBean.genericEmployee.surname}" />
+							<p:outputLabel for="editEmail" value="Email:" />
+							<p:inputText id="editEmail"
+								value="#{employeeBean.genericEmployee.email}" />
+
+							<p:outputLabel for="editUnion" value="Union:" />
+							<p:selectOneMenu id="editUnion"
+								value="#{employeeBean.genericEmployee.union}"
+								style="width:125px" converter="unionTranslator">
+								<f:selectItems value="#{unionsBean.unionsList}" var="union"
+									itemLabel="#{union.unionName}" />
+							</p:selectOneMenu>
+							<p:outputLabel for="editStreet" value="Street:" />
+							<p:inputText id="editStreet"
+								value="#{employeeBean.genericEmployee.address.street}" />
+
+							<p:outputLabel for="editNum" value="Number:" />
+							<p:inputText id="editNum"
+								value="#{employeeBean.genericEmployee.address.number}"
+								label="num">
+								<f:validateDoubleRange minimum="1" maximum="999999" />
+							</p:inputText>
+
+							<p:outputLabel for="editCap" value="CAP:" />
+							<p:inputMask id="editCap"
+								value="#{employeeBean.genericEmployee.address.cap}" mask="99999" />
+
+							<p:outputLabel for="editMunic" value="Municipality:" />
+							<p:inputText id="editMunic"
+								value="#{employeeBean.genericEmployee.address.municipality}" />
+
+							<p:outputLabel for="editDisCode" value="District Code:" />
+							<p:selectOneMenu id="editDisCode"
+								value="#{employeeBean.genericEmployee.address.districtCode}"
+								style="width:125px">
+								<f:selectItems value="#{employeeBean.districtCodeList}"
+									var="disList" itemLabel="#{disList}" />
+							</p:selectOneMenu>
+							<f:facet name="footer">
+								<p:commandButton value="Update User Info"
+									action="#{employeeBean.updateGenericEmployee()}"
+									update=":selectedEmployee @widgetVar(editTable) @widgetVar(employeesTable) @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)"
+									onclick="showOnlyDivByClass('editEmployeePanel', 'editDetailsEmployeePanel')" />
+								<p:commandButton value="Cancel"
+									action="#{employeeBean.cancel()}" update=":selectedEmployee"
+									onclick="showOnlyDivByClass('editEmployeePanel', 'editDetailsEmployeePanel')" />
+
+							</f:facet>
+
+						</h:panelGrid>
+					</h:form>
 				</p:panel>
-			</h:form>
+
+			</p:panel>
 			<p:panel header="Delete Employee"
 				class="dynamicPanel usersSubPanel deleteEmployeePanel">
 				<h:panelGrid columns="3">
@@ -422,25 +674,221 @@
 							filterStyle="display:none" headerText="Union">
 							<h:outputText value="#{employee.union.unionName}" />
 						</p:column>
-
+						<p:column>
+							<p:commandButton icon="fa fa-trash"
+								action="#{employeeBean.setFireCode(employee.code)}"
+								update=":selectedDeletableEmployee"
+								onclick="showDivsByClass('deletableEmployeePanel')" />
+						</p:column>
 					</p:dataTable>
 				</h:panelGrid>
-				<h:form>
-					<h:panelGrid cellpadding="10">
-						<p:panel>
+				<p:panel header="Delete this Employee"
+					class="dynamicPanel deletableEmployeePanel">
+					<h:form id="selectedDeletableEmployee">
+						<h:panelGrid cellpadding="5" columns="2">
 							<p:outputLabel value="Code of the Employee to fire" />
 							<p:inputText value="#{employeeBean.fireCode}" />
 							<p:commandButton value="Fire"
-								action="#{employeeBean.fireEmployee()}" ajax="false" />
-						</p:panel>
+								action="#{employeeBean.fireEmployee()}"
+								update=":selectedDeletableEmployee  @widgetVar(editTable) @widgetVar(employeesTable) @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)"
+								onclick="showOnlyDivByClass('deleteEmployeePanel', 'deletableEmployeePanel')" />
+							<p:commandButton value="Cancel" action="#{employeeBean.cancel()}"
+								update=":selectedDeletableEmployee "
+								onclick="showOnlyDivByClass('deleteEmployeePanel', 'deletableEmployeePanel')" />
+						</h:panelGrid>
+					</h:form>
+				</p:panel>
+
+			</p:panel>
+			<p:panel header="Unions Management"
+				class="dynamicPanel unionsManagementPanel">
+				<h:panelGrid cellpadding="5" columns="3">
+
+					<p:button value="Add Union"
+						onclick="return showOnlyDivByClass('addUnionPanel','unionsSubPanel')"
+						icon="fa fa-plus-circle" />
+					<p:button value="Edit Union"
+						onclick="return showOnlyDivByClass('editUnionPanel','unionsSubPanel');"
+						icon="fa fa-edit" />
+					<p:button value="Delete Union"
+						onclick="return showOnlyDivByClass('deleteUnionPanel','unionsSubPanel');"
+						icon="fa fa-minus-circle" />
+
+				</h:panelGrid>
+			</p:panel>
+			<p:panel header="Insert Union informations"
+				class="dynamicPanel unionsSubPanel addUnionPanel">
+				<h:form id="addUnionForm">
+					<h:panelGrid cellpadding="5" columns="2">
+						<p:outputLabel for="unionCode"
+							value="Insert name of the new Union:" />
+						<p:inputText id="unionCode" required="true"
+							value="#{unionsBean.union.unionName}" />
+
+						<p:outputLabel for="unionRate" value="Insert the weekly rate:" />
+						<p:inputNumber id="unionRate" required="true"
+							value="#{unionsBean.union.weeklyRate}" symbol="€"
+							symbolPosition="s" />
+
+						<p:commandButton action="#{unionsBean.addUnion()}"
+							update="addUnionForm :persInfo :partHireAdditionalInfo :fullHireAdditionalInfo :selectedEmployee :selectedDeletableEmployee @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)"
+							value="Add Union" />
 					</h:panelGrid>
 				</h:form>
+			</p:panel>
+			<p:panel header="Edit Union"
+				class="dynamicPanel unionsSubPanel editUnionPanel">
+				<h:form id="editUnionForm">
+					<p:dataTable value="#{unionsBean.unionsList}" var="union"
+						widgetVar="unionEditTable" rows="10" rowsPerPageTemplate="5,10,15">
+						<f:facet name="header">
+							<p:outputPanel>
+								<h:outputText value="Search all fields:" />
+								<p:inputText id="globalFilter"
+									onkeyup="PF('unionEditTable').filter()" style="width:150px"
+									placeholder="Enter keyword" />
+							</p:outputPanel>
+						</f:facet>
 
+						<p:column sortBy="#{union.unionName}"
+							filterBy="#{union.unionName}" filterStyle="display:none"
+							headerText="Union Name">
+							<h:outputText value="#{union.unionName}" />
+						</p:column>
+
+
+						<p:column filterBy="#{union.weeklyRate}"
+							filterStyle="display:none" headerText="Weekly Rate (€)">
+							<h:outputText value="#{union.weeklyRate}" />
+						</p:column>
+
+						<p:column headerText="Number of Associates">
+							<h:outputText value="#{union.associates.size()}" />
+						</p:column>
+
+						<p:column headerText="Edit">
+							<p:commandButton icon="fa fa-edit"
+								action="#{unionsBean.setUnion(union)}" 
+								update="selectedUnion :persInfo :partHireAdditionalInfo :fullHireAdditionalInfo :selectedEmployee :selectedDeletableEmployee @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)"
+								onclick="return showOnlyDivByClass('editDetailsUnionPanel');" />
+						</p:column>
+					</p:dataTable>
+				</h:form>
+				<p:panel header="Edit this Union" class="dynamicPanel unionsSubPanel editDetailsUnionPanel"> 
+					<h:form id="selectedUnion">
+						<h:panelGrid cellpadding="5" columns="2">
+
+							<p:outputLabel for="editUnionRate"
+								value="Edit the rate of the Union #{unionsBean.union.unionName}:" />
+							<p:inputNumber id="editUnionRate"
+								value="#{unionsBean.union.weeklyRate}" symbol="€"
+								symbolPosition="s" />
+
+							<p:commandButton action="#{unionsBean.updateUnion()}"
+								value="Update this Union"
+								update="selectedUnion :persInfo :partHireAdditionalInfo :fullHireAdditionalInfo :selectedEmployee :selectedDeletableEmployee @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)" 
+								onclick="showOnlyDivByClass('editUnionPanel', 'editDetailsUnionPanel')"/>
+							<p:commandButton action="#{unionsBean.clearSelection()}"
+								value="Cancel"
+								update="selectedUnion"
+								onclick="showOnlyDivByClass('editUnionPanel', 'editDetailsUnionPanel')" />
+						</h:panelGrid>
+					</h:form>
+				</p:panel>
+			</p:panel>
+			<p:panel header="Delete Union"
+				class="dynamicPanel unionsSubPanel deleteUnionPanel">
+				<h:form>
+					<p:dataTable value="#{unionsBean.unionsList}" var="union"
+						widgetVar="unionDeleteTable" rows="10"
+						rowsPerPageTemplate="5,10,15">
+						<f:facet name="header">
+							<p:outputPanel>
+								<h:outputText value="Search all fields:" />
+								<p:inputText id="globalFilter"
+									onkeyup="PF('unionDeleteTable').filter()" style="width:150px"
+									placeholder="Enter keyword" />
+							</p:outputPanel>
+						</f:facet>
+
+						<p:column sortBy="#{union.unionName}"
+							filterBy="#{union.unionName}" filterStyle="display:none"
+							headerText="Union Name">
+							<h:outputText value="#{union.unionName}" />
+						</p:column>
+
+
+						<p:column filterBy="#{union.weeklyRate}"
+							filterStyle="display:none" headerText="Weekly Rate (€)">
+							<h:outputText value="#{union.weeklyRate}" />
+						</p:column>
+
+						<p:column headerText="Number of Associates">
+							<h:outputText value="#{union.associates.size()}" />
+						</p:column>
+
+						<p:column headerText="Delete">
+							<p:commandButton icon="fa fa-close"
+								action="#{unionsBean.setFireUnionName(union.unionName)}"
+								update="deletableUnionForm" 
+								onclick="return showDivsByClass('deletableUnion')"/> 
+						</p:column>
+					</p:dataTable>
+				</h:form>
+				<p:panel header="Delete this Union" class="dynamicPanel unionsSubPanel deletableUnion">
+					<h:form id="deletableUnionForm">
+
+						<p:outputLabel
+							value="Do you want to delete #{unionsBean.fireUnionName}?" />
+						<h:panelGrid cellpadding="5" columns="2">
+							<p:commandButton action="#{unionsBean.removeUnion()}"
+								update="deletableUnionForm @widgetVar(unionDeleteTable) @widgetVar(unionEditTable)"
+								value="Yes" 
+								onclick="showOnlyDivByClass('deleteUnionPanel', 'deletableUnion')" />
+							<p:commandButton action="#{unionsBean.clearSelection()}"
+								update="deletableUnionForm :persInfo :partHireAdditionalInfo :fullHireAdditionalInfo :selectedEmployee :selectedDeletableEmployee @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)" value="No" 
+								onclick="showOnlyDivByClass('deleteUnionPanel', 'deletableUnion')" />
+						</h:panelGrid>
+					</h:form>
+				</p:panel>
 			</p:panel>
 		</div>
 
 	</div>
-	<!-- 	</h:form> -->
+	<!-- 	template addressEdit -->
 
+
+	<!-- <p:outputLabel for="editStreet" value="Street:" />
+							<p:inputText id="editStreet"
+								value="#{employeeBean.genericEmployee.address.street}" />
+
+							<p:outputLabel for="editNum" value="Number:" />
+							<p:inputText id="editNum"
+								value="#{employeeBean.genericEmployee.address.number}"
+								label="num">
+								<f:validateDoubleRange minimum="1" maximum="999999" />
+							</p:inputText>
+
+							<p:outputLabel for="editCap" value="CAP:" />
+							<p:inputMask id="editCap"
+								value="#{employeeBean.genericEmployee.address.cap}" mask="99999" />
+
+							<p:outputLabel for="editMunic" value="Municipality:" />
+							<p:inputText id="editMunic"
+								value="#{employeeBean.genericEmployee.address.municipality}" />
+
+							<p:outputLabel for="editDisCode" value="District Code:" />
+							<p:selectOneMenu id="editDisCode"
+								value="#{employeeBean.genericEmployee.address.districtCode}"
+								style="width:125px">
+								<f:selectItems value="#{employeeBean.districtCodeList}"
+									var="disList" itemLabel="#{disList}" />
+							</p:selectOneMenu> -->
+
+	<!-- All the widgetVar table names to be updated -->
+	<!--@widgetVar(editTable) @widgetVar(employeesTable) @widgetVar(unionEditTable) @widgetVar(unionDeleteTable) -->
+	<!-- All form id to update from Unions -->
+	<!-- :persInfo :partHireAdditionalInfo :fullHireAdditionalInfo :selectedEmployee :selectedDeletableEmployee -->
 </h:body>
 </html>
+

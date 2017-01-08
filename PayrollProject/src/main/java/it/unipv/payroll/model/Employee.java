@@ -1,23 +1,18 @@
 package it.unipv.payroll.model;
 
 import java.io.Serializable;
-import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-
-import org.hibernate.validator.internal.util.privilegedactions.GetResolvedMemberMethods;
-
-import it.unipv.payroll.utils.Address;
 
 @Entity
 @Table(name = "employees")
@@ -31,13 +26,20 @@ public abstract class Employee implements Serializable{
 	private String name;
 	private String surname;
 	private String email;
-	private String address;
+//	private String address;
 	@ManyToOne/*(cascade={CascadeType.ALL})*/
 	@JoinColumn(name="union_name")
 	private Union union;
+
+    @MapsId 
+    @OneToOne(mappedBy = "employee")
+    @JoinColumn(name = "code") 
+	private Address address=new Address();
 	private String payment_method;
 	
 	private String role;
+	
+	
 	
 	public String getCode() {
 		return code;
@@ -81,10 +83,10 @@ public abstract class Employee implements Serializable{
 	public void setRole(String role) {
 		this.role = role;
 	}
-	public String getAddress() {
+	public Address getAddress() {
 		return address;
 	}
-	public void setAddress(String address) {
+	public void setAddress(Address address) {
 		this.address = address;
 	}
 	
