@@ -2,7 +2,6 @@ package it.unipv.payroll.controller;
 
 import javax.ejb.Stateless;
 
-import it.unipv.payroll.model.SalesReceipt;
 import it.unipv.payroll.model.TimeCard;
 
 @Stateless

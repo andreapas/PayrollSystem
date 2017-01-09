@@ -1,15 +1,18 @@
 package it.unipv.payroll.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -30,6 +33,9 @@ public abstract class Employee implements Serializable{
 	@ManyToOne/*(cascade={CascadeType.ALL})*/
 	@JoinColumn(name="union_name")
 	private Union union;
+	
+	@OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
+	private List<Transactions> transactions;	
 
     @MapsId 
     @OneToOne(mappedBy = "employee")
@@ -88,6 +94,12 @@ public abstract class Employee implements Serializable{
 	}
 	public void setAddress(Address address) {
 		this.address = address;
+	}
+	public List<Transactions> getTransactions() {
+		return transactions;
+	}
+	public void setTransactions(List<Transactions> transactions) {
+		this.transactions = transactions;
 	}
 	
 	

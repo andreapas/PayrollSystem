@@ -8,23 +8,25 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import it.unipv.payroll.controller.TransactionsInfoController;
-import it.unipv.payroll.model.TransactionsInfo;
+import it.unipv.payroll.controller.EmployeeController;
+import it.unipv.payroll.controller.TransactionsController;
+import it.unipv.payroll.model.Transactions;
 
 @Named
 @SessionScoped
 public class InsertHoursBean implements Serializable{
 
 	
-	@Inject TransactionsInfoController tiController;
+	@Inject TransactionsController tiController;
+	@Inject EmployeeController eController;
 
-	private TransactionsInfo tiInfo;
+	private Transactions tiInfo;
 	private String id;
 	private String hours;
 	
 	@PostConstruct
 	public void init() {
-		tiInfo = new TransactionsInfo();
+		tiInfo = new Transactions();
 	}
 	public String getId() {
 		return id;
@@ -38,14 +40,14 @@ public class InsertHoursBean implements Serializable{
 	public void setHours(String hours) {
 		this.hours = hours;
 	}
-	public TransactionsInfo getTiInfo() {
+	public Transactions getTiInfo() {
 		return tiInfo;
 	}
-	public void setTiInfo(TransactionsInfo tiInfo) {
+	public void setTiInfo(Transactions tiInfo) {
 		this.tiInfo = tiInfo;
 	}
 	public String addHours(){
-		tiInfo.setCode(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+		tiInfo.setEmployee(eController.find(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser()));
 		tiInfo.setInfo(" worked "+hours+" receipt id: "+id);
 		String answer=tiController.add(tiInfo);
 		return answer;

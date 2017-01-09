@@ -10,9 +10,9 @@ import javax.inject.Named;
 
 import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.controller.TimeCardController;
-import it.unipv.payroll.controller.TransactionsInfoController;
+import it.unipv.payroll.controller.TransactionsController;
 import it.unipv.payroll.model.TimeCard;
-import it.unipv.payroll.model.TransactionsInfo;
+import it.unipv.payroll.model.Transactions;
 
 @Named
 @SessionScoped

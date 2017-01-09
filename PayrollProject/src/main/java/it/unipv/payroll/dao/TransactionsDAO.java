@@ -7,21 +7,21 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Root;
 
-import it.unipv.payroll.model.TransactionsInfo;
+import it.unipv.payroll.model.Transactions;
 
 @Stateless
-public class TransactionsInfoDAO extends GenericDAO<TransactionsInfo>{
+public class TransactionsDAO extends GenericDAO<Transactions>{
 
-	public TransactionsInfoDAO() {
-		super(TransactionsInfo.class);
+	public TransactionsDAO() {
+		super(Transactions.class);
 	}
 	
 	//ONE TO MANY MANY TO ONE
-	public List<TransactionsInfo> findAllTransactionFromEmployeeCode(String id){
+	public List<Transactions> findAllTransactionFromEmployeeCode(String id){
 //		criteriaQuery.select(criteriaQuery.from(type));
 //		return em.createQuery(criteriaQuery).getResultList();
-		CriteriaQuery<TransactionsInfo> q = em.getCriteriaBuilder().createQuery(TransactionsInfo.class);
-		  Root<TransactionsInfo> c = q.from(TransactionsInfo.class);
+		CriteriaQuery<Transactions> q = em.getCriteriaBuilder().createQuery(Transactions.class);
+		  Root<Transactions> c = q.from(Transactions.class);
 		  q.select(c);
 		  ParameterExpression<String> p = em.getCriteriaBuilder().parameter(String.class);
 		  q.where(em.getCriteriaBuilder().equal(c.get(id), p));

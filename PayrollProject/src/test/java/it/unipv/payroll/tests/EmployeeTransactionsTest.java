@@ -12,11 +12,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import it.unipv.payroll.dao.EmployeeTransactionsDAO;
-import it.unipv.payroll.dao.TransactionsInfoDAO;
+import it.unipv.payroll.dao.TransactionsDAO;
 import it.unipv.payroll.model.EmployeeTransactions;
-import it.unipv.payroll.model.TransactionsInfo;
+import it.unipv.payroll.model.Transactions;
 import it.unipv.payroll.view.EmployeeTransactionsBean;
-import it.unipv.payroll.view.TransactionsInfoBean;
+import it.unipv.payroll.view.TransactionsBean;
 
 @RunWith(Arquillian.class)
 public class EmployeeTransactionsTest extends ArquillianTest{
@@ -29,8 +29,8 @@ public class EmployeeTransactionsTest extends ArquillianTest{
 	@Inject EmployeeTransactionsDAO utDAO;
 	
 	
-	@Inject TransactionsInfoBean tiBean;
-	@Inject TransactionsInfoDAO tiDAO;
+	@Inject TransactionsBean tiBean;
+	@Inject TransactionsDAO tiDAO;
 	
 	
 	@After
@@ -184,29 +184,29 @@ public class EmployeeTransactionsTest extends ArquillianTest{
 	@Test
 	public void transactionsInfoTest(){
 		
-		TransactionsInfo ti1 = new TransactionsInfo();
+		Transactions ti1 = new Transactions();
 		ti1.setInfo("Transactions info 1");
 		ti1.setCode(USER_CODE1);
-		tiBean.setTransactionsInfo(ti1);
-		tiBean.addTransactionsInfo();
+		tiBean.setTransaction(ti1);
+		tiBean.addTransaction();
 		
-		TransactionsInfo ti2 = new TransactionsInfo();
+		Transactions ti2 = new Transactions();
 		ti2.setInfo("Transactions info 2");
 		ti2.setCode(USER_CODE1);
-		tiBean.setTransactionsInfo(ti2);
-		tiBean.addTransactionsInfo();
+		tiBean.setTransaction(ti2);
+		tiBean.addTransaction();
 		
-		TransactionsInfo ti3 = new TransactionsInfo();
+		Transactions ti3 = new Transactions();
 		ti3.setInfo("Transactions info 3");
 		ti3.setCode(USER_CODE1);
-		tiBean.setTransactionsInfo(ti3);
-		tiBean.addTransactionsInfo();
+		tiBean.setTransaction(ti3);
+		tiBean.addTransaction();
 
 		
-		List<TransactionsInfo> allTransactionsInfo = tiDAO.findAll();
+		List<Transactions> allTransactionsInfo = tiDAO.findAll();
 		
 		int aux = 0;
-		for(TransactionsInfo t:allTransactionsInfo){
+		for(Transactions t:allTransactionsInfo){
 			
 			if(t.getCode().equals(USER_CODE1)){
 				aux++;
@@ -216,8 +216,8 @@ public class EmployeeTransactionsTest extends ArquillianTest{
 		}
 		
 		
-		List<TransactionsInfo>list= tiDAO.findAll();
-		for (TransactionsInfo transactionsInfo : list) {
+		List<Transactions>list= tiDAO.findAll();
+		for (Transactions transactionsInfo : list) {
 			if(transactionsInfo.getInfo().equals(ti1.getInfo())){
 				tiBean.removeTransactionInfo(transactionsInfo);
 			}else if(transactionsInfo.getInfo().equals(ti2.getInfo())){
@@ -227,9 +227,9 @@ public class EmployeeTransactionsTest extends ArquillianTest{
 			} 
 		}
 		
-		List<TransactionsInfo> lastList=tiDAO.findAll();
+		List<Transactions> lastList=tiDAO.findAll();
 		int tot=0;
-		for (TransactionsInfo transactionsInfo : lastList) {
+		for (Transactions transactionsInfo : lastList) {
 			if (transactionsInfo.getCode().equals(USER_CODE1)) {
 				tot++;
 			}

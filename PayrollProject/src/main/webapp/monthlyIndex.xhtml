@@ -4,7 +4,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
-	
+
 <h:head>
 	<link rel="stylesheet" type="text/css" href="css/style.css"></link>
 	<script type="text/javascript" src="js/scripts.js"></script>
@@ -18,103 +18,180 @@
 	});
 	</script>
 
-<!-- 	<h:form> -->
-		<div class="ui-g">
+	<!-- 	<h:form> -->
+	<div class="ui-g">
 
-			<div class="ui-g-3">
+		<div class="ui-g-3">
 
-				<p:panel id="mainMenu" header="Menu">
-					<h:panelGrid columns="1" cellpadding="10">
-					
-						<p>Welcome #{employeeBean.loggedUser.name}</p>
-						<h:form>
-						<h:commandButton value="logout" action="#{sessionManagementBean.logout()}" />
-						</h:form>
-						<p:button value="Overview" icon="fa fa-eye" onclick="return showOnlyDivByClass('overviewPanel','dynamicPanel')" />
-						<p:button value="Settings" icon="fa fa-gears" onclick="return showOnlyDivByClass('settingsPanel','dynamicPanel')" />						
-						<p:button value="Insert Sales" icon="fa fa-eur" onclick="return showOnlyDivByClass('insertSalesPanel','dynamicPanel')" />
-						
-					</h:panelGrid>
-				</p:panel>
+			<p:panel id="mainMenu" header="Menu">
+				<h:panelGrid columns="1" cellpadding="10">
 
-			</div>
+					<p>Welcome #{employeeBean.loggedUser.name}</p>
+					<h:form>
+						<h:commandButton value="logout"
+							action="#{sessionManagementBean.logout()}" />
+					</h:form>
+					<p:button value="Overview" icon="fa fa-eye"
+						onclick="return showOnlyDivByClass('overviewPanel','dynamicPanel')" />
+					<p:button value="Settings" icon="fa fa-gears"
+						onclick="return showOnlyDivByClass('settingsPanel','dynamicPanel')" />
+					<p:button value="Insert Sales" icon="fa fa-eur"
+						onclick="return showOnlyDivByClass('insertSalesPanel','dynamicPanel')" />
 
-			<div class="ui-g-9">
+				</h:panelGrid>
+			</p:panel>
 
-				<p:panel header="Overview" class="dynamicPanel overviewPanel">
-					<h:panelGrid cellpadding="10">
-						<p:dataTable var="employee" value="#{employeeBean.loggedUser}" rows="1">
-							<p:column headerText="Code">
-								<h:outputText value="#{employee.code}" />
-							</p:column>
-							<p:column headerText="Name">
-								<h:outputText value="#{employee.name}" />
-							</p:column>
-							<p:column headerText="Surname">
-								<h:outputText value="#{employee.surname}" />
-							</p:column>
-							<p:column headerText="Email">
-								<h:outputText value="#{employee.email}" />
-							</p:column>
-							<p:column headerText="Union Name">
-								<h:outputText value="#{employee.union.unionName}" />
-							</p:column>
-						</p:dataTable>
-					</h:panelGrid>
-				</p:panel>
-				<p:panel header="Settings" class="dynamicPanel settingsPanel">
-				<h:form>
-					<p:panel header="Payment Method" class="dynamicPanel settingsPanel">
-						<h:panelGrid cellpadding="10">
+		</div>
+
+		<div class="ui-g-9">
+
+			<p:panel header="Overview" class="dynamicPanel overviewPanel">
+				<h:panelGrid cellpadding="10">
+					<p:dataTable var="employee" value="#{employeeBean.loggedUser}"
+						rows="1">
+						<p:column headerText="Code">
+							<h:outputText value="#{employee.code}" />
+						</p:column>
+						<p:column headerText="Name">
+							<h:outputText value="#{employee.name}" />
+						</p:column>
+						<p:column headerText="Surname">
+							<h:outputText value="#{employee.surname}" />
+						</p:column>
+						<p:column headerText="Email">
+							<h:outputText value="#{employee.email}" />
+						</p:column>
+						<p:column headerText="Union Name">
+							<h:outputText value="#{employee.union.unionName}" />
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+			</p:panel>
+			<p:panel header="Settings" class="dynamicPanel settingsPanel">
+				<p:panel header="Personal Informations"
+					class="dynamicPanel settingsPanel">
+					<h:form id="persInfo">
+
+						<h:panelGrid cellpadding="10" id="updateInfos">
 							<p:outputLabel for="paymentMethod" value="Method of payment:" />
-							<p:selectOneRadio id="paymentMethod" value="#{employeeBean.loggedUser.payment_method}">
-								<f:selectItem itemLabel="Mailed to the postal address" itemValue="Postal address" />
-								<f:selectItem itemLabel="Held for pickup by the paymaster" itemValue="Paymaster" />
-								<f:selectItem itemLabel="Deposited into the bank account" itemValue="Bank account" />
+							<p:selectOneRadio id="paymentMethod"
+								value="#{employeeBean.radioVal}">
+								<f:selectItem itemLabel="Mailed to the postal address"
+									itemValue="Postal address" />
+								<f:selectItem itemLabel="Held for pickup by the paymaster"
+									itemValue="Paymaster" />
+								<f:selectItem itemLabel="Deposited into the bank account"
+									itemValue="Bank account" />
+								<p:ajax process="paymentMethod" update="updateInfos" />
 							</p:selectOneRadio>
-							<p:commandButton value="Submit Payment Method" actionListener="#{employeeBean.editPaymentMethod()}" />
+							<p:panel header="Additional Informations"
+								rendered="#{employeeBean.radioVal eq 'Postal address'}">
+								<h:panelGrid columns="2">
+									<p:outputLabel value="Address:" />
+									<p:outputLabel
+										value="#{employeeBean.loggedUser.address.toString()}" />
+								</h:panelGrid>
+							</p:panel>
+							<p:panel header="Additional Informations"
+								rendered="#{employeeBean.radioVal eq 'Bank account'}">
+								<h:panelGrid columns="2">
+									<p:outputLabel for="bank" value="IBAN:" />
+									<p:inputMask id="bank"
+										value="#{employeeBean.loggedUser.payment_method}" size="27"
+										required="true" mask="aa99**********************" />
+								</h:panelGrid>
+							</p:panel>
+
+							<h:panelGrid columns="2">
+								<p:outputLabel for="street" value="Street:" />
+								<p:inputText id="street"
+									value="#{employeeBean.loggedUser.address.street}" />
+
+								<p:outputLabel for="num" value="Number:" />
+								<p:inputText id="num"
+									value="#{employeeBean.loggedUser.address.number}" label="num">
+									<f:validateDoubleRange minimum="1" maximum="999999" />
+								</p:inputText>
+
+								<p:outputLabel for="cap" value="CAP:" />
+								<p:inputMask id="cap"
+									value="#{employeeBean.loggedUser.address.cap}" mask="99999" />
+
+								<p:outputLabel for="city" value="City:" />
+								<p:inputText id="city"
+									value="#{employeeBean.loggedUser.address.municipality}" />
+
+								<p:outputLabel for="disCode" value="District Code:" />
+								<p:selectOneMenu id="disCode"
+									value="#{employeeBean.loggedUser.address.districtCode}"
+									style="width:125px">
+									<f:selectItems value="#{employeeBean.districtCodeList}"
+										var="disList" itemLabel="#{disList}" />
+								</p:selectOneMenu>
+							</h:panelGrid>
+
+							<p:outputLabel for="email" value="New email address:" />
+							<p:inputText id="email" placeholder="Email"
+								value="#{employeeBean.loggedUser.email}" />
+
+							<p:outputLabel for="union" value="Change Union:" />
+							<p:selectOneMenu id="union"
+								value="#{employeeBean.loggedUser.union}" style="width:125px"
+								converter="unionTranslator">
+								<f:selectItems value="#{unionsBean.unionsList}" var="union"
+									itemLabel="#{union.unionName}" />
+							</p:selectOneMenu>
+
+							<p:commandButton value="Submit updated informations"
+								actionListener="#{employeeBean.updateInfo()}"
+								update="updateInfos" />
 						</h:panelGrid>
-					</p:panel>
-				</h:form>
-				<h:form>
-					<p:panel header="Password Management" class="dynamicPanel settingsPanel">
+					</h:form>
+				</p:panel>
+				<p:panel header="Password Management"
+					class="dynamicPanel settingsPanel">
+					<h:form id="passMgmt">
 						<h:panelGrid cellpadding="10">
 							<h:outputText value="Old Password: " />
-							<p:password id="oldPassword" value="#{sessionManagementBean.oldLoginCredentials.password}" required="true" label="password"/>
-							
+							<p:password id="oldPassword"
+								value="#{sessionManagementBean.oldLoginCredentials.password}"
+								required="true" label="password" />
+
 							<h:outputText value="New Password: " />
- 							<p:password id="newPassword" value="#{sessionManagementBean.newLoginCredentials.password}" feedback="true" match="repeatNewPassword" required="true"/>
+							<p:password id="newPassword"
+								value="#{sessionManagementBean.newLoginCredentials.password}"
+								feedback="true" match="repeatNewPassword" required="true" />
 
 							<h:outputText value="Repeat New Password: " />
- 							<p:password id="repeatNewPassword" value="#{sessionManagementBean.newLoginCredentials.password}" feedback="true" required="true"/>
- 
-							<p:commandButton value="Submit Payment Method" actionListener="#{sessionManagementBean.modifyPassword()}" update="passwordGrowl"/>
-							<p:growl id="passwordGrowl" showDetail="true" sticky="true" />  
+							<p:password id="repeatNewPassword"
+								value="#{sessionManagementBean.newLoginCredentials.password}"
+								feedback="true" required="true" />
+
+							<p:commandButton value="Change Password"
+								actionListener="#{sessionManagementBean.modifyPassword()}" />
 						</h:panelGrid>
-					</p:panel>
-				</h:form>
-				
+					</h:form>
 				</p:panel>
-				<h:form>
+
+			</p:panel>
+			<h:form>
 				<p:panel header="Insert sales" class="dynamicPanel insertSalesPanel">
 					<h:panelGrid cellpadding="10">
 						<h:outputLabel for="id" value="ID:" />
-						<p:inputText id="id" required="true" placeholder="ID" value="#{salesReceiptBean.salesReceipt.postId}" />
+						<p:inputText id="id" required="true" placeholder="ID" value="#{transactionsBean.transaction.info}" />
 						<h:outputLabel for="amount" value="Amount:" />
-						<p:inputText id="amount" required="true" value="#{salesReceiptBean.salesReceipt.amount}" />
-<!-- 						<p:outputLabel for="date" value="Date:" /> -->
-<!-- 						<p:calendar id="date" value="#{salesReceiptBean.salesReceipt.date}" /> -->
-<!-- 						<h:outputLabel for="password" value="Password:" /> -->
-<!-- 						<p:inputText id="password" required="true" /> -->
-						<p:commandButton value="Add" actionListener="#{salesReceiptBean.postSalesReceipt()}" />	
+						<p:inputText id="amount" required="true" value="#{transactionsBean.transaction.amount}" />
+						<p:outputLabel for="date" value="Date:" />
+						<p:calendar id="date" value="#{transactionsBean.transaction.date}" />
+						<p:commandButton value="Add" actionListener="#{transactionsBean.addTransaction()}" />
 					</h:panelGrid>
 				</p:panel>
-				</h:form>
-				
-			</div>
-			
+			</h:form>
+
 		</div>
-<!-- 	</h:form> -->
+
+	</div>
+	<!-- 	</h:form> -->
 
 </h:body>
 </html>

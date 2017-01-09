@@ -12,8 +12,6 @@ import javax.persistence.OneToMany;
 public class FullTimeEmployee extends Employee{
 
 	private float salary;
-	@OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
-	private List<SalesReceipt> postedSalesReceipt;	
 
 	public float getSalary() {
 		return salary;
@@ -21,11 +19,5 @@ public class FullTimeEmployee extends Employee{
 
 	public void setSalary(float salary) {
 		this.salary = salary;
-	}
-	public List<SalesReceipt> getPostedSalesReceipt() {
-		return postedSalesReceipt;
-	}
-	public void setPostedSalesReceipt(List<SalesReceipt> postedSalesReceipt) {
-		this.postedSalesReceipt = postedSalesReceipt;
 	}
 }
