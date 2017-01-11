@@ -150,7 +150,7 @@
 							</p:selectOneMenu>
 
 							<p:commandButton value="Submit updated informations"
-								actionListener="#{employeeBean.updateInfo()}"
+								actionListener="#{employeeBean.updateInfo(employeeBean.loggedUser)}"
 								update="updateInfos" />
 						</h:panelGrid>
 						</h:form>
@@ -359,7 +359,7 @@
 							<p:column colspan="2">
 								<p:commandButton value="Add"
 									actionListener="#{employeeBean.hirePartTimeEmployee()}"
-									update="partGrid @widgetVar(editTable) @widgetVar(employeesTable) @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)" />
+									update="partGrid @widgetVar(editTable) @widgetVar(employeesTable) @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)"/>
 							</p:column>
 						</p:row>
 					</p:panelGrid>
@@ -621,11 +621,11 @@
 							</p:selectOneMenu>
 							<f:facet name="footer">
 								<p:commandButton value="Update User Info"
-									action="#{employeeBean.updateGenericEmployee()}"
+									action="#{employeeBean.updateInfo(employeeBean.genericEmployee)}"
 									update=":selectedEmployee @widgetVar(editTable) @widgetVar(employeesTable) @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)"
 									onclick="showOnlyDivByClass('editEmployeePanel', 'editDetailsEmployeePanel')" />
 								<p:commandButton value="Cancel"
-									action="#{employeeBean.cancel()}" update=":selectedEmployee"
+									resetValues="true" update=":selectedEmployee"
 									onclick="showOnlyDivByClass('editEmployeePanel', 'editDetailsEmployeePanel')" />
 
 							</f:facet>
@@ -692,7 +692,7 @@
 								action="#{employeeBean.fireEmployee()}"
 								update=":selectedDeletableEmployee  @widgetVar(editTable) @widgetVar(employeesTable) @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)"
 								onclick="showOnlyDivByClass('deleteEmployeePanel', 'deletableEmployeePanel')" />
-							<p:commandButton value="Cancel" action="#{employeeBean.cancel()}"
+							<p:commandButton value="Cancel" resetValues="true"
 								update=":selectedDeletableEmployee "
 								onclick="showOnlyDivByClass('deleteEmployeePanel', 'deletableEmployeePanel')" />
 						</h:panelGrid>
@@ -788,7 +788,7 @@
 								value="Update this Union"
 								update="selectedUnion :persInfo :partHireAdditionalInfo :fullHireAdditionalInfo :selectedEmployee :selectedDeletableEmployee @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)" 
 								onclick="showOnlyDivByClass('editUnionPanel', 'editDetailsUnionPanel')"/>
-							<p:commandButton action="#{unionsBean.clearSelection()}"
+							<p:commandButton resetValues="true"
 								value="Cancel"
 								update="selectedUnion"
 								onclick="showOnlyDivByClass('editUnionPanel', 'editDetailsUnionPanel')" />
@@ -845,7 +845,7 @@
 								update="deletableUnionForm @widgetVar(unionDeleteTable) @widgetVar(unionEditTable)"
 								value="Yes" 
 								onclick="showOnlyDivByClass('deleteUnionPanel', 'deletableUnion')" />
-							<p:commandButton action="#{unionsBean.clearSelection()}"
+							<p:commandButton resetValues="true"
 								update="deletableUnionForm :persInfo :partHireAdditionalInfo :fullHireAdditionalInfo :selectedEmployee :selectedDeletableEmployee @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)" value="No" 
 								onclick="showOnlyDivByClass('deleteUnionPanel', 'deletableUnion')" />
 						</h:panelGrid>

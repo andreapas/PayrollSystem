@@ -58,15 +58,15 @@ public class UnionsBean implements Serializable {
 			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
 		}
 		unions= unionsController.getUnionsList();
-		clearUnion();
+//		clearUnion();
 		return answer;
 
 			
 	}
-	private void clearUnion(){
-		union.setUnionName("");
-		union.setWeeklyRate(0);
-	}
+//	private void clearUnion(){
+//		union.setUnionName("");
+//		union.setWeeklyRate(0);
+//	}
 	public String removeUnion() {
 		String answer=unionsController.remove(fireUnionName);
 		try {
@@ -119,10 +119,10 @@ public class UnionsBean implements Serializable {
 		fireUnionName="";
 		return answer;
 	}
-	public void clearSelection(){
-		fireUnionName="";
-		union=new Union();
-		unions= unionsController.getUnionsList();
-	}
+//	public void clearSelection(){
+//		fireUnionName="";
+//		union=new Union();
+//		unions= unionsController.getUnionsList();
+//	}
 	
 }

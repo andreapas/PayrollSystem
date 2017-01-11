@@ -25,3 +25,6 @@ function showOnlyDivByClass(divClass, excludeClass) {
 	showDivsByClass(divClass);
 }
 
+function reset(formId){
+	document.getElementById(formId).reset();
+}

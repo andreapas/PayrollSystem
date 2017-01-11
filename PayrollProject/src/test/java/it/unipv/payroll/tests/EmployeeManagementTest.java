@@ -11,9 +11,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import it.unipv.payroll.controller.AddressController;
 import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.controller.UnionsController;
 import it.unipv.payroll.dao.EmployeeDAO;
+import it.unipv.payroll.model.Address;
 import it.unipv.payroll.model.Employee;
 import it.unipv.payroll.model.FullTimeEmployee;
 import it.unipv.payroll.model.PartTimeEmployee;
@@ -38,21 +40,36 @@ public class EmployeeManagementTest extends ArquillianTest {
 	private static FullTimeEmployee anotherEmployee;
 	private static String MonthlyRole= "Monthly";
 	private static String WeeklyRole= "Weekly";
+	private static Address ADDRESS1;
+	private static Address ADDRESS2;
 	
-	@Inject
-	EmployeeBean emBean;
-	@Inject
-	UnionsBean unBean;
-	@Inject
-	EmployeeController emController;
-	@Inject
-	UnionsController unController;	
-	@Inject
-	EmployeeDAO emDAO;
-
+	@Inject	EmployeeBean emBean;
+	@Inject	EmployeeController emController;
+	@Inject	EmployeeDAO emDAO;
+	
+	@Inject	UnionsBean unBean;
+	@Inject	UnionsController unController;	
 	
 	@Before
 	public void setUp(){
+		
+		ADDRESS1=new Address();
+		ADDRESS1.setCap(12345);
+		ADDRESS1.setCode(USER1_COD);
+		ADDRESS1.setDistrictCode("PV");
+		ADDRESS1.setEmployee(null);
+		ADDRESS1.setMunicipality("Pavia");
+		ADDRESS1.setNumber(0);
+		ADDRESS1.setStreet("via dei matti");
+		
+		ADDRESS2=new Address();
+		ADDRESS2.setCap(12345);
+		ADDRESS2.setCode(USER2_COD);
+		ADDRESS2.setDistrictCode("RM");
+		ADDRESS2.setEmployee(null);
+		ADDRESS2.setMunicipality("Roma");
+		ADDRESS2.setNumber(9);
+		ADDRESS2.setStreet("sani dei via");
 		
 		USER1_UNION= new Union();
 		USER1_UNION.setUnionName("union 1");
@@ -73,6 +90,7 @@ public class EmployeeManagementTest extends ArquillianTest {
 		anEmployee.setUnion(USER1_UNION);
 		anEmployee.setPayment_method(PAYMENT_METHOD1);
 		anEmployee.setRole(WeeklyRole);
+		anEmployee.setAddress(ADDRESS1);
 		
 		anotherEmployee= new FullTimeEmployee();
 		anotherEmployee.setCode(USER2_COD);
@@ -82,6 +100,7 @@ public class EmployeeManagementTest extends ArquillianTest {
 		anotherEmployee.setUnion(USER1_UNION);
 		anotherEmployee.setPayment_method(PAYMENT_METHOD1);
 		anotherEmployee.setRole(MonthlyRole);
+		anotherEmployee.setAddress(ADDRESS2);
 	}
 	
 	@After
@@ -146,53 +165,27 @@ public class EmployeeManagementTest extends ArquillianTest {
 		
 		emBean.setPartTimeEmployee(anEmployee);
 		emBean.hirePartTimeEmployee();
+		
 
-		emBean.findEmployeeByCode(anEmployee.getCode());
+//		emBean.setLoggedUser(emBean.findEmployeeByCode(anEmployee.getCode()));;
+		anEmployee.setEmail(USER1_EMAIL_EDITED);
+		anEmployee.setUnion(USER1_UNION_EDITED);
+		anEmployee.setPayment_method(PAYMENT_METHOD2);
+		emBean.updateInfo(anEmployee);
 
-		emBean.setLoggedUser(emBean.findEmployeeByCode(anEmployee.getCode()));;
-		emBean.getLoggedUser().setEmail(USER1_EMAIL_EDITED);
-		emBean.getLoggedUser().setUnion(USER1_UNION_EDITED);
-		emBean.updateInfo();
-
-		List<Employee> employees = emDAO.findAll();
-		boolean isEmailEdited = false;
-		boolean isUnionEdited = false;
-		for (Employee em : employees) {
-			if (em.getCode().equals(USER1_COD)) {
-				if (em.getEmail().equals(USER1_EMAIL_EDITED)) {
-					isEmailEdited = true;
-				}
-				if (em.getUnion().getUnionName().equals(USER1_UNION_EDITED.getUnionName())) {
-					isUnionEdited = true;
-				}
-				break;
-			}
-		}
-
-		Assert.assertTrue("Employee email edited successfully!", isEmailEdited);
-		Assert.assertTrue("Employee union edited successfully!", isUnionEdited);
-	}
-
-	@Test
-	public void testEditPaymentMethod() {
-
-		emBean.setPartTimeEmployee(anEmployee);
-		emBean.hirePartTimeEmployee();
-		emBean.findEmployeeByCode(anEmployee.getCode());
-		emBean.setLoggedUser(emBean.findEmployeeByCode(anEmployee.getCode()));
-		emBean.getLoggedUser().setPayment_method(PAYMENT_METHOD2);
-		emBean.updateInfo();
-
+		
 		Assert.assertEquals(PAYMENT_METHOD2, emBean.findEmployeeByCode(anEmployee.getCode()).getPayment_method());
-
+		Assert.assertEquals(USER1_EMAIL_EDITED, emBean.findEmployeeByCode(anEmployee.getCode()).getEmail());
+		Assert.assertEquals(USER1_UNION_EDITED.getUnionName(), emBean.findEmployeeByCode(anEmployee.getCode()).getUnion().getUnionName());
 	}
+
 	@Test
 	public void autoMapUnion() {
 		emBean.setPartTimeEmployee(anEmployee);
 		emBean.hirePartTimeEmployee();
 
 		boolean mapWorking=false;
-		if(emBean.getPartTimeEmployee().getUnion().getUnionName().equals(USER1_UNION.getUnionName())){
+		if(emBean.findEmployeeByCode(anEmployee.getCode()).getUnion().getUnionName().equals(USER1_UNION.getUnionName())){
 			mapWorking=true;
 		}
 		
@@ -216,4 +209,55 @@ public class EmployeeManagementTest extends ArquillianTest {
 		Assert.assertTrue("The Union has mapped correctly with the users", inverseMapWorking);
 
 	}
+	
+	@Test
+	public void testUnions() {
+		
+		Union union1 = new Union();
+		union1.setUnionName("unionTest");
+		union1.setWeeklyRate(10.5);
+		unBean.setUnion(union1);
+		unBean.addUnion();
+
+		Union union = new Union();
+		union.setUnionName("unionTest2");
+		union.setWeeklyRate(0.52);
+		unBean.setUnion(union);
+		unBean.addUnion();
+		
+		List<Union> unions = unBean.getUnionsList();
+		int flag = 0;
+		boolean isEqualsWorking=false;
+		for (Union u : unions) {
+			if (u.equals(union)|| u.equals(union1)) {
+				if (u.getUnionName().equals(union.getUnionName())||u.getUnionName().equals(union1.getUnionName())) {
+					isEqualsWorking=true;
+					flag++;
+				}
+			}
+		}
+		Assert.assertTrue("2 unions added!", flag == 2);
+		Assert.assertTrue("Override of equals is working", isEqualsWorking);
+		
+		Union tmpUnion=unController.findUnion(union1.getUnionName());
+		Assert.assertTrue("findUnion is working properly", tmpUnion.equals(union1));
+		
+		
+		unBean.setFireUnionName(union.getUnionName());
+		unBean.removeUnion();
+		unBean.setFireUnionName(union1.getUnionName());
+		unBean.removeUnion();
+		
+		unions = unBean.getUnionsList();
+		boolean hasBeenFired=true;
+		for (Union u : unions) {
+			if (u.equals(union)|| u.equals(union1)) {
+				hasBeenFired=false;
+			}
+		}
+		Assert.assertTrue("Fire union is working correctly", hasBeenFired);
+		
+		
+	}
+	
 }

@@ -4,11 +4,9 @@ import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.controller.TransactionsController;
 import it.unipv.payroll.model.Employee;
 import it.unipv.payroll.model.Transactions;
@@ -18,7 +16,6 @@ import it.unipv.payroll.model.Transactions;
 public class TransactionsBean implements Serializable {
 
 	@Inject TransactionsController tController;
-	@Inject EmployeeController eController;
 
 	private Transactions transaction;
 	
