@@ -1,17 +1,16 @@
 package it.unipv.payroll.view;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
-import javax.enterprise.inject.Default;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.controller.TransactionsController;
+import it.unipv.payroll.model.Employee;
 import it.unipv.payroll.model.Transactions;
 
 @Named
@@ -28,8 +27,8 @@ public class TransactionsBean implements Serializable {
 		transaction = new Transactions();
 	}
 
-	public String addTransaction(){
-		transaction.setEmployee(eController.find(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser()));
+	public String addTransaction(Employee employee){
+		transaction.setEmployee(employee);
 		String answer = tController.add(transaction);
 		return answer;
 	}

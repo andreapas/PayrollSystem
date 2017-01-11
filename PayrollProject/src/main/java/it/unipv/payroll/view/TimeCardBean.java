@@ -2,17 +2,13 @@ package it.unipv.payroll.view;
 
 import java.io.Serializable;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.controller.TimeCardController;
-import it.unipv.payroll.controller.TransactionsController;
+import it.unipv.payroll.model.Employee;
 import it.unipv.payroll.model.TimeCard;
-import it.unipv.payroll.model.Transactions;
 
 @Named
 @SessionScoped
@@ -20,8 +16,6 @@ public class TimeCardBean implements Serializable {
 
 	@Inject
 	TimeCardController tcController;
-	@Inject
-	EmployeeController emController;
 
 	private TimeCard timeCard;
 //	@PostConstruct
@@ -29,8 +23,8 @@ public class TimeCardBean implements Serializable {
 //		timeCard= new TimeCard();
 //	}
 
-	public String postTimeCard() {
-		timeCard.setEmployee(emController.find(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser()));
+	public String postTimeCard(Employee employee) {
+		timeCard.setEmployee(employee);
 		String answer = tcController.add(timeCard);
 		return answer;
 	}
