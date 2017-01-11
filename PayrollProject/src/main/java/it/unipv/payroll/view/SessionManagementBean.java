@@ -8,7 +8,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-//import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSession;
 
 import it.unipv.payroll.controller.SessionManagementController;
 import it.unipv.payroll.model.Credentials;
@@ -34,8 +34,8 @@ public class SessionManagementBean implements Serializable {
 	}
 	
 	public String logout() {
-//	    HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-//	    session.invalidate();
+	    HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+	    session.invalidate();
 	    return "/index.xhtml?faces-redirect=true";
 	}
 

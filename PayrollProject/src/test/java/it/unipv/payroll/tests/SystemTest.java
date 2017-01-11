@@ -296,7 +296,7 @@ public class SystemTest extends ArquillianTest {
 
 		utBean.addFee(50, aTransaction.getCode());
 		
-		List<EmployeeTransactions> allTransactions=utDAO.findAll();
+		List<EmployeeTransactions> allTransactions=utBean.getAllTransactions();
 		int totalFee=0;
 		for (EmployeeTransactions uts : allTransactions) {
 			if (USER1_COD.equals(uts.getCode())) {
@@ -321,7 +321,7 @@ public class SystemTest extends ArquillianTest {
 
 		utBean.addEarned(500, aTransaction.getCode());
 		
-		List<EmployeeTransactions> allTransactions=utDAO.findAll();
+		List<EmployeeTransactions> allTransactions=utBean.getAllTransactions();
 		int totalEarned=0;
 		for (EmployeeTransactions uts : allTransactions) {
 			if (USER1_COD.equals(uts.getCode())) {
@@ -331,6 +331,8 @@ public class SystemTest extends ArquillianTest {
 		Assert.assertEquals(1500, totalEarned);
 
 	}
+	
+	
 	
 	@Test
 	public void testPayday(){
@@ -379,7 +381,7 @@ public class SystemTest extends ArquillianTest {
 		
 		utBean.startPayday();
 		
-		List<EmployeeTransactions> allTransactions=utDAO.findAll();
+		List<EmployeeTransactions> allTransactions=utBean.getAllTransactions();
 		
 		boolean notNulled=false;
 		for (EmployeeTransactions ut : allTransactions) {
