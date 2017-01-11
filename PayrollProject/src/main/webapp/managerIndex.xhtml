@@ -83,16 +83,16 @@
 							<p:outputLabel for="paymentMethod" value="Method of payment:" />
 							<p:selectOneRadio id="paymentMethod"
 								value="#{employeeBean.radioVal}">
-								<f:selectItem itemLabel="Mailed to the postal address"
-									itemValue="Postal address" />
 								<f:selectItem itemLabel="Held for pickup by the paymaster"
-									itemValue="Paymaster" />
+									itemValue="#{employeeBean.optionsList.get(0)}" />
+								<f:selectItem itemLabel="Mailed to the postal address"
+									itemValue="#{employeeBean.optionsList.get(1)}" />
 								<f:selectItem itemLabel="Deposited into the bank account"
-									itemValue="Bank account" />
+									itemValue="#{employeeBean.optionsList.get(2)}" />
 								<p:ajax process="paymentMethod" update="updateInfos" />
 							</p:selectOneRadio>
 							<p:panel header="Additional Informations"
-								rendered="#{employeeBean.radioVal eq 'Postal address'}">
+								rendered="#{employeeBean.radioVal eq employeeBean.optionsList.get(1)}">
 								<h:panelGrid columns="2">
 									<p:outputLabel value="Address:" />
 									<p:outputLabel
@@ -100,7 +100,7 @@
 								</h:panelGrid>
 							</p:panel>
 							<p:panel header="Additional Informations"
-								rendered="#{employeeBean.radioVal eq 'Bank account'}">
+								rendered="#{employeeBean.radioVal eq employeeBean.optionsList.get(2)}">
 								<h:panelGrid columns="2">
 									<p:outputLabel for="bank" value="IBAN:" />
 									<p:inputMask id="bank"
@@ -257,10 +257,10 @@
 							<p:column>
 								<p:selectOneMenu required="true" id="parthirepaymentMethod"
 									value="#{employeeBean.radioVal}" style="width:125px">
-									<f:selectItem itemLabel="Paymaster" itemValue="Paymaster" />
-									<f:selectItem itemLabel="Postal Address"
-										itemValue="Postal address" />
-									<f:selectItem itemLabel="Bank Account" itemValue="Bank account" />
+									<f:selectItem itemLabel="#{employeeBean.optionsList.get(0)}" itemValue="#{employeeBean.optionsList.get(0)}" />
+									<f:selectItem itemLabel="#{employeeBean.optionsList.get(1)}"
+										itemValue="#{employeeBean.optionsList.get(1)}" />
+									<f:selectItem itemLabel="#{employeeBean.optionsList.get(2)}" itemValue="#{employeeBean.optionsList.get(2)}" />
 									<p:ajax process="parthirepaymentMethod"
 										update="partHireAdditionalInfo" />
 								</p:selectOneMenu>
@@ -269,7 +269,7 @@
 						<p:row>
 							<p:column colspan="2">
 								<p:panel header="Additional Informations"
-									rendered="#{employeeBean.radioVal eq 'Bank account'}">
+									rendered="#{employeeBean.radioVal eq employeeBean.optionsList.get(2)}">
 									<h:panelGrid columns="2">
 										<p:outputLabel for="bank" value="IBAN:" />
 										<p:inputMask id="bank"
@@ -413,12 +413,12 @@
 									value="Payment Method:"></p:outputLabel>
 							</p:column>
 							<p:column>
-								<p:selectOneMenu required="true" id="fullhirepaymentMethod"
+								<p:selectOneMenu required="true"  id="fullhirepaymentMethod"
 									value="#{employeeBean.radioVal}" style="width:125px">
-									<f:selectItem itemLabel="Paymaster" itemValue="Paymaster" />
-									<f:selectItem itemLabel="Postal Address"
-										itemValue="Postal address" />
-									<f:selectItem itemLabel="Bank Account" itemValue="Bank account" />
+									<f:selectItem itemLabel="#{employeeBean.optionsList.get(0)}" itemValue="#{employeeBean.optionsList.get(0)}" />
+									<f:selectItem itemLabel="#{employeeBean.optionsList.get(1)}"
+										itemValue="#{employeeBean.optionsList.get(1)}" />
+									<f:selectItem itemLabel="#{employeeBean.optionsList.get(2)}" itemValue="#{employeeBean.optionsList.get(2)}" />
 									<p:ajax process="fullhirepaymentMethod"
 										update=":fullHireAdditionalInfo" />
 								</p:selectOneMenu>
@@ -427,7 +427,7 @@
 						<p:row>
 							<p:column colspan="2">
 								<p:panel header="Additional Informations"
-									rendered="#{employeeBean.radioVal eq 'Bank account'}">
+									rendered="#{employeeBean.radioVal eq employeeBean.optionsList.get(2)}">
 									<h:panelGrid columns="2">
 										<p:outputLabel for="bank" value="IBAN:" />
 										<p:inputMask id="bank"

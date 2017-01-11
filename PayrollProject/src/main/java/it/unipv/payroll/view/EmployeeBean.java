@@ -43,7 +43,11 @@ public class EmployeeBean implements Serializable {
 	private Employee genericEmployee;
 	private List<String> districtCodeList;
 	private Address address;
-
+	private List<String> optionsList;
+	private static String paymaster="Paymaster";
+	private static String postal_address="Postal address";
+	private static String bank_account="Bank account";
+	
 	@PostConstruct
 	public void init() {
 		partTimeEmployee = new PartTimeEmployee();
@@ -63,6 +67,7 @@ public class EmployeeBean implements Serializable {
 				"PZ", "PO", "RG", "RA", "RC", "RE", "RI", "RN", "RM", "RO", "SA", "SS", "SV", "SI", "SR", "SO", "TA",
 				"TE", "TR", "TO", "TP", "TN", "TV", "TS", "UD", "VA", "VE", "VB", "VC", "VR", "VV", "VI"));
 		address = new Address();
+		optionsList = new ArrayList<String>(Arrays.asList(paymaster,postal_address,bank_account));
 	}
 
 	public String getFireCode() {
@@ -97,10 +102,10 @@ public class EmployeeBean implements Serializable {
 		partTimeEmployee.setRole("Weekly");
 		address.setCode(partTimeEmployee.getCode());
 		partTimeEmployee.setAddress(address);
-		if (radioVal.equals("Postal address")) {
+		if (radioVal.equals(postal_address)) {
 			partTimeEmployee.setPayment_method(partTimeEmployee.getAddress().toString());
-		} else if (radioVal.equals("Paymaster")) {
-			partTimeEmployee.setPayment_method("Paymaster");
+		} else if (radioVal.equals(paymaster)) {
+			partTimeEmployee.setPayment_method(paymaster);
 		}
 		String answer = emController.add(partTimeEmployee);
 		String tmpPassword = "";
@@ -141,10 +146,10 @@ public class EmployeeBean implements Serializable {
 		fullTimeEmployee.setRole("Monthly");
 		address.setCode(fullTimeEmployee.getCode());
 		fullTimeEmployee.setAddress(address);
-		if (radioVal.equals("Postal address")) {
+		if (radioVal.equals(postal_address)) {
 			fullTimeEmployee.setPayment_method(fullTimeEmployee.getAddress().toString());
-		} else if (radioVal.equals("Paymaster")) {
-			fullTimeEmployee.setPayment_method("Paymaster");
+		} else if (radioVal.equals(paymaster)) {
+			fullTimeEmployee.setPayment_method(paymaster);
 		}
 
 		String answer = emController.add(fullTimeEmployee);
@@ -204,10 +209,10 @@ public class EmployeeBean implements Serializable {
 	public void updateInfo(Employee employee) {
 		// System.out.println(">>>><<<<<>>>>>>><<<<<<<<<>>>>>>>><<<<<<<<<<<<<<>>>>>>>>>"+loggedUser.getPayment_method());
 		if (radioVal != null) {
-			if (radioVal.equals("Postal address")) {
+			if (radioVal.equals(postal_address)) {
 				employee.setPayment_method(employee.getAddress().toString());
-			} else if (radioVal.equals("Paymaster")) {
-				employee.setPayment_method("Paymaster");
+			} else if (radioVal.equals(paymaster)) {
+				employee.setPayment_method(paymaster);
 			}
 		}
 		String answer = emController.update(employee);
@@ -256,46 +261,12 @@ public class EmployeeBean implements Serializable {
 		this.genericEmployee = genericEmployee;
 	}
 
-//	public void cancel() {
-//		genericEmployee = null;
-//		fireCode = "";
-//		partTimeEmployee = new PartTimeEmployee();
-//		fullTimeEmployee = new FullTimeEmployee();
-//		address = new Address();
-//
-//	}
-
-//	public String updateGenericEmployee() {
-//		// System.out.println(">>>><<<<<>>>>>>><<<<<<<<<>>>>>>>><<<<<<<<<<<<<<>>>>>>>>>"+loggedUser.getPayment_method());
-//
-//		// if (radioVal.equals("Postal address")) {
-//		// loggedUser.setPayment_method(address.toString());
-//		// } else if (radioVal.equals("Paymaster")) {
-//		// loggedUser.setPayment_method("Paymaster");
-//		// }
-//		String answer = emController.update(genericEmployee);
-//
-//		try {
-//			FacesContext context = FacesContext.getCurrentInstance();
-//			if (answer.equals("Operation completed successfully.")) {
-//				context.addMessage(null,
-//						new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!",
-//								"Employee " + genericEmployee.getName() + " " + genericEmployee.getSurname()
-//										+ "'s informations has been successfully updated."));
-//			} else {
-//				context.addMessage(null,
-//						new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error!",
-//								"Something has gone wrong while trying to update the informations of "
-//										+ genericEmployee.getName() + " " + genericEmployee.getSurname()
-//										+ ". The complete message is " + answer));
-//			}
-//		} catch (NullPointerException e) {
-//			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
-//		}
-//
-//		// TODO:CLEAR TUTTO
-//		return answer;
-//	}
+	public List<String> getOptionsList() {
+		return optionsList;
+	}
+	public void setOptionsList(List<String> optionsList) {
+		this.optionsList = optionsList;
+	}
 
 	public List<String> getDistrictCodeList() {
 		return districtCodeList;
