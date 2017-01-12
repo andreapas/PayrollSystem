@@ -1,7 +1,9 @@
 package it.unipv.payroll.view;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -26,9 +28,12 @@ public class TransactionsBean implements Serializable {
 	private int id;
 	private double saleAmount;
 	private int hoursAmount;
-	
+	private List<String> transList;
+	private HashMap<String, Double> transMap;
+
 	@PostConstruct
-	public void init() {
+	public void init(){
+		transList=new ArrayList<String>();
 		transaction = new Transactions();
 	}
 
@@ -104,5 +109,22 @@ public class TransactionsBean implements Serializable {
 	public List<Transactions> getAllTransactions() {
 		return tController.findAll();
 	}
-	
+	public HashMap<String, Double> startPayday() {
+		HashMap<String, Double> employeesEarnings = tController.startPayday();
+		List<String> tmpList=new ArrayList<String>();
+		tmpList.addAll(employeesEarnings.keySet());
+		transList=tmpList;
+		transMap=employeesEarnings;
+		return employeesEarnings;
+	}
+	public List<String> getTransList() {
+		return transList;
+	}
+	public HashMap<String, Double> getTransMap() {
+		return transMap;
+	}
+	public boolean isPayday() {
+		// some logic
+		return true;
+	}
 }

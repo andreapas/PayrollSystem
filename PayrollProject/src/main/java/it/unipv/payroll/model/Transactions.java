@@ -23,6 +23,7 @@ public class Transactions implements Serializable {
 	private Date date;
 	private Double amount;
 	private String info;
+	private boolean executed;
 	
 	public Employee getEmployee() {
 		return employee;
@@ -51,6 +52,10 @@ public class Transactions implements Serializable {
 	public void setInfo(String info) {
 		this.info = info;
 	}
-
-
+	public boolean isExecuted() {
+		return executed;
+	}
+	public void setExecuted(boolean executed) {
+		this.executed = executed;
+	}
 }

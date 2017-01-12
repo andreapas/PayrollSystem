@@ -13,21 +13,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import it.unipv.payroll.controller.AddressController;
 import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.controller.UnionsController;
 import it.unipv.payroll.dao.EmployeeDAO;
-import it.unipv.payroll.dao.EmployeeTransactionsDAO;
 import it.unipv.payroll.dao.TransactionsDAO;
 import it.unipv.payroll.model.Address;
 import it.unipv.payroll.model.Employee;
-import it.unipv.payroll.model.EmployeeTransactions;
 import it.unipv.payroll.model.FullTimeEmployee;
 import it.unipv.payroll.model.PartTimeEmployee;
 import it.unipv.payroll.model.Transactions;
 import it.unipv.payroll.model.Union;
 import it.unipv.payroll.view.EmployeeBean;
-import it.unipv.payroll.view.EmployeeTransactionsBean;
 import it.unipv.payroll.view.TransactionsBean;
 import it.unipv.payroll.view.UnionsBean;
 
@@ -58,8 +54,6 @@ public class SystemTest extends ArquillianTest {
 	@Inject	UnionsBean unBean;
 	@Inject	UnionsController unController;	
 	
-	@Inject EmployeeTransactionsBean utBean;
-	@Inject EmployeeTransactionsDAO utDAO;
 	
 	@Inject TransactionsBean tBean;
 	@Inject TransactionsDAO tDAO;
