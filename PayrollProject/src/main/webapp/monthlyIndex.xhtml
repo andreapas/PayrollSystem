@@ -45,28 +45,33 @@
 
 		<div class="ui-g-9">
 
-			<p:panel header="Overview" class="dynamicPanel overviewPanel">
-				<h:panelGrid cellpadding="10">
-					<p:dataTable var="employee" value="#{employeeBean.loggedUser}"
-						rows="1">
-						<p:column headerText="Code">
-							<h:outputText value="#{employee.code}" />
-						</p:column>
-						<p:column headerText="Name">
-							<h:outputText value="#{employee.name}" />
-						</p:column>
-						<p:column headerText="Surname">
-							<h:outputText value="#{employee.surname}" />
-						</p:column>
-						<p:column headerText="Email">
-							<h:outputText value="#{employee.email}" />
-						</p:column>
-						<p:column headerText="Union Name">
-							<h:outputText value="#{employee.union.unionName}" />
-						</p:column>
-					</p:dataTable>
-				</h:panelGrid>
-			</p:panel>
+			<p:growl id="infoGrowl" autoUpdate="true" severity="info"
+				sticky="false" life="3000" showDetail="true"></p:growl>
+			<p:messages id="warnErrorPanel" autoUpdate="true" showDetail="true"
+				severity="warn,error,fatal" closable="true" />
+
+			<h:form id="overview">
+				<p:panel header="Personal Informations:"
+					class="dynamicPanel overviewPanel" style="display:block">
+					<h:panelGrid columns="2">
+						<p:outputLabel value="Name:" />
+						<p:outputLabel value="#{employeeBean.loggedUser.name}" />
+
+						<p:outputLabel value="Surname:" />
+						<p:outputLabel value="#{employeeBean.loggedUser.surname}" />
+						<p:outputLabel value="Email:" />
+						<p:outputLabel value="#{employeeBean.loggedUser.email}" />
+						<p:outputLabel value="Address:" />
+						<p:outputLabel
+							value="#{employeeBean.loggedUser.address.toString()}" />
+						<p:outputLabel value="Preferred payment method selected:" />
+						<p:outputLabel value="#{employeeBean.loggedUser.payment_method}" />
+						<p:outputLabel value="Associated to Union:" />
+						<p:outputLabel value="#{employeeBean.loggedUser.union.unionName}" />
+
+					</h:panelGrid>
+				</p:panel>
+			</h:form>
 			<p:panel header="Settings" class="dynamicPanel settingsPanel">
 				<p:panel header="Personal Informations"
 					class="dynamicPanel settingsPanel">
@@ -76,16 +81,16 @@
 							<p:outputLabel for="paymentMethod" value="Method of payment:" />
 							<p:selectOneRadio id="paymentMethod"
 								value="#{employeeBean.radioVal}">
-								<f:selectItem itemLabel="Mailed to the postal address"
-									itemValue="Postal address" />
 								<f:selectItem itemLabel="Held for pickup by the paymaster"
-									itemValue="Paymaster" />
+									itemValue="#{employeeBean.optionsList.get(0)}" />
+								<f:selectItem itemLabel="Mailed to the postal address"
+									itemValue="#{employeeBean.optionsList.get(1)}" />
 								<f:selectItem itemLabel="Deposited into the bank account"
-									itemValue="Bank account" />
+									itemValue="#{employeeBean.optionsList.get(2)}" />
 								<p:ajax process="paymentMethod" update="updateInfos" />
 							</p:selectOneRadio>
 							<p:panel header="Additional Informations"
-								rendered="#{employeeBean.radioVal eq 'Postal address'}">
+								rendered="#{employeeBean.radioVal eq employeeBean.optionsList.get(1)}">
 								<h:panelGrid columns="2">
 									<p:outputLabel value="Address:" />
 									<p:outputLabel
@@ -93,7 +98,7 @@
 								</h:panelGrid>
 							</p:panel>
 							<p:panel header="Additional Informations"
-								rendered="#{employeeBean.radioVal eq 'Bank account'}">
+								rendered="#{employeeBean.radioVal eq employeeBean.optionsList.get(2)}">
 								<h:panelGrid columns="2">
 									<p:outputLabel for="bank" value="IBAN:" />
 									<p:inputMask id="bank"
@@ -143,8 +148,9 @@
 							</p:selectOneMenu>
 
 							<p:commandButton value="Submit updated informations"
-								actionListener="#{employeeBean.updateInfo()}"
-								update="updateInfos" />
+								actionListener="#{employeeBean.updateInfo(employeeBean.loggedUser)}"
+								update="updateInfos :overview @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)"
+								oncomplete="showOnlyDivByClass('settingsPanel', 'overviewPanel')" />
 						</h:panelGrid>
 					</h:form>
 				</p:panel>
@@ -177,12 +183,12 @@
 			<h:form>
 				<p:panel header="Insert sales" class="dynamicPanel insertSalesPanel">
 					<h:panelGrid cellpadding="10">
-						<h:outputLabel for="id" value="ID:" />
-						<p:inputText id="id" required="true" placeholder="ID" value="#{transactionsBean.id}" />
-						<h:outputLabel for="amount" value="Amount:" />
+						<h:outputLabel for="id" value="Recipt ID:" />
+						<p:inputText id="id" required="true" value="#{transactionsBean.id}" />
+						<h:outputLabel for="amount" value="Amount of the sale:" />
 						<p:inputText id="amount" required="true" value="#{transactionsBean.saleAmount}" />
-						<p:outputLabel for="date" value="Date:" />
-						<p:calendar id="date" value="#{transactionsBean.transaction.date}" />
+						<p:outputLabel for="date" value="Date of the sale:" />
+						<p:calendar id="date" required="true" value="#{transactionsBean.transaction.date}" />
 						<p:commandButton value="Add" actionListener="#{transactionsBean.addSaleRecipt(employeeBean.loggedUser)}" />
 					</h:panelGrid>
 				</p:panel>

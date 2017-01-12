@@ -41,60 +41,142 @@
 
 			<div class="ui-g-9">
 
-				<p:panel header="Overview" class="dynamicPanel overviewPanel">
-					<h:panelGrid cellpadding="10">
-						<p:dataTable var="employee" value="#{employeeBean.loggedUser}" rows="1">
-							<p:column headerText="Code">
-								<h:outputText value="#{employee.code}" />
-							</p:column>
-							<p:column headerText="Name">
-								<h:outputText value="#{employee.name}" />
-							</p:column>
-							<p:column headerText="Surname">
-								<h:outputText value="#{employee.surname}" />
-							</p:column>
-							<p:column headerText="Email">
-								<h:outputText value="#{employee.email}" />
-							</p:column>
-							<p:column headerText="Union Name">
-								<h:outputText value="#{employee.union.unionName}" />
-							</p:column>
-						</p:dataTable>
+				<p:growl id="infoGrowl" autoUpdate="true" severity="info"
+				sticky="false" life="3000" showDetail="true"></p:growl>
+			<p:messages id="warnErrorPanel" autoUpdate="true" showDetail="true"
+				severity="warn,error,fatal" closable="true" />
+
+			<h:form id="overview">
+				<p:panel header="Personal Informations:"
+					class="dynamicPanel overviewPanel" style="display:block">
+					<h:panelGrid columns="2">
+						<p:outputLabel value="Name:" />
+						<p:outputLabel value="#{employeeBean.loggedUser.name}" />
+
+						<p:outputLabel value="Surname:" />
+						<p:outputLabel value="#{employeeBean.loggedUser.surname}" />
+						<p:outputLabel value="Email:" />
+						<p:outputLabel value="#{employeeBean.loggedUser.email}" />
+						<p:outputLabel value="Address:" />
+						<p:outputLabel
+							value="#{employeeBean.loggedUser.address.toString()}" />
+						<p:outputLabel value="Preferred payment method selected:" />
+						<p:outputLabel value="#{employeeBean.loggedUser.payment_method}" />
+						<p:outputLabel value="Associated to Union:" />
+						<p:outputLabel value="#{employeeBean.loggedUser.union.unionName}" />
+
 					</h:panelGrid>
 				</p:panel>
-				<p:panel header="Settings" class="dynamicPanel settingsPanel">
-				<h:form>
-					<p:panel header="Payment Method" class="dynamicPanel settingsPanel">
-						<h:panelGrid cellpadding="10">
+			</h:form>
+			<p:panel header="Settings" class="dynamicPanel settingsPanel">
+				<p:panel header="Personal Informations"
+					class="dynamicPanel settingsPanel">
+					<h:form id="persInfo">
+
+						<h:panelGrid cellpadding="10" id="updateInfos">
 							<p:outputLabel for="paymentMethod" value="Method of payment:" />
-							<p:selectOneRadio id="paymentMethod" value="#{employeeBean.loggedUser.payment_method}">
-								<f:selectItem itemLabel="Mailed to the postal address" itemValue="Postal address" />
-								<f:selectItem itemLabel="Held for pickup by the paymaster" itemValue="Paymaster" />
-								<f:selectItem itemLabel="Deposited into the bank account" itemValue="Bank account" />
+							<p:selectOneRadio id="paymentMethod"
+								value="#{employeeBean.radioVal}">
+								<f:selectItem itemLabel="Held for pickup by the paymaster"
+									itemValue="#{employeeBean.optionsList.get(0)}" />
+								<f:selectItem itemLabel="Mailed to the postal address"
+									itemValue="#{employeeBean.optionsList.get(1)}" />
+								<f:selectItem itemLabel="Deposited into the bank account"
+									itemValue="#{employeeBean.optionsList.get(2)}" />
+								<p:ajax process="paymentMethod" update="updateInfos" />
 							</p:selectOneRadio>
-							<p:commandButton value="Submit Payment Method" actionListener="#{employeeBean.editPaymentMethod()}" />
+							<p:panel header="Additional Informations"
+								rendered="#{employeeBean.radioVal eq employeeBean.optionsList.get(1)}">
+								<h:panelGrid columns="2">
+									<p:outputLabel value="Address:" />
+									<p:outputLabel
+										value="#{employeeBean.loggedUser.address.toString()}" />
+								</h:panelGrid>
+							</p:panel>
+							<p:panel header="Additional Informations"
+								rendered="#{employeeBean.radioVal eq employeeBean.optionsList.get(2)}">
+								<h:panelGrid columns="2">
+									<p:outputLabel for="bank" value="IBAN:" />
+									<p:inputMask id="bank"
+										value="#{employeeBean.loggedUser.payment_method}" size="27"
+										required="true" mask="aa99**********************" />
+								</h:panelGrid>
+							</p:panel>
+
+							<h:panelGrid columns="2">
+								<p:outputLabel for="street" value="Street:" />
+								<p:inputText id="street"
+									value="#{employeeBean.loggedUser.address.street}" />
+
+								<p:outputLabel for="num" value="Number:" />
+								<p:inputText id="num"
+									value="#{employeeBean.loggedUser.address.number}" label="num">
+									<f:validateDoubleRange minimum="1" maximum="999999" />
+								</p:inputText>
+
+								<p:outputLabel for="cap" value="CAP:" />
+								<p:inputMask id="cap"
+									value="#{employeeBean.loggedUser.address.cap}" mask="99999" />
+
+								<p:outputLabel for="city" value="City:" />
+								<p:inputText id="city"
+									value="#{employeeBean.loggedUser.address.municipality}" />
+
+								<p:outputLabel for="disCode" value="District Code:" />
+								<p:selectOneMenu id="disCode"
+									value="#{employeeBean.loggedUser.address.districtCode}"
+									style="width:125px">
+									<f:selectItems value="#{employeeBean.districtCodeList}"
+										var="disList" itemLabel="#{disList}" />
+								</p:selectOneMenu>
+							</h:panelGrid>
+
+							<p:outputLabel for="email" value="New email address:" />
+							<p:inputText id="email" placeholder="Email"
+								value="#{employeeBean.loggedUser.email}" />
+
+							<p:outputLabel for="union" value="Change Union:" />
+							<p:selectOneMenu id="union"
+								value="#{employeeBean.loggedUser.union}" style="width:125px"
+								converter="unionTranslator">
+								<f:selectItems value="#{unionsBean.unionsList}" var="union"
+									itemLabel="#{union.unionName}" />
+							</p:selectOneMenu>
+
+							<p:commandButton value="Submit updated informations"
+								actionListener="#{employeeBean.updateInfo(employeeBean.loggedUser)}"
+								update="updateInfos :overview @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)"
+								oncomplete="showOnlyDivByClass('settingsPanel', 'overviewPanel')" />
 						</h:panelGrid>
-					</p:panel>
-				</h:form>
-				<h:form>
-					<p:panel header="Password Management" class="dynamicPanel settingsPanel">
+					</h:form>
+				</p:panel>
+				<p:panel header="Password Management"
+					class="dynamicPanel settingsPanel">
+					<h:form id="passMgmt">
 						<h:panelGrid cellpadding="10">
 							<h:outputText value="Old Password: " />
-							<p:password id="oldPassword" value="#{sessionManagementBean.oldLoginCredentials.password}" required="true" label="password"/>
-							
+							<p:password id="oldPassword"
+								value="#{sessionManagementBean.oldLoginCredentials.password}"
+								required="true" label="password" />
+
 							<h:outputText value="New Password: " />
- 							<p:password id="newPassword" value="#{sessionManagementBean.newLoginCredentials.password}" feedback="true" match="repeatNewPassword" required="true"/>
+							<p:password id="newPassword"
+								value="#{sessionManagementBean.newLoginCredentials.password}"
+								feedback="true" match="repeatNewPassword" required="true" />
 
 							<h:outputText value="Repeat New Password: " />
- 							<p:password id="repeatNewPassword" value="#{sessionManagementBean.newLoginCredentials.password}" feedback="true" required="true"/>
- 
-							<p:commandButton value="Submit Payment Method" actionListener="#{sessionManagementBean.modifyPassword()}" update="passwordGrowl"/>
-							<p:growl id="passwordGrowl" showDetail="true" sticky="true" />  
+							<p:password id="repeatNewPassword"
+								value="#{sessionManagementBean.newLoginCredentials.password}"
+								feedback="true" required="true" />
+
+							<p:commandButton value="Change Password"
+								actionListener="#{sessionManagementBean.modifyPassword()}" />
 						</h:panelGrid>
-					</p:panel>
-				</h:form>
-				
+					</h:form>
 				</p:panel>
+
+			</p:panel>
+				
 				<h:form>
 				<p:panel header="Insert Hours" class="dynamicPanel insertHoursPanel">
 					<h:panelGrid cellpadding="10">
