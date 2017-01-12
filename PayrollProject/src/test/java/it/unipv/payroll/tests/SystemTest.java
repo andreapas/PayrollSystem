@@ -15,20 +15,20 @@ import org.junit.runner.RunWith;
 
 import it.unipv.payroll.controller.AddressController;
 import it.unipv.payroll.controller.EmployeeController;
-import it.unipv.payroll.controller.TimeCardController;
 import it.unipv.payroll.controller.UnionsController;
 import it.unipv.payroll.dao.EmployeeDAO;
 import it.unipv.payroll.dao.EmployeeTransactionsDAO;
+import it.unipv.payroll.dao.TransactionsDAO;
 import it.unipv.payroll.model.Address;
 import it.unipv.payroll.model.Employee;
 import it.unipv.payroll.model.EmployeeTransactions;
 import it.unipv.payroll.model.FullTimeEmployee;
 import it.unipv.payroll.model.PartTimeEmployee;
-import it.unipv.payroll.model.TimeCard;
+import it.unipv.payroll.model.Transactions;
 import it.unipv.payroll.model.Union;
 import it.unipv.payroll.view.EmployeeBean;
 import it.unipv.payroll.view.EmployeeTransactionsBean;
-import it.unipv.payroll.view.TimeCardBean;
+import it.unipv.payroll.view.TransactionsBean;
 import it.unipv.payroll.view.UnionsBean;
 
 @RunWith(Arquillian.class)
@@ -50,10 +50,6 @@ public class SystemTest extends ArquillianTest {
 	private static String WeeklyRole= "Weekly";
 	private static Address ADDRESS1;
 	private static Address ADDRESS2;
-	private static TimeCard aTimeCard;
-
-	@Inject TimeCardBean tcBean;
-	@Inject TimeCardController tcController;
 	
 	@Inject	EmployeeBean emBean;
 	@Inject	EmployeeController emController;
@@ -64,6 +60,9 @@ public class SystemTest extends ArquillianTest {
 	
 	@Inject EmployeeTransactionsBean utBean;
 	@Inject EmployeeTransactionsDAO utDAO;
+	
+	@Inject TransactionsBean tBean;
+	@Inject TransactionsDAO tDAO;
 	
 	@Before
 	public void setUp(){
@@ -106,6 +105,7 @@ public class SystemTest extends ArquillianTest {
 		anEmployee.setPayment_method(PAYMENT_METHOD1);
 		anEmployee.setRole(WeeklyRole);
 		anEmployee.setAddress(ADDRESS1);
+		anEmployee.setHourlyRate(20);
 		
 		anotherEmployee= new FullTimeEmployee();
 		anotherEmployee.setCode(USER2_COD);
@@ -116,6 +116,7 @@ public class SystemTest extends ArquillianTest {
 		anotherEmployee.setPayment_method(PAYMENT_METHOD1);
 		anotherEmployee.setRole(MonthlyRole);
 		anotherEmployee.setAddress(ADDRESS2);
+		anotherEmployee.setCommissionRate(50);
 	}
 	
 	@After
@@ -281,6 +282,50 @@ public class SystemTest extends ArquillianTest {
 		}
 		Assert.assertTrue("Fire union is working correctly", hasBeenFired);
 		
+	}
+	
+	@Test
+	public void testTransactions() {
+		
+		emBean.setPartTimeEmployee(anEmployee);
+		emBean.hirePartTimeEmployee();
+		emBean.setFullTimeEmployee(anotherEmployee);
+		emBean.hireFullTimeEmployee();
+		
+		Transactions aTransaction = new Transactions();
+		tBean.setHoursAmount(10);
+		tBean.setTransaction(aTransaction);
+		tBean.addHours(anEmployee);
+		
+		Transactions anotherTransaction = new Transactions();
+		anotherTransaction.setAmount(100.00);
+		anotherTransaction.setDate(new Date());
+		anotherTransaction.setInfo("Sale ID=12345 test");
+		tBean.setId(12345);
+		tBean.setSaleAmount(55.55);
+		tBean.setTransaction(anotherTransaction);
+		tBean.addSaleRecipt(anotherEmployee);
+		
+		List<Transactions> allTransactions = tBean.getAllTransactions();
+		int trans1 = 0;
+		int trans2 = 0;
+		for (Transactions t : allTransactions) {
+			if (USER1_COD.equals(t.getEmployee().getCode())) {
+				trans1++;
+			}
+			if (USER2_COD.equals(t.getEmployee().getCode())) {
+				trans2++;
+			}
+		}
+		Assert.assertEquals(2, trans1+trans2);
+		
+		for (Transactions t : allTransactions) {
+			if (t.getEmployee().getCode().equals(USER1_COD)) {
+				tDAO.remove(t.getId());
+			}else if (t.getEmployee().getCode().equals(USER2_COD)) {
+				tDAO.remove(t.getId());
+			}
+		}
 		
 	}
 	
