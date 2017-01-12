@@ -215,6 +215,7 @@ public class EmployeeBean implements Serializable {
 				employee.setPayment_method(paymaster);
 			}
 		}
+		addrController.update(employee.getAddress());
 		String answer = emController.update(employee);
 		try {
 			FacesContext context = FacesContext.getCurrentInstance();

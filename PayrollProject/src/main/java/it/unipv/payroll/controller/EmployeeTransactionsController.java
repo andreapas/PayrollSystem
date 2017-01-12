@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 
-import it.unipv.payroll.model.Employee;
 import it.unipv.payroll.model.EmployeeTransactions;
 
 @Stateless
