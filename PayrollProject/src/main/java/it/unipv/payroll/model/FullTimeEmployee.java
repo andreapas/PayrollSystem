@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 public class FullTimeEmployee extends Employee{
 
 	private float salary;
+	private int commissionRate;
 
 	public float getSalary() {
 		return salary;
@@ -20,4 +21,13 @@ public class FullTimeEmployee extends Employee{
 	public void setSalary(float salary) {
 		this.salary = salary;
 	}
+
+	public int getCommissionRate() {
+		return commissionRate;
+	}
+
+	public void setCommissionRate(int commissionRate) {
+		this.commissionRate = commissionRate;
+	}
+	
 }

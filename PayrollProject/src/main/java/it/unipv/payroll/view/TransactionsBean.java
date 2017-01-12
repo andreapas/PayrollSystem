@@ -10,6 +10,8 @@ import javax.swing.plaf.synth.SynthSeparatorUI;
 
 import it.unipv.payroll.controller.TransactionsController;
 import it.unipv.payroll.model.Employee;
+import it.unipv.payroll.model.FullTimeEmployee;
+import it.unipv.payroll.model.PartTimeEmployee;
 import it.unipv.payroll.model.Transactions;
 
 @Named
@@ -20,24 +22,41 @@ public class TransactionsBean implements Serializable {
 
 	private Transactions transaction;
 	private int id;
+	private double saleAmount;
+	private int hoursAmount;
 
 	@PostConstruct
 	public void init() {
 		transaction = new Transactions();
 	}
 
-	public String addTransaction(Employee employee){
+	public String addSaleRecipt(FullTimeEmployee employee) {
+		
 		transaction.setEmployee(employee);
-		System.out.println(employee.getRole());
+		
 		if (employee.getRole().equals("Monthly")) {
+			transaction.setAmount((double)(saleAmount*employee.getCommissionRate()/100));
 			transaction.setInfo("Sale ID="+id);
 		}
+		else {
+			System.out.println("Impossible to add a sale recipt!");
+		}
+		String answer = tController.add(transaction);
+		return answer;
+	}
+	
+	public String addHours(PartTimeEmployee employee){
+		
+		transaction.setEmployee(employee);
+
 		if (employee.getRole().equals("Weekly")) {
+			//transaction.setAmount(...)
 			transaction.setInfo("Extra hours");
 		}
 		else {
-			System.out.println("Errrrore!");
+			System.out.println("Impossible to add hours!");
 		}
+		
 		String answer = tController.add(transaction);
 		return answer;
 	}
@@ -55,4 +74,21 @@ public class TransactionsBean implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
+
+	public double getSaleAmount() {
+		return saleAmount;
+	}
+
+	public void setSaleAmount(double saleAmount) {
+		this.saleAmount = saleAmount;
+	}
+
+	public int getHoursAmount() {
+		return hoursAmount;
+	}
+
+	public void setHoursAmount(int hoursAmount) {
+		this.hoursAmount = hoursAmount;
+	}
+	
 }

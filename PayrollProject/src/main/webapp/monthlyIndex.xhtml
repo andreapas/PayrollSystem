@@ -180,10 +180,10 @@
 						<h:outputLabel for="id" value="ID:" />
 						<p:inputText id="id" required="true" placeholder="ID" value="#{transactionsBean.id}" />
 						<h:outputLabel for="amount" value="Amount:" />
-						<p:inputText id="amount" required="true" value="#{transactionsBean.transaction.amount}" />
+						<p:inputText id="amount" required="true" value="#{transactionsBean.saleAmount}" />
 						<p:outputLabel for="date" value="Date:" />
 						<p:calendar id="date" value="#{transactionsBean.transaction.date}" />
-						<p:commandButton value="Add" actionListener="#{transactionsBean.addTransaction(employeeBean.loggedUser)}" />
+						<p:commandButton value="Add" actionListener="#{transactionsBean.addSaleRecipt(employeeBean.loggedUser)}" />
 					</h:panelGrid>
 				</p:panel>
 			</h:form>
