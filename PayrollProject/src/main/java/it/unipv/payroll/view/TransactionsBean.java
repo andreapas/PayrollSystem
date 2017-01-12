@@ -39,7 +39,7 @@ public class TransactionsBean implements Serializable {
 			transaction.setInfo("Sale ID="+id);
 		}
 		else {
-			System.out.println("Impossible to add a sale recipt!");
+			System.out.println("Impossible to add a sale recipt. You are not a monthly!");
 		}
 		String answer = tController.add(transaction);
 		return answer;
@@ -50,11 +50,16 @@ public class TransactionsBean implements Serializable {
 		transaction.setEmployee(employee);
 
 		if (employee.getRole().equals("Weekly")) {
-			//transaction.setAmount(...)
-			transaction.setInfo("Extra hours");
+			
+			if (hoursAmount>8) {
+				transaction.setAmount((double)( 8*employee.getHourlyRate() + 1.5*(hoursAmount-8)*employee.getHourlyRate()));
+			} else {
+				transaction.setAmount((double)(hoursAmount*employee.getHourlyRate()));
+			}
+			transaction.setInfo("Worked hours");
 		}
 		else {
-			System.out.println("Impossible to add hours!");
+			System.out.println("Impossible to add hours. You are not a weekly!");
 		}
 		
 		String answer = tController.add(transaction);
