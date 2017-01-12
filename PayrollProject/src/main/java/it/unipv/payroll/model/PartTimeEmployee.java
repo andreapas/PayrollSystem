@@ -13,18 +13,6 @@ import javax.persistence.OneToMany;
 public class PartTimeEmployee extends Employee {
 
 	private float hourlyRate;
-	@OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
-	private List<TimeCard> postedTimeCards;	
-	
-	
-	
-	public List<TimeCard> getPostedTimeCards() {
-		return postedTimeCards;
-	}
-	public void setPostedTimeCards(List<TimeCard> postedTimeCards) {
-		this.postedTimeCards = postedTimeCards;
-	}
-	
 	
 	public float getHourlyRate() {
 		return hourlyRate;

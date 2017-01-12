@@ -180,10 +180,10 @@
 				<h:form>
 				<p:panel header="Insert Hours" class="dynamicPanel insertHoursPanel">
 					<h:panelGrid cellpadding="10">
-						<h:outputText id="output" value="Hours worked today: #{insertHoursBean.hours}" />
-						<h:inputHidden id="h" value="#{insertHoursBean.hours}" />
-						<p:slider for="h" display="output" step="1" maxValue="10" displayTemplate="Hours worked today: {value}" />
-						<p:commandButton value="Add" actionListener="#{insertHoursBean.addHours()}" />
+						<h:outputText id="output" value="Hours worked today: #{transactionsBean.hoursAmount}" />
+						<h:inputHidden id="h" value="#{transactionsBean.hoursAmount}" />
+						<p:slider for="h" display="output" step="1" maxValue="20" displayTemplate="Hours worked today: {value}" />
+						<p:commandButton value="Add" actionListener="#{transactionsBean.addHours(employeeBean.loggedUser)}" />
 					</h:panelGrid>	
 				</p:panel>
 				</h:form>

@@ -1,6 +1,7 @@
 package it.unipv.payroll.view;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -48,6 +49,9 @@ public class TransactionsBean implements Serializable {
 	public String addHours(PartTimeEmployee employee){
 		
 		transaction.setEmployee(employee);
+		
+		Date today = new Date();
+		transaction.setDate(today);
 
 		if (employee.getRole().equals("Weekly")) {
 			
