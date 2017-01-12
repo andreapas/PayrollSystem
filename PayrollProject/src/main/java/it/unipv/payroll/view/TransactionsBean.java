@@ -2,6 +2,7 @@ package it.unipv.payroll.view;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -25,7 +26,7 @@ public class TransactionsBean implements Serializable {
 	private int id;
 	private double saleAmount;
 	private int hoursAmount;
-
+	
 	@PostConstruct
 	public void init() {
 		transaction = new Transactions();
@@ -98,6 +99,10 @@ public class TransactionsBean implements Serializable {
 
 	public void setHoursAmount(int hoursAmount) {
 		this.hoursAmount = hoursAmount;
+	}
+	
+	public List<Transactions> getAllTransactions() {
+		return tController.findAll();
 	}
 	
 }
