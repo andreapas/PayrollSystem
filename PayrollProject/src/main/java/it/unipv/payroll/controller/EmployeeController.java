@@ -16,12 +16,12 @@ public class EmployeeController extends GenericController<Employee> {
 
 	public List<Employee> findAll() {
 		List<Employee> list = dao.findAll();
-		for (Iterator<Employee> iterator = list.iterator(); iterator.hasNext();) {
-			Employee employee = (Employee) iterator.next();
-			if (employee.getRole().equals("Manager")) {
-				iterator.remove();
-			}
-		}
+//		for (Iterator<Employee> iterator = list.iterator(); iterator.hasNext();) {
+//			Employee employee = (Employee) iterator.next();
+//			if (employee.getRole().equals("Manager")) {
+//				iterator.remove();
+//			}
+//		}
 		return list;
 	}
 

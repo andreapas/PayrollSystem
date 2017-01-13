@@ -7,9 +7,12 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.controller.TransactionsController;
 import it.unipv.payroll.model.Employee;
 import it.unipv.payroll.model.FullTimeEmployee;
@@ -58,6 +61,18 @@ public class TransactionsBean implements Serializable {
 			System.out.println("Impossible to add a sale recipt. You are not a monthly!");
 		}
 		String answer = tController.add(transaction);
+		try {
+			FacesContext context = FacesContext.getCurrentInstance();
+			if (answer.equals("Operation completed successfully.")) {
+				context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!", "The sale receipt have been correctly added"));
+			} else {
+				context.addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error!",
+								"Something has gone wrong while trying to add sale receipt. The complete message is " + answer));
+			}
+		} catch (NullPointerException e) {
+			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
+		}
 		return answer;
 	}
 	
@@ -82,6 +97,18 @@ public class TransactionsBean implements Serializable {
 		}
 		
 		String answer = tController.add(transaction);
+		try {
+			FacesContext context = FacesContext.getCurrentInstance();
+			if (answer.equals("Operation completed successfully.")) {
+				context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!", "The worked hours have been correctly added"));
+			} else {
+				context.addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error!",
+								"Something has gone wrong while trying to add the hours. The complete message is " + answer));
+			}
+		} catch (NullPointerException e) {
+			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
+		}
 		return answer;
 	}
 
@@ -118,13 +145,26 @@ public class TransactionsBean implements Serializable {
 	public List<Transactions> getAllTransactions() {
 		return tController.findAll();
 	}
+	@Inject EmployeeController emC;
 	public void addServiceCharge(){
+		String answer="";
 		transaction.setDate(new Date());
 		for (Employee employee : employeeList) {
-			System.out.println("-----------------------------------------------------"+transaction.getAmount());
 			transaction.setAmount(-transaction.getAmount());
-			transaction.setEmployee(employee);
-			tController.add(transaction);
+			transaction.setEmployee(emC.find(employee.getCode()));
+			answer=tController.add(transaction);
+		}
+		try {
+			FacesContext context = FacesContext.getCurrentInstance();
+			if (answer.equals("Operation completed successfully.")) {
+				context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!", "The service charge has been successfully set"));
+			} else {
+				context.addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error!",
+								"Something has gone wrong while trying to add the service charge. The complete message is " + answer));
+			}
+		} catch (NullPointerException e) {
+			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
 		}
 	}
 //	public HashMap<String, Double> startPaydayForEmployeeType(String role) {

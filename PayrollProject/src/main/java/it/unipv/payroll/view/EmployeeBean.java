@@ -184,9 +184,15 @@ public class EmployeeBean implements Serializable {
 
 	public List<Employee> fireEmployee() {
 		Employee employee = findEmployeeByCode(fireCode);
-		String answer = emController.remove(employee.getCode());
-		sessionManag.removeLogin(employee.getCode());
-		addrController.remove(employee.getCode());
+		String answer;
+		if (!employee.getRole().equals("Manager")) {
+			answer = emController.remove(employee.getCode());
+			sessionManag.removeLogin(employee.getCode());
+			addrController.remove(employee.getCode());
+
+		}else{
+			answer="You don't have the permission to remove a Manager";
+		}
 		try {
 			FacesContext context = FacesContext.getCurrentInstance();
 			if (answer.equals("Operation completed successfully.")) {

@@ -5,13 +5,11 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 
-<h:head>
-	<link rel="stylesheet" type="text/css" href="css/style.css"></link>
-	<script type="text/javascript" src="js/scripts.js"></script>
-</h:head>
+<h:head/>
 
 <h:body>
-
+	<h:outputStylesheet library="css" name="style.css" />
+	<h:outputScript library="js" name="scripts.js"/>
 	<script type="text/javascript">
 	$( document ).ready(function() {
 		showElementsOfRole("#{employeeBean.loggedUser.role}");
@@ -40,7 +38,7 @@
 					<p:button value="Unions Management" icon="fa fa-university"
 						onclick="return showOnlyDivByClass('unionsManagementPanel','dynamicPanel')" />
 					<p:button value="Add Service Charge" icon="fa fa-dollar"
-						onclick="return showOnlyDivByClass('serviceChargePanel', 'dynamicPanel')"/>
+						onclick="return showOnlyDivByClass('serviceChargePanel', 'dynamicPanel')" />
 				</h:panelGrid>
 			</p:panel>
 
@@ -696,17 +694,28 @@
 				<p:panel header="Delete this Employee"
 					class="dynamicPanel deletableEmployeePanel">
 					<h:form id="selectedDeletableEmployee">
-						<h:panelGrid cellpadding="5" columns="2">
-							<p:outputLabel value="Code of the Employee to fire" />
-							<p:inputText value="#{employeeBean.fireCode}" />
-							<p:commandButton value="Fire"
-								action="#{employeeBean.fireEmployee()}"
-								update="@widgetVar(associatesList) :selectedDeletableEmployee  @widgetVar(editTable) @widgetVar(employeesTable) @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)"
-								onclick="showOnlyDivByClass('deleteEmployeePanel', 'deletableEmployeePanel')" />
-							<p:commandButton value="Cancel" resetValues="true"
-								update=":selectedDeletableEmployee "
-								onclick="showOnlyDivByClass('deleteEmployeePanel', 'deletableEmployeePanel')" />
-						</h:panelGrid>
+						<p:panelGrid cellpadding="5" >
+							<p:row>
+								<p:column>
+									<p:outputLabel value="Are you sure, you want to remove " />
+									<p:outputLabel value="#{employeeBean.fireCode}?"
+										style="color:red" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<p:commandButton value="Fire"
+										action="#{employeeBean.fireEmployee()}"
+										update="@widgetVar(associatesList) :selectedDeletableEmployee  @widgetVar(editTable) @widgetVar(employeesTable) @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)"
+										onclick="showOnlyDivByClass('deleteEmployeePanel', 'deletableEmployeePanel')" />
+								</p:column>
+								<p:column>
+									<p:commandButton value="Cancel" resetValues="true"
+										update=":selectedDeletableEmployee "
+										onclick="showOnlyDivByClass('deleteEmployeePanel', 'deletableEmployeePanel')" />
+								</p:column>
+							</p:row>
+						</p:panelGrid>
 					</h:form>
 				</p:panel>
 
@@ -864,54 +873,44 @@
 					</h:form>
 				</p:panel>
 			</p:panel>
-			<p:panel header="Add union service charge" class="serviceChargePanel dynamicPanel">
-				<h:form>
+			<p:panel header="Add union service charge"
+				class="serviceChargePanel dynamicPanel">
+				<h:form id="chargeForm">
 					<h:panelGrid columns="2">
-						<p:outputLabel value="Select a Union:" />
-						<p:selectOneMenu value="#{unionsBean.union}" style="width:125px"
-							converter="unionTranslator">
-							<f:selectItem itemLabel="Select One" noSelectionOption="true" />
-							<f:selectItems value="#{unionsBean.unionsList}" var="union"
-								itemLabel="#{union.unionName}" />
-							<p:ajax event="change" update="@widgetVar(associatesList)" />
-						</p:selectOneMenu>
-					</h:panelGrid>
-				</h:form>
-				<p:panel header="Associates list">
-					<h:form id="chargeForm">
-						<h:panelGrid columns="2">
 
-							<p:outputLabel value="Amount to charge:" />
-							<p:inputNumber decimalSeparator="," thousandSeparator="."
-								value="#{transactionsBean.transaction.amount}" />
-							<p:outputLabel value="Informations:" />
-							<p:inputTextarea value="#{transactionsBean.transaction.info}" />
-						</h:panelGrid>
-						<p:dataTable widgetVar="associatesList" id="associatesTable"
-							var="employee" value="#{unionsBean.union.associates}"
-							rowKey="#{employee.code}"
-							selection="#{transactionsBean.employeeList}"
-							style="margin-bottom:0">
-							<p:column selectionMode="multiple"
-								style="width:16px;text-align:center" />
-							<p:column>
-								<p:outputLabel value="#{employee.code}" />
-							</p:column>
-							<p:column>
-								<p:outputLabel value="#{employee.name}" />
-							</p:column>
-							<p:column>
-								<p:outputLabel value="#{employee.surname}" />
-							</p:column>
-							<f:facet name="footer">
-								<p:commandButton process=":chargeForm"
-									update="@widgetVar(associatesList)"
-									value="Add service to those"
-									action="#{transactionsBean.addServiceCharge()}" />
-							</f:facet>
-						</p:dataTable>
-					</h:form>
-				</p:panel>
+						<p:outputLabel value="Amount to charge:" />
+						<p:inputNumber decimalSeparator="," thousandSeparator="."
+							value="#{transactionsBean.transaction.amount}" />
+						<p:outputLabel value="Informations:" />
+						<p:inputTextarea value="#{transactionsBean.transaction.info}" />
+					</h:panelGrid>
+					<p:dataTable widgetVar="associatesList" id="associatesTable"
+						var="employee" value="#{employeeBean.employeeList}"
+						rowKey="#{employee.code}"
+						selection="#{transactionsBean.employeeList}"
+						style="margin-bottom:0">
+						<p:column selectionMode="multiple"
+							style="width:16px;text-align:center" />
+						<p:column sortBy="#{employee.code}" headerText="Code">
+							<p:outputLabel value="#{employee.code}" />
+						</p:column>
+						<p:column sortBy="#{employee.name}" headerText="Name">
+							<p:outputLabel value="#{employee.name}" />
+						</p:column>
+						<p:column sortBy="#{employee.surname}" headerText="Surname">
+							<p:outputLabel value="#{employee.surname}" />
+						</p:column>
+						<p:column sortBy="#{employee.union.unionName}"
+							headerText="Union Name">
+							<p:outputLabel value="#{employee.union.unionName}" />
+						</p:column>
+						<f:facet name="footer">
+							<p:commandButton process=":chargeForm"
+								update="@widgetVar(associatesList)" value="Add service to those"
+								action="#{transactionsBean.addServiceCharge()}" />
+						</f:facet>
+					</p:dataTable>
+				</h:form>
 			</p:panel>
 		</div>
 
