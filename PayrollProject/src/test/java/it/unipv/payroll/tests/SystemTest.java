@@ -99,7 +99,6 @@ public class SystemTest extends ArquillianTest {
 		anEmployee.setEmail(USER1_EMAIL);
 		anEmployee.setUnion(USER1_UNION);
 		anEmployee.setPayment_method(PAYMENT_METHOD1);
-		anEmployee.setEmployee_Type(WeeklyRole);
 		anEmployee.setAddress(ADDRESS1);
 		anEmployee.setHourlyRate(20);
 		
@@ -110,7 +109,6 @@ public class SystemTest extends ArquillianTest {
 		anotherEmployee.setEmail(USER1_EMAIL);
 		anotherEmployee.setUnion(USER1_UNION);
 		anotherEmployee.setPayment_method(PAYMENT_METHOD1);
-		anotherEmployee.setEmployee_Type(MonthlyRole);
 		anotherEmployee.setAddress(ADDRESS2);
 		anotherEmployee.setCommissionRate(50);
 	}
@@ -286,10 +284,10 @@ public class SystemTest extends ArquillianTest {
 		tBean.addHours(anEmployee);
 		
 		Transactions anotherTransaction = new Transactions();
-		anotherTransaction.setAmount(100.00);
+		anotherTransaction.setAmount(100);
 		anotherTransaction.setDate(new Date());
 		anotherTransaction.setInfo("Sale ID=12345 test");
-		anotherTransaction.setAmount(55.55);
+		anotherTransaction.setAmount((float)55.55);
 		tBean.setId(12345);
 		tBean.setTransaction(anotherTransaction);
 		tBean.addSaleRecipt(anotherEmployee);
@@ -318,38 +316,4 @@ public class SystemTest extends ArquillianTest {
 	}
 	
 	
-	@Test
-	public void testPayday(){
-		emBean.setFullTimeEmployee(anotherEmployee);
-		emBean.hireFullTimeEmployee();
-		
-		Transactions firstTransaction= new Transactions();
-		firstTransaction.setAmount(1500.00);
-		firstTransaction.setDate(new Date());
-		firstTransaction.setEmployee(anEmployee);
-		firstTransaction.setInfo("Test add sales");
-		tBean.setId(123456);
-		tBean.setTransaction(firstTransaction);
-		tBean.addSaleRecipt(anotherEmployee);
-		
-		
-		firstTransaction.setAmount(150.68);
-		firstTransaction.setInfo("Test addServiceCharge");
-		tBean.setTransaction(firstTransaction);
-		tBean.addServiceChargeTo(new ArrayList<Employee>(Arrays.asList(anotherEmployee)));
-		
-		HashMap<String, Double> employeeEarnings=tBean.startPayday();
-		List<Transactions> allTransactions = tBean.getAllTransactions();
-		for (Transactions t : allTransactions) {
-			if (t.getEmployee().getCode().equals(anotherEmployee.getCode())) {
-				tDAO.remove(t.getId());
-			}
-		}
-		
-		Assert.assertEquals((Double)((1500.00*anotherEmployee.getCommissionRate()/100)-150.68), (Double)employeeEarnings.get(anotherEmployee.getCode()));
-		
-		
-		
-		
-	}
 }
