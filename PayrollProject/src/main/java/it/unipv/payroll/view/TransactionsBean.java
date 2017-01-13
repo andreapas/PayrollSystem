@@ -3,7 +3,6 @@ package it.unipv.payroll.view;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -27,13 +26,10 @@ public class TransactionsBean implements Serializable {
 	private int id;
 //	private double saleAmount;
 	private int hoursAmount;
-	private List<String> transList;
-	private HashMap<String, Double> transMap;
 	private List<Employee> employeeList;
 
 	@PostConstruct
 	public void init(){
-		transList=new ArrayList<String>();
 		transaction = new Transactions();
 		employeeList=new ArrayList<Employee>();
 	}
@@ -55,7 +51,7 @@ public class TransactionsBean implements Serializable {
 		
 		if (employee.getRole().equals("Monthly")) {
 			
-			transaction.setAmount((double)(transaction.getAmount()*employee.getCommissionRate()/100));
+			transaction.setAmount((float)(transaction.getAmount()*employee.getCommissionRate()/100));
 			transaction.setInfo("Sale ID="+id);
 		}
 		else {
@@ -75,9 +71,9 @@ public class TransactionsBean implements Serializable {
 		if (employee.getRole().equals("Weekly")) {
 			
 			if (hoursAmount>8) {
-				transaction.setAmount((double)( 8*employee.getHourlyRate() + 1.5*(hoursAmount-8)*employee.getHourlyRate()));
+				transaction.setAmount((float)( 8*employee.getHourlyRate() + 1.5*(hoursAmount-8)*employee.getHourlyRate()));
 			} else {
-				transaction.setAmount((double)(hoursAmount*employee.getHourlyRate()));
+				transaction.setAmount((float)(hoursAmount*employee.getHourlyRate()));
 			}
 			transaction.setInfo("Worked hours");
 		}
@@ -131,22 +127,8 @@ public class TransactionsBean implements Serializable {
 			tController.add(transaction);
 		}
 	}
-	public HashMap<String, Double> startPayday() {
-		HashMap<String, Double> employeesEarnings = tController.startPayday();
-		List<String> tmpList=new ArrayList<String>();
-		tmpList.addAll(employeesEarnings.keySet());
-		transList=tmpList;
-		transMap=employeesEarnings;
-		return employeesEarnings;
-	}
-	public List<String> getTransList() {
-		return transList;
-	}
-	public HashMap<String, Double> getTransMap() {
-		return transMap;
-	}
-	public boolean isPayday() {
-		// some logic
-		return true;
-	}
+//	public HashMap<String, Double> startPaydayForEmployeeType(String role) {
+//		HashMap<String, Double> employeesEarnings = tController.startPaydayForEmployeeType(role);
+//		return employeesEarnings;
+//	}
 }

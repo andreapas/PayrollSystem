@@ -21,7 +21,7 @@ public class Transactions implements Serializable {
 	@JoinColumn(name="employee_code")
 	private Employee employee;
 	private Date date;
-	private Double amount;
+	private float amount;
 	private String info;
 	private boolean executed;
 	
@@ -42,10 +42,10 @@ public class Transactions implements Serializable {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	public Double getAmount() {
+	public float getAmount() {
 		return amount;
 	}
-	public void setAmount(Double amount) {
+	public void setAmount(float amount) {
 		this.amount = amount;
 	}
 	public int getId() {

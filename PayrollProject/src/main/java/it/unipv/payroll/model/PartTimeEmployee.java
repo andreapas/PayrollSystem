@@ -9,7 +9,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 
 @Entity
-@DiscriminatorValue(value = "Part-time")
+@DiscriminatorValue(value = "PartTime")
 public class PartTimeEmployee extends Employee {
 
 	private float hourlyRate;

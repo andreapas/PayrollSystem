@@ -39,9 +39,8 @@
 						onclick="return showOnlyDivByClass('employeesManagementPanel','dynamicPanel')" />
 					<p:button value="Unions Management" icon="fa fa-university"
 						onclick="return showOnlyDivByClass('unionsManagementPanel','dynamicPanel')" />
-					<p:button value="Payments Management" icon="fa fa-money"
-						onclick="return showOnlyDivByClass('paymentsPanel','dynamicPanel')" />
-
+					<p:button value="Add Service Charge" icon="fa fa-dollar"
+						onclick="return showOnlyDivByClass('serviceChargePanel', 'dynamicPanel')"/>
 				</h:panelGrid>
 			</p:panel>
 
@@ -865,32 +864,7 @@
 					</h:form>
 				</p:panel>
 			</p:panel>
-			<p:panel header="Payday" class="dynamicPanel paymentsPanel">
-				<h:panelGrid cellpadding="5" columns="2">
-					<p:commandButton value="Add Service Charge"
-						onclick="showDivsByClass('serviceChargePanel')"
-						icon="fa fa-dollar" />
-					<h:form id="showPayday">
-						<p:commandButton value="Start Payday"
-							actionListener="#{transactionsBean.startPayday()}"
-							oncomplete="PF('resultDialog').show();" update=":showPayday"
-							icon="fa fa-money" disabled="#{!transactionsBean.isPayday()}" />
-						<p:dialog header="Employees Payed" widgetVar="resultDialog"
-							modal="true" height="100" width="50%" resizable="false"
-							draggable="false">
-							<p:dataTable var="code" value="#{transactionsBean.transList}">
-								<p:column headerText="Employee Code">
-									<p:outputLabel value="#{code}" />
-								</p:column>
-								<p:column headerText="Amount earned:">
-									<p:outputLabel value="#{transactionsBean.transMap.get(code)}" />
-								</p:column>
-							</p:dataTable>
-						</p:dialog>
-					</h:form>
-				</h:panelGrid>
-			</p:panel>
-			<p:panel header="Add union service charge" class="dynamicPanel serviceChargePanel">
+			<p:panel header="Add union service charge" class="serviceChargePanel dynamicPanel">
 				<h:form>
 					<h:panelGrid columns="2">
 						<p:outputLabel value="Select a Union:" />
@@ -933,7 +907,7 @@
 								<p:commandButton process=":chargeForm"
 									update="@widgetVar(associatesList)"
 									value="Add service to those"
-									oncomplete="#{transactionsBean.addServiceCharge()}" />
+									action="#{transactionsBean.addServiceCharge()}" />
 							</f:facet>
 						</p:dataTable>
 					</h:form>

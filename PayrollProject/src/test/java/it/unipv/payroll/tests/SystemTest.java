@@ -99,7 +99,7 @@ public class SystemTest extends ArquillianTest {
 		anEmployee.setEmail(USER1_EMAIL);
 		anEmployee.setUnion(USER1_UNION);
 		anEmployee.setPayment_method(PAYMENT_METHOD1);
-		anEmployee.setRole(WeeklyRole);
+		anEmployee.setEmployee_Type(WeeklyRole);
 		anEmployee.setAddress(ADDRESS1);
 		anEmployee.setHourlyRate(20);
 		
@@ -110,7 +110,7 @@ public class SystemTest extends ArquillianTest {
 		anotherEmployee.setEmail(USER1_EMAIL);
 		anotherEmployee.setUnion(USER1_UNION);
 		anotherEmployee.setPayment_method(PAYMENT_METHOD1);
-		anotherEmployee.setRole(MonthlyRole);
+		anotherEmployee.setEmployee_Type(MonthlyRole);
 		anotherEmployee.setAddress(ADDRESS2);
 		anotherEmployee.setCommissionRate(50);
 	}

@@ -8,7 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
 @Entity
-@DiscriminatorValue(value = "Flat")
+@DiscriminatorValue(value = "FullTime")
 public class FullTimeEmployee extends Employee{
 
 	private float salary;
