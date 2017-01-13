@@ -1,65 +1,32 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html">
-<head>
-<title>ERROR</title>
-</head>
-<body>
-<h1>Wrong Username or Password</h1>
-	<form method="post" action="j_security_check" name="loginForm">
-		<h:panelGrid columns="2">
-			<h:outputLabel id="userNameLabel" for="j_username" value="Username:" />
-			<h:inputText id="j_username" autocomplete="off" />
-			<h:outputLabel id="passwordLabel" for="j_password" value="Password:" />
-			<h:inputSecret id="j_password" autocomplete="off" />
-			<div />
-			<h:panelGroup>
-				<h:commandButton type="submit" value="Login" />
-				<h:commandButton type="reset" value="Clear" />
-			</h:panelGroup>
-		</h:panelGrid>
-	</form>
-</body>
-</html>
-<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
+<title>Login Failed</title>
 </h:head>
-<h:body>
- <h:form>
-  
-    <p:dialog header="Login" widgetVar="dlg" resizable="false" visible="true">
+<body>
+	<div class="centered_div">
+		<p:dialog header="Login" widgetVar="dlg" resizable="false" visible="true">
+			
+	<h:form  name="loginForm" onsubmit="action='j_security_check';" prependId="false">
+		<p:outputLabel value="Wrong Username or Password" style="color:red"/>
         <h:panelGrid columns="2" cellpadding="5">
-            <h:outputLabel for="username" value="Username:" />
-            <p:inputText id="username" value="#{loginBean.username}" required="true" label="username" />
+            <h:outputLabel id="userNameLabel" for="j_username" value="Username:"/>
+            <p:inputText id="j_username" autocomplete="off"  />
  
-            <h:outputLabel for="password" value="Password:" />
-            <p:password id="password" value="#{loginBean.password}" required="true" label="password" />
+            <h:outputLabel  id="passwordLabel" for="j_password" value="Password:"  />
+            <p:password id="j_password" autocomplete="off" />
  
             <f:facet name="footer">
-                <p:commandButton value="Login" actionListener="#{loginBean.login}" />
+                <p:commandButton value="Login" type="submit" ajax="false" />
+				<p:commandButton type="reset" value="Clear" />
             </f:facet>  
         </h:panelGrid>
+        </h:form>
     </p:dialog>
-</h:form>
- 
-<script type="text/javascript">
-    function handleLoginRequest(xhr, status, args) {
-        if(args.validationFailed || !args.loggedIn) {
-            PF('dlg').jq.effect("shake", {times:5}, 100);
-        }
-        else {
-            PF('dlg').hide();
-            $('#loginLink').fadeOut();
-        }
-    }
-</script>
-
-</h:body>
-</html>-->
+	</div>
+</body>
+</html>
