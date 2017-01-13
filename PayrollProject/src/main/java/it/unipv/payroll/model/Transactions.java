@@ -3,11 +3,11 @@ package it.unipv.payroll.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 @Entity
@@ -24,6 +24,11 @@ public class Transactions implements Serializable {
 	private Double amount;
 	private String info;
 	private boolean executed;
+	
+	@PrePersist
+    void preInsert() {
+       executed=false;
+    }
 	
 	public Employee getEmployee() {
 		return employee;

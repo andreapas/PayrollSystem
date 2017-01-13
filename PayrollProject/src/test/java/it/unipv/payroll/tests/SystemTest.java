@@ -1,5 +1,7 @@
 package it.unipv.payroll.tests;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -287,8 +289,8 @@ public class SystemTest extends ArquillianTest {
 		anotherTransaction.setAmount(100.00);
 		anotherTransaction.setDate(new Date());
 		anotherTransaction.setInfo("Sale ID=12345 test");
+		anotherTransaction.setAmount(55.55);
 		tBean.setId(12345);
-		tBean.setSaleAmount(55.55);
 		tBean.setTransaction(anotherTransaction);
 		tBean.addSaleRecipt(anotherEmployee);
 		
@@ -318,27 +320,33 @@ public class SystemTest extends ArquillianTest {
 	
 	@Test
 	public void testPayday(){
-		//TOBE FIXED
-//		EmployeeTransactions firstTransaction= new EmployeeTransactions();
-//		firstTransaction.setCode(USER1_COD);
-//		firstTransaction.setFee(50);
-//		firstTransaction.setEarned(1000);
-//		utBean.setTransaction(firstTransaction);
-//		utBean.addTransaction();
-//		
-//		EmployeeTransactions secondTransaction= new EmployeeTransactions();
-//		secondTransaction.setCode(USER2_COD);
-//		secondTransaction.setFee(5000);
-//		secondTransaction.setEarned(2000);
-//		utBean.setTransaction(secondTransaction);
-//		utBean.addTransaction();
-//		
-//		
-//		HashMap<String, Integer> employeeEarnings=utBean.startPayday();
-//		
-//		System.out.println(employeeEarnings.get(USER1_COD));
-//		Assert.assertEquals(950, (int)employeeEarnings.get(USER1_COD));
-//		Assert.assertEquals(-3000, (int)employeeEarnings.get(USER2_COD));
+		emBean.setFullTimeEmployee(anotherEmployee);
+		emBean.hireFullTimeEmployee();
+		
+		Transactions firstTransaction= new Transactions();
+		firstTransaction.setAmount(1500.00);
+		firstTransaction.setDate(new Date());
+		firstTransaction.setEmployee(anEmployee);
+		firstTransaction.setInfo("Test add sales");
+		tBean.setId(123456);
+		tBean.setTransaction(firstTransaction);
+		tBean.addSaleRecipt(anotherEmployee);
+		
+		
+		firstTransaction.setAmount(150.68);
+		firstTransaction.setInfo("Test addServiceCharge");
+		tBean.setTransaction(firstTransaction);
+		tBean.addServiceChargeTo(new ArrayList<Employee>(Arrays.asList(anotherEmployee)));
+		
+		HashMap<String, Double> employeeEarnings=tBean.startPayday();
+		List<Transactions> allTransactions = tBean.getAllTransactions();
+		for (Transactions t : allTransactions) {
+			if (t.getEmployee().getCode().equals(anotherEmployee.getCode())) {
+				tDAO.remove(t.getId());
+			}
+		}
+		
+		Assert.assertEquals((Double)((1500.00*anotherEmployee.getCommissionRate()/100)-150.68), (Double)employeeEarnings.get(anotherEmployee.getCode()));
 		
 		
 		

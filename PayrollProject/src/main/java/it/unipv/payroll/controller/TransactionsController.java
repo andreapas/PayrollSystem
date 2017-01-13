@@ -19,6 +19,7 @@ public class TransactionsController extends GenericController<Transactions> {
 		HashMap<String, Double> employeesEarnings= new HashMap<String, Double>();
 		List<Transactions> allTransactions= dao.findAll();
 		for (Transactions ut : allTransactions) {
+			
 			if(employeesEarnings.containsKey(ut.getEmployee().getCode())){
 				employeesEarnings.put(ut.getEmployee().getCode(),employeesEarnings.get(ut.getEmployee().getCode())+ut.getAmount());
 			}else{

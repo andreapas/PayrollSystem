@@ -10,7 +10,6 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.swing.plaf.synth.SynthSeparatorUI;
 
 import it.unipv.payroll.controller.TransactionsController;
 import it.unipv.payroll.model.Employee;
@@ -26,23 +25,37 @@ public class TransactionsBean implements Serializable {
 
 	private Transactions transaction;
 	private int id;
-	private double saleAmount;
+//	private double saleAmount;
 	private int hoursAmount;
 	private List<String> transList;
 	private HashMap<String, Double> transMap;
+	private List<Employee> employeeList;
 
 	@PostConstruct
 	public void init(){
 		transList=new ArrayList<String>();
 		transaction = new Transactions();
+		employeeList=new ArrayList<Employee>();
 	}
+
+	
+	public List<Employee> getEmployeeList() {
+		return employeeList;
+	}
+
+
+	public void setEmployeeList(List<Employee> employeeList) {
+		this.employeeList = employeeList;
+	}
+
 
 	public String addSaleRecipt(FullTimeEmployee employee) {
 		
 		transaction.setEmployee(employee);
 		
 		if (employee.getRole().equals("Monthly")) {
-			transaction.setAmount((double)(saleAmount*employee.getCommissionRate()/100));
+			
+			transaction.setAmount((double)(transaction.getAmount()*employee.getCommissionRate()/100));
 			transaction.setInfo("Sale ID="+id);
 		}
 		else {
@@ -90,13 +103,13 @@ public class TransactionsBean implements Serializable {
 		this.id = id;
 	}
 
-	public double getSaleAmount() {
-		return saleAmount;
-	}
-
-	public void setSaleAmount(double saleAmount) {
-		this.saleAmount = saleAmount;
-	}
+//	public double getSaleAmount() {
+//		return saleAmount;
+//	}
+//
+//	public void setSaleAmount(double saleAmount) {
+//		this.saleAmount = saleAmount;
+//	}
 
 	public int getHoursAmount() {
 		return hoursAmount;
@@ -108,6 +121,15 @@ public class TransactionsBean implements Serializable {
 	
 	public List<Transactions> getAllTransactions() {
 		return tController.findAll();
+	}
+	public void addServiceCharge(){
+		transaction.setDate(new Date());
+		for (Employee employee : employeeList) {
+			System.out.println("-----------------------------------------------------"+transaction.getAmount());
+			transaction.setAmount(-transaction.getAmount());
+			transaction.setEmployee(employee);
+			tController.add(transaction);
+		}
 	}
 	public HashMap<String, Double> startPayday() {
 		HashMap<String, Double> employeesEarnings = tController.startPayday();
