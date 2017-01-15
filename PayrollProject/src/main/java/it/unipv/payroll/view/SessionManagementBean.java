@@ -34,17 +34,21 @@ public class SessionManagementBean implements Serializable {
 	}
 	
 	public String logout() {
-	    HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-	    session.invalidate();
+	    try {
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+			session.invalidate();
+		} catch (NullPointerException e) {
+			System.out.println("Null face context detected, maybe this bean has been run for testing");
+		}
 	    return "/index.xhtml?faces-redirect=true";
 	}
 
 	public Credentials getOldLoginCredentials() {
 		return oldLoginCredentials;
 	}
-	public void setLogin(Credentials login) {
-		this.login = login;
-	}
+//	public void setLogin(Credentials login) {
+//		this.login = login;
+//	}
 	public void setCode(String username) {
 		login.setCode(username);
 	}

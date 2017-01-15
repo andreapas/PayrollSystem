@@ -28,7 +28,7 @@ public abstract class GenericController<T extends Serializable> {
 	
 	public String add(T element) {
 		if(isAlreadyInDatabase(element)){
-			return ERROR;
+			return ERROR+" element already present";
 		}else{
 			dao.add(element);
 			return SUCCESS;
@@ -36,7 +36,11 @@ public abstract class GenericController<T extends Serializable> {
 	}
 
 	public String remove(Object id) {
-		dao.remove(id);
+		try {
+			dao.remove(id);
+		} catch (Exception e) {
+			return ERROR;
+		}
 		return SUCCESS;
 	}
 

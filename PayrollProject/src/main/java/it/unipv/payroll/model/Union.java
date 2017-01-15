@@ -18,7 +18,7 @@ public class Union implements Serializable{
 	@Id
 	private String unionName;
 	
-	private double weeklyRate;
+	private float weeklyRate;
 	
 	@OneToMany(mappedBy = "union", fetch = FetchType.EAGER)
 	private List<Employee> associates;	
@@ -35,7 +35,7 @@ public class Union implements Serializable{
 		this.unionName = unionName;
 	}
 
-	public void setWeeklyRate(double weeklyRate) {
+	public void setWeeklyRate(float weeklyRate) {
 		this.weeklyRate = weeklyRate;
 	}
 
@@ -44,7 +44,7 @@ public class Union implements Serializable{
 		return unionName;
 	}
 
-	public double getWeeklyRate() {
+	public float getWeeklyRate() {
 		
 		return weeklyRate;
 	}

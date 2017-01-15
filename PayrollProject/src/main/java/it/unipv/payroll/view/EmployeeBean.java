@@ -7,8 +7,10 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -17,10 +19,12 @@ import org.primefaces.context.RequestContext;
 
 import it.unipv.payroll.controller.AddressController;
 import it.unipv.payroll.controller.EmployeeController;
+import it.unipv.payroll.controller.TransactionsController;
 import it.unipv.payroll.model.Address;
 import it.unipv.payroll.model.Employee;
 import it.unipv.payroll.model.FullTimeEmployee;
 import it.unipv.payroll.model.PartTimeEmployee;
+import it.unipv.payroll.model.Transactions;
 
 @Named
 @SessionScoped
@@ -33,25 +37,28 @@ public class EmployeeBean implements Serializable {
 	SessionManagementBean sessionManag;
 	@Inject
 	AddressController addrController;
+	@Inject
+	TransactionsController transController;
 
 	private PartTimeEmployee partTimeEmployee;
 	private FullTimeEmployee fullTimeEmployee;
 	private Employee loggedUser;
 	private List<Employee> employeeList;
-	private String fireCode;
+	// private String fireCode;
 	private String radioVal;
 	private Employee genericEmployee;
 	private List<String> districtCodeList;
 	private Address address;
 	private List<String> optionsList;
-	private static String paymaster="Paymaster";
-	private static String postal_address="Postal address";
-	private static String bank_account="Bank account";
-	
+	private static String paymaster = "Paymaster";
+	private static String postal_address = "Postal address";
+	private static String bank_account = "Bank account";
+
 	@PostConstruct
 	public void init() {
 		partTimeEmployee = new PartTimeEmployee();
 		fullTimeEmployee = new FullTimeEmployee();
+
 		try {
 			loggedUser = emController.find(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
 		} catch (NullPointerException e) {
@@ -67,16 +74,16 @@ public class EmployeeBean implements Serializable {
 				"PZ", "PO", "RG", "RA", "RC", "RE", "RI", "RN", "RM", "RO", "SA", "SS", "SV", "SI", "SR", "SO", "TA",
 				"TE", "TR", "TO", "TP", "TN", "TV", "TS", "UD", "VA", "VE", "VB", "VC", "VR", "VV", "VI"));
 		address = new Address();
-		optionsList = new ArrayList<String>(Arrays.asList(paymaster,postal_address,bank_account));
+		optionsList = new ArrayList<String>(Arrays.asList(paymaster, postal_address, bank_account));
 	}
 
-	public String getFireCode() {
-		return fireCode;
-	}
+	// public String getFireCode() {
+	// return fireCode;
+	// }
 
-	public void setFireCode(String fireCode) {
-		this.fireCode = fireCode;
-	}
+	// public void setFireCode(String fireCode) {
+	// this.fireCode = fireCode;
+	// }
 
 	public Employee getLoggedUser() {
 		return loggedUser;
@@ -99,8 +106,8 @@ public class EmployeeBean implements Serializable {
 	}
 
 	public void hirePartTimeEmployee() {
-		partTimeEmployee.setRole("Weekly");
 		address.setCode(partTimeEmployee.getCode());
+		partTimeEmployee.setRole("Weekly");
 		partTimeEmployee.setAddress(address);
 		if (radioVal.equals(postal_address)) {
 			partTimeEmployee.setPayment_method(partTimeEmployee.getAddress().toString());
@@ -114,37 +121,24 @@ public class EmployeeBean implements Serializable {
 			tmpPassword = sessionManag.generatePassword();
 			sessionManag.addLogin();
 		}
-		try {
-			FacesContext context = FacesContext.getCurrentInstance();
-			if (answer.equals("Operation completed successfully.")) {
-				context.addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!",
-								"The employee " + partTimeEmployee.getName() + " " + partTimeEmployee.getSurname()
-										+ " has been successfully hired"));
-				context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Attention", "Password: \'"
-						+ tmpPassword + "\' without apices. This password should be changed at first login."));
-			} else {
-				context.addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error!",
-								"Something has gone wrong while trying to hire " + partTimeEmployee.getName() + " "
-										+ partTimeEmployee.getSurname() + ".\nThe complete message is " + answer));
-			}
-		} catch (NullPointerException e) {
-			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
+		if (answer.equals("Operation completed successfully.")) {
+			growl(FacesMessage.SEVERITY_INFO, "Success!",
+					"The employee " + partTimeEmployee.getName() + " " + partTimeEmployee.getSurname()
+							+ " has been successfully hired",
+					FacesMessage.SEVERITY_WARN, "Attention", "Password: \'" + tmpPassword
+							+ "\' without apices. This password should be changed at first login.");
+		} else {
+			growl(FacesMessage.SEVERITY_FATAL, "Error!",
+					"Something has gone wrong while trying to hire " + partTimeEmployee.getName() + " "
+							+ partTimeEmployee.getSurname() + ".\nThe complete message is " + answer);
 		}
-		cancel();
+		// cancel();
 		employeeList = emController.findAll();
 	}
 
-	private void cancel(){
-		partTimeEmployee=new PartTimeEmployee();
-		fullTimeEmployee=new FullTimeEmployee();
-		address=new Address();
-		fireCode="";
-	}
 	public void hireFullTimeEmployee() {
-		fullTimeEmployee.setRole("Monthly");
 		address.setCode(fullTimeEmployee.getCode());
+		fullTimeEmployee.setRole("Monthly");
 		fullTimeEmployee.setAddress(address);
 		if (radioVal.equals(postal_address)) {
 			fullTimeEmployee.setPayment_method(fullTimeEmployee.getAddress().toString());
@@ -159,84 +153,67 @@ public class EmployeeBean implements Serializable {
 			tmpPassword = sessionManag.generatePassword();
 			sessionManag.addLogin();
 		}
-		try {
-			FacesContext context = FacesContext.getCurrentInstance();
-			if (answer.equals("Operation completed successfully.")) {
-				context.addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!",
-								"The employee " + fullTimeEmployee.getName() + " " + fullTimeEmployee.getSurname()
-										+ " has been successfully hired"));
-				context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Attention", "Password: \'"
-						+ tmpPassword + "\' without apices. This password should be changed at first login."));
-
-			} else {
-				context.addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error!",
-								"Something has gone wrong while trying to hire " + fullTimeEmployee.getName() + " "
-										+ fullTimeEmployee.getSurname() + ".\nThe complete message is " + answer));
-			}
-		} catch (NullPointerException e) {
-			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
+		if (answer.equals("Operation completed successfully.")) {
+			growl(FacesMessage.SEVERITY_INFO, "Success!",
+					"The employee " + fullTimeEmployee.getName() + " " + fullTimeEmployee.getSurname()
+							+ " has been successfully hired",
+					FacesMessage.SEVERITY_WARN, "Attention", "Password: \'" + tmpPassword
+							+ "\' without apices. This password should be changed at first login.");
+		} else {
+			growl(FacesMessage.SEVERITY_FATAL, "Error!",
+					"Something has gone wrong while trying to hire " + fullTimeEmployee.getName() + " "
+							+ fullTimeEmployee.getSurname() + ".\nThe complete message is " + answer);
 		}
-		cancel();
+		// cancel();
 		employeeList = emController.findAll();
 	}
 
-	public List<Employee> fireEmployee() {
+	public void fireEmployee(String fireCode) {
 		Employee employee = findEmployeeByCode(fireCode);
 		String answer;
 		if (!employee.getRole().equals("Manager")) {
-			answer = emController.remove(employee.getCode());
 			sessionManag.removeLogin(employee.getCode());
+			List<Transactions> tList = transController.findAll();
+			for (Transactions transactions : tList) {
+				if (transactions.getEmployee().getCode().equals(employee.getCode())) {
+					transController.remove(transactions.getId());
+				}
+			}
+			answer = emController.remove(employee.getCode());
 			addrController.remove(employee.getCode());
 
-		}else{
-			answer="You don't have the permission to remove a Manager";
+		} else {
+			answer = "You don't have the permission to remove a Manager";
 		}
-		try {
-			FacesContext context = FacesContext.getCurrentInstance();
-			if (answer.equals("Operation completed successfully.")) {
-				context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!", "The employee "
-						+ employee.getName() + " " + employee.getSurname() + " has been successfully fired"));
-			} else {
-				context.addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error!",
-								"Something has gone wrong while trying to fire " + employee.getName() + " "
-										+ employee.getSurname() + ". The complete message is " + answer));
-			}
-		} catch (NullPointerException e) {
-			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
+		if (answer.equals("Operation completed successfully.")) {
+			growl(FacesMessage.SEVERITY_INFO, "Success!", "The employee " + employee.getName() + " "
+					+ employee.getSurname() + " has been successfully fired");
+		} else {
+			growl(FacesMessage.SEVERITY_FATAL, "Error!", "Something has gone wrong while trying to fire "
+					+ employee.getName() + " " + employee.getSurname() + ". The complete message is " + answer);
 		}
 		employeeList = emController.findAll();
-		return employeeList;
-
 	}
 
-	public void updateInfo(Employee employee) {
+	public void updateInfo() {
 		// System.out.println(">>>><<<<<>>>>>>><<<<<<<<<>>>>>>>><<<<<<<<<<<<<<>>>>>>>>>"+loggedUser.getPayment_method());
 		if (radioVal != null) {
 			if (radioVal.equals(postal_address)) {
-				employee.setPayment_method(employee.getAddress().toString());
+				genericEmployee.setPayment_method(genericEmployee.getAddress().toString());
 			} else if (radioVal.equals(paymaster)) {
-				employee.setPayment_method(paymaster);
+				genericEmployee.setPayment_method(paymaster);
 			}
 		}
-		addrController.update(employee.getAddress());
-		String answer = emController.update(employee);
-		try {
-			FacesContext context = FacesContext.getCurrentInstance();
-			if (answer.equals("Operation completed successfully.")) {
-				context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!",
-						"Your informations has been updated successfully."));
-			} else {
-				context.addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error!",
-								"Something has gone wrong while trying to update your informations. The complete message is "
-										+ answer));
-			}
-		} catch (NullPointerException e) {
-			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
+		addrController.update(genericEmployee.getAddress());
+		String answer = emController.update(genericEmployee);
+		if (answer.equals("Operation completed successfully.")) {
+			growl(FacesMessage.SEVERITY_INFO, "Success", "Your informations has been updated successfully.");
+		} else {
+			growl(FacesMessage.SEVERITY_FATAL, "Error!",
+					"Something has gone wrong while trying to update your informations. The complete message is "
+							+ answer);
 		}
+		System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
 	}
 
 	public Employee findEmployeeByCode(String code) {
@@ -271,9 +248,6 @@ public class EmployeeBean implements Serializable {
 	public List<String> getOptionsList() {
 		return optionsList;
 	}
-	public void setOptionsList(List<String> optionsList) {
-		this.optionsList = optionsList;
-	}
 
 	public List<String> getDistrictCodeList() {
 		return districtCodeList;
@@ -285,5 +259,25 @@ public class EmployeeBean implements Serializable {
 
 	public void setAddress(Address address) {
 		this.address = address;
+	}
+
+	private void growl(Severity sevMessage, String title1, String message, Severity sevMessage2, String title2,
+			String message2) {
+		try {
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage(null, new FacesMessage(sevMessage, title1, message));
+			context.addMessage(null, new FacesMessage(sevMessage2, title2, message2));
+		} catch (NullPointerException e) {
+			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
+		}
+	}
+
+	private void growl(Severity sevMessage, String title, String message) {
+		try {
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage(null, new FacesMessage(sevMessage, title, message));
+		} catch (NullPointerException e) {
+			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
+		}
 	}
 }

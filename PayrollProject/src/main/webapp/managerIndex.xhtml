@@ -5,11 +5,11 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 
-<h:head/>
+<h:head />
 
 <h:body>
 	<h:outputStylesheet library="css" name="style.css" />
-	<h:outputScript library="js" name="scripts.js"/>
+	<h:outputScript library="js" name="scripts.js" />
 	<script type="text/javascript">
 	$( document ).ready(function() {
 		showElementsOfRole("#{employeeBean.loggedUser.role}");
@@ -149,7 +149,7 @@
 
 							<p:commandButton value="Submit updated informations"
 								actionListener="#{employeeBean.updateInfo(employeeBean.loggedUser)}"
-								update="@widgetVar(associatesList) updateInfos :overview @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)"
+								update="@widgetVar(editTable) @widgetVar(employeesTable) @widgetVar(unionEditTable) @widgetVar(unionDeleteTable) :persInfo :partHireAdditionalInfo :fullHireAdditionalInfo :selectedEmployee :selectedDeletableEmployee"
 								oncomplete="showOnlyDivByClass('settingsPanel', 'overviewPanel')" />
 						</h:panelGrid>
 					</h:form>
@@ -646,78 +646,65 @@
 			</p:panel>
 			<p:panel header="Delete Employee"
 				class="dynamicPanel usersSubPanel deleteEmployeePanel">
-				<h:panelGrid columns="3">
-					<p:dataTable var="employee" widgetVar="employeesTable"
-						value="#{employeeBean.employeeList}" rows="10"
-						rowsPerPageTemplate="5,10,15">
-						<f:facet name="header">
-							<p:outputPanel>
-								<h:outputText value="Search all fields:" />
-								<p:inputText id="globalFilter"
-									onkeyup="PF('employeesTable').filter()" style="width:150px"
-									placeholder="Enter keyword" />
-							</p:outputPanel>
-						</f:facet>
-						<p:column sortBy="#{employee.code}" filterBy="#{employee.code}"
-							filterStyle="display:none" headerText="Code">
-							<h:outputText value="#{employee.code}" />
-						</p:column>
+				<h:form id="selectedDeletableEmployee">
+					<h:panelGrid columns="3">
+						<p:dataTable var="employee" widgetVar="employeesTable"
+							value="#{employeeBean.employeeList}" rows="10"
+							rowsPerPageTemplate="5,10,15">
+							<f:facet name="header">
+								<p:outputPanel>
+									<h:outputText value="Search all fields:" />
+									<p:inputText id="globalFilter"
+										onkeyup="PF('employeesTable').filter()" style="width:150px"
+										placeholder="Enter keyword" />
+								</p:outputPanel>
+							</f:facet>
+							<p:column sortBy="#{employee.code}" filterBy="#{employee.code}"
+								filterStyle="display:none" headerText="Code">
+								<h:outputText value="#{employee.code}" />
+							</p:column>
 
-						<p:column sortBy="#{employee.name}" filterBy="#{employee.name}"
-							filterStyle="display:none" headerText="Name">
-							<h:outputText value="#{employee.name}" />
-						</p:column>
+							<p:column sortBy="#{employee.name}" filterBy="#{employee.name}"
+								filterStyle="display:none" headerText="Name">
+								<h:outputText value="#{employee.name}" />
+							</p:column>
 
-						<p:column sortBy="#{employee.surname}"
-							filterBy="#{employee.surname}" filterStyle="display:none"
-							headerText="Surname">
-							<h:outputText value="#{employee.surname}" />
-						</p:column>
+							<p:column sortBy="#{employee.surname}"
+								filterBy="#{employee.surname}" filterStyle="display:none"
+								headerText="Surname">
+								<h:outputText value="#{employee.surname}" />
+							</p:column>
 
-						<p:column filterBy="#{employee.email}" filterStyle="display:none"
-							headerText="Email">
-							<h:outputText value="#{employee.email}" />
-						</p:column>
+							<p:column filterBy="#{employee.email}" filterStyle="display:none"
+								headerText="Email">
+								<h:outputText value="#{employee.email}" />
+							</p:column>
 
-						<p:column filterBy="#{employee.union.unionName}"
-							filterStyle="display:none" headerText="Union">
-							<h:outputText value="#{employee.union.unionName}" />
-						</p:column>
-						<p:column>
-							<p:commandButton icon="fa fa-trash"
-								action="#{employeeBean.setFireCode(employee.code)}"
-								update=":selectedDeletableEmployee"
-								onclick="showDivsByClass('deletableEmployeePanel')" />
-						</p:column>
-					</p:dataTable>
-				</h:panelGrid>
-				<p:panel header="Delete this Employee"
-					class="dynamicPanel deletableEmployeePanel">
-					<h:form id="selectedDeletableEmployee">
-						<p:panelGrid cellpadding="5" >
-							<p:row>
-								<p:column>
-									<p:outputLabel value="Are you sure, you want to remove " />
-									<p:outputLabel value="#{employeeBean.fireCode}?"
-										style="color:red" />
-								</p:column>
-							</p:row>
-							<p:row>
-								<p:column>
-									<p:commandButton value="Fire"
-										action="#{employeeBean.fireEmployee()}"
-										update="@widgetVar(associatesList) :selectedDeletableEmployee  @widgetVar(editTable) @widgetVar(employeesTable) @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)"
-										onclick="showOnlyDivByClass('deleteEmployeePanel', 'deletableEmployeePanel')" />
-								</p:column>
-								<p:column>
-									<p:commandButton value="Cancel" resetValues="true"
-										update=":selectedDeletableEmployee "
-										onclick="showOnlyDivByClass('deleteEmployeePanel', 'deletableEmployeePanel')" />
-								</p:column>
-							</p:row>
-						</p:panelGrid>
-					</h:form>
-				</p:panel>
+							<p:column filterBy="#{employee.union.unionName}"
+								filterStyle="display:none" headerText="Union">
+								<h:outputText value="#{employee.union.unionName}" />
+							</p:column>
+							<p:column>
+
+
+								<p:commandButton icon="fa fa-trash"
+									action="#{employeeBean.fireEmployee(employee.code)}"
+									update=":selectedDeletableEmployee">
+									<p:confirm header="Confirmation"
+										message="Do you really want to delete #{employee.code}?"
+										icon="ui-icon-alert" />
+								</p:commandButton>
+								<p:confirmDialog global="true" showEffect="fade"
+									hideEffect="fade">
+									<p:commandButton value="Yes" type="button"
+										styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+									<p:commandButton value="No" type="button"
+										styleClass="ui-confirmdialog-no" icon="fa fa-close" />
+								</p:confirmDialog>
+							</p:column>
+						</p:dataTable>
+					</h:panelGrid>
+				</h:form>
 
 			</p:panel>
 			<p:panel header="Unions Management"
@@ -948,7 +935,6 @@
 	<!-- All the widgetVar table names to be updated -->
 	<!--@widgetVar(editTable) @widgetVar(employeesTable) @widgetVar(unionEditTable) @widgetVar(unionDeleteTable) -->
 	<!-- All form id to update from Unions -->
-	<!-- :persInfo :partHireAdditionalInfo :fullHireAdditionalInfo :selectedEmployee :selectedDeletableEmployee -->
+	<!---@widgetVar(editTable) @widgetVar(employeesTable) @widgetVar(unionEditTable) @widgetVar(unionDeleteTable) :persInfo :partHireAdditionalInfo :fullHireAdditionalInfo :selectedEmployee :selectedDeletableEmployee -->
 </h:body>
 </html>
-

@@ -24,20 +24,24 @@ import it.unipv.payroll.model.Transactions;
 public class TransactionsBean implements Serializable {
 
 	@Inject TransactionsController tController;
+	@Inject	EmployeeController emController;
 
 	private Transactions transaction;
 	private int id;
 //	private double saleAmount;
 	private int hoursAmount;
 	private List<Employee> employeeList;
-
+	private Employee loggedEmployee;
+	
 	@PostConstruct
 	public void init(){
 		transaction = new Transactions();
 		employeeList=new ArrayList<Employee>();
 	}
 
-	
+	public void setLoggedEmployee(Employee loggedEmployee) {
+		this.loggedEmployee = loggedEmployee;
+	}
 	public List<Employee> getEmployeeList() {
 		return employeeList;
 	}
@@ -48,17 +52,20 @@ public class TransactionsBean implements Serializable {
 	}
 
 
-	public String addSaleRecipt(FullTimeEmployee employee) {
-		
-		transaction.setEmployee(employee);
-		
-		if (employee.getRole().equals("Monthly")) {
-			
-			transaction.setAmount((float)(transaction.getAmount()*employee.getCommissionRate()/100));
-			transaction.setInfo("Sale ID="+id);
+	public void addSaleRecipt() {
+		try {
+			loggedEmployee=emController.find(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+		} catch (NullPointerException e) {
+			System.out.println("Null context detected. Maybe this bean as been run for testing");
 		}
-		else {
-			System.out.println("Impossible to add a sale recipt. You are not a monthly!");
+		transaction.setEmployee(loggedEmployee);
+		
+		if (loggedEmployee.getRole().equals("Monthly")) {
+			
+			transaction.setAmount((float)(transaction.getAmount()*((FullTimeEmployee)loggedEmployee).getCommissionRate()/100));
+			transaction.setInfo("Sale ID="+id);
+		}else {
+			System.out.println("Impossible to add a sale recipt. You are not a Full time employee!");
 		}
 		String answer = tController.add(transaction);
 		try {
@@ -73,22 +80,25 @@ public class TransactionsBean implements Serializable {
 		} catch (NullPointerException e) {
 			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
 		}
-		return answer;
 	}
 	
-	public String addHours(PartTimeEmployee employee){
-		
-		transaction.setEmployee(employee);
+	public void addHours(){
+		try {
+			loggedEmployee=emController.find(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+		} catch (NullPointerException e) {
+			System.out.println("Null context detected. Maybe this bean as been run for testing");
+		}
+		transaction.setEmployee(loggedEmployee);
 		
 		Date today = new Date();
 		transaction.setDate(today);
 
-		if (employee.getRole().equals("Weekly")) {
-			
+		if (loggedEmployee.getRole().equals("Weekly")) {
+			float rate=((PartTimeEmployee)loggedEmployee).getHourlyRate();
 			if (hoursAmount>8) {
-				transaction.setAmount((float)( 8*employee.getHourlyRate() + 1.5*(hoursAmount-8)*employee.getHourlyRate()));
+				transaction.setAmount((float)( 8*rate + 1.5*(hoursAmount-8)*rate));
 			} else {
-				transaction.setAmount((float)(hoursAmount*employee.getHourlyRate()));
+				transaction.setAmount((float)(hoursAmount*rate));
 			}
 			transaction.setInfo("Worked hours");
 		}
@@ -109,7 +119,6 @@ public class TransactionsBean implements Serializable {
 		} catch (NullPointerException e) {
 			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
 		}
-		return answer;
 	}
 
 	public Transactions getTransaction() {
@@ -119,9 +128,9 @@ public class TransactionsBean implements Serializable {
 		this.transaction = transaction;
 	}
 	
-	public int getId() {
-		return id;
-	}
+//	public int getId() {
+//		return id;
+//	}
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -134,9 +143,9 @@ public class TransactionsBean implements Serializable {
 //		this.saleAmount = saleAmount;
 //	}
 
-	public int getHoursAmount() {
-		return hoursAmount;
-	}
+//	public int getHoursAmount() {
+//		return hoursAmount;
+//	}
 
 	public void setHoursAmount(int hoursAmount) {
 		this.hoursAmount = hoursAmount;
@@ -145,13 +154,12 @@ public class TransactionsBean implements Serializable {
 	public List<Transactions> getAllTransactions() {
 		return tController.findAll();
 	}
-	@Inject EmployeeController emC;
 	public void addServiceCharge(){
 		String answer="";
 		transaction.setDate(new Date());
 		for (Employee employee : employeeList) {
 			transaction.setAmount(-transaction.getAmount());
-			transaction.setEmployee(emC.find(employee.getCode()));
+			transaction.setEmployee(emController.find(employee.getCode()));
 			answer=tController.add(transaction);
 		}
 		try {

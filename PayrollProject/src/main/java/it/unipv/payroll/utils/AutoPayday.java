@@ -15,10 +15,13 @@ import it.unipv.payroll.controller.TransactionsController;
 import it.unipv.payroll.model.Employee;
 import it.unipv.payroll.model.FullTimeEmployee;
 import it.unipv.payroll.model.Transactions;
+import it.unipv.payroll.view.TransactionsBean;
 
 @Stateless
 public class AutoPayday {
 
+	@Inject
+	TransactionsBean tBean;
 	@Inject
 	TransactionsController tController;
 	@Inject
@@ -29,7 +32,18 @@ public class AutoPayday {
 
 	@Schedule(dayOfWeek = "Fri")
 	// @Schedule(hour = "18", minute = "20", second = "30")
-	public void weeklyPay() {
+	public HashMap<String, Float> weeklyPay() {
+		List<Employee> employeeList= emController.findAll();
+		for (Employee employee : employeeList) {
+			System.out.println(employee.getCode());
+			Transactions trans=new Transactions();
+			tBean.setTransaction(trans);
+			tBean.getTransaction().setAmount(employee.getUnion().getWeeklyRate());
+			tBean.getTransaction().setInfo("Weekly charge for being an associate to the union: "+employee.getUnion().getUnionName());
+			tBean.getEmployeeList().add(employee);
+			tBean.addServiceCharge();
+			tBean.getEmployeeList().clear();
+		}
 		HashMap<String, Float> employeesEarnings = new HashMap<String, Float>();
 		List<Transactions> allTransactions = tController.findAll();
 		for (Transactions ut : allTransactions) {
@@ -54,11 +68,12 @@ public class AutoPayday {
 		if (employeesEarnings.size() == 0) {
 			System.out.println("noone has been paid :(");
 		}
+		return employeesEarnings;
 	}
 
 	@Schedule(dayOfMonth = "Last")
 	// @Schedule(hour = "18", minute = "20", second = "25")
-	public void monthlyPay() {
+	public HashMap<String, Float> monthlyPay() {
 		List<Employee> emList = emController.findAll();
 		HashMap<String, Float> employeesEarnings = new HashMap<String, Float>();
 		for (Employee employee : emList) {
@@ -83,6 +98,7 @@ public class AutoPayday {
 		for (String key : keys) {
 			System.out.println(key + " has been payed " + employeesEarnings.get(key));
 		}
+		return employeesEarnings;
 	}
 
 	// private void cancelTimers() {

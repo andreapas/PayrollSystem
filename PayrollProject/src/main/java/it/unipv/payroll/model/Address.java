@@ -62,12 +62,6 @@ public class Address implements Serializable {
 	public void setDistrictCode(String districtCode) {
 		this.districtCode = districtCode;
 	}
-	public Employee getEmployee() {
-		return employee;
-	}
-	public void setEmployee(Employee employee) {
-		this.employee = employee;
-	}
 	
 	@Override
 	public String toString() {
