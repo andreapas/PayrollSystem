@@ -40,8 +40,8 @@ public class EmployeeBean implements Serializable {
 	@Inject
 	TransactionsController transController;
 
-	private PartTimeEmployee partTimeEmployee;
-	private FullTimeEmployee fullTimeEmployee;
+	private Employee partTimeEmployee;
+	private Employee fullTimeEmployee;
 	private Employee loggedUser;
 	private List<Employee> employeeList;
 	// private String fireCode;
@@ -89,19 +89,19 @@ public class EmployeeBean implements Serializable {
 		return loggedUser;
 	}
 
-	public PartTimeEmployee getPartTimeEmployee() {
+	public Employee getPartTimeEmployee() {
 		return partTimeEmployee;
 	}
 
-	public void setPartTimeEmployee(PartTimeEmployee partTimeEmployee) {
+	public void setPartTimeEmployee(Employee partTimeEmployee) {
 		this.partTimeEmployee = partTimeEmployee;
 	}
 
-	public FullTimeEmployee getFullTimeEmployee() {
+	public Employee getFullTimeEmployee() {
 		return fullTimeEmployee;
 	}
 
-	public void setFullTimeEmployee(FullTimeEmployee fullTimeEmployee) {
+	public void setFullTimeEmployee(Employee fullTimeEmployee) {
 		this.fullTimeEmployee = fullTimeEmployee;
 	}
 
@@ -173,12 +173,12 @@ public class EmployeeBean implements Serializable {
 		String answer;
 		if (!employee.getRole().equals("Manager")) {
 			sessionManag.removeLogin(employee.getCode());
-			List<Transactions> tList = transController.findAll();
-			for (Transactions transactions : tList) {
-				if (transactions.getEmployee().getCode().equals(employee.getCode())) {
-					transController.remove(transactions.getId());
-				}
-			}
+//			List<Transactions> tList = transController.findAll();
+//			for (Transactions transactions : tList) {
+//				if (transactions.getEmployee().getCode().equals(employee.getCode())) {
+//					transController.remove(transactions.getId());
+//				}
+//			}
 			answer = emController.remove(employee.getCode());
 			addrController.remove(employee.getCode());
 
@@ -213,7 +213,7 @@ public class EmployeeBean implements Serializable {
 					"Something has gone wrong while trying to update your informations. The complete message is "
 							+ answer);
 		}
-		System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
+		employeeList=emController.findAll();
 	}
 
 	public Employee findEmployeeByCode(String code) {

@@ -1,5 +1,6 @@
 package it.unipv.payroll.utils;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -15,13 +16,10 @@ import it.unipv.payroll.controller.TransactionsController;
 import it.unipv.payroll.model.Employee;
 import it.unipv.payroll.model.FullTimeEmployee;
 import it.unipv.payroll.model.Transactions;
-import it.unipv.payroll.view.TransactionsBean;
 
 @Stateless
 public class AutoPayday {
 
-	@Inject
-	TransactionsBean tBean;
 	@Inject
 	TransactionsController tController;
 	@Inject
@@ -30,19 +28,18 @@ public class AutoPayday {
 	@Resource
 	TimerService timerService;
 
-	@Schedule(dayOfWeek = "Fri")
-	// @Schedule(hour = "18", minute = "20", second = "30")
+	@Schedule(dayOfWeek = "Fri", hour="8", minute="30")
+//	@Schedule(hour = "16", minute = "33", second = "30")
 	public HashMap<String, Float> weeklyPay() {
 		List<Employee> employeeList= emController.findAll();
 		for (Employee employee : employeeList) {
 			System.out.println(employee.getCode());
 			Transactions trans=new Transactions();
-			tBean.setTransaction(trans);
-			tBean.getTransaction().setAmount(employee.getUnion().getWeeklyRate());
-			tBean.getTransaction().setInfo("Weekly charge for being an associate to the union: "+employee.getUnion().getUnionName());
-			tBean.getEmployeeList().add(employee);
-			tBean.addServiceCharge();
-			tBean.getEmployeeList().clear();
+			trans.setAmount(-employee.getUnion().getWeeklyRate());
+			trans.setDate(new Date());
+			trans.setEmployee(employee);
+			trans.setInfo("Weekly charge for being an associate to the union: "+employee.getUnion().getUnionName());
+			tController.add(trans);
 		}
 		HashMap<String, Float> employeesEarnings = new HashMap<String, Float>();
 		List<Transactions> allTransactions = tController.findAll();
@@ -65,19 +62,16 @@ public class AutoPayday {
 		for (String key : keys) {
 			System.out.println(key + " has been payed " + employeesEarnings.get(key));
 		}
-		if (employeesEarnings.size() == 0) {
-			System.out.println("noone has been paid :(");
-		}
 		return employeesEarnings;
 	}
 
-	@Schedule(dayOfMonth = "Last")
-	// @Schedule(hour = "18", minute = "20", second = "25")
+	@Schedule(dayOfMonth = "Last", hour="8", minute="30")
+//	@Schedule(hour = "16", minute = "33", second = "35")
 	public HashMap<String, Float> monthlyPay() {
 		List<Employee> emList = emController.findAll();
 		HashMap<String, Float> employeesEarnings = new HashMap<String, Float>();
 		for (Employee employee : emList) {
-			if (employee.getRole().equals("Monthly")) {
+			if (!employee.getRole().equals("Weekly")) {
 				FullTimeEmployee full = (FullTimeEmployee) employee;
 				employeesEarnings.put(full.getCode(), full.getSalary());
 			}

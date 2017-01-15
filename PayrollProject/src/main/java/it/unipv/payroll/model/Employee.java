@@ -3,6 +3,7 @@ package it.unipv.payroll.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -34,7 +35,7 @@ public abstract class Employee implements Serializable{
 	@JoinColumn(name="union_name")
 	private Union union;
 	
-	@OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "employee", fetch = FetchType.EAGER, cascade={CascadeType.ALL})
 	private List<Transactions> transactions;	
 
     @MapsId 

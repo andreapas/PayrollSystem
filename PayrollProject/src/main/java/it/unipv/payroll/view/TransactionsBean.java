@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -20,7 +21,7 @@ import it.unipv.payroll.model.PartTimeEmployee;
 import it.unipv.payroll.model.Transactions;
 
 @Named
-@SessionScoped
+@RequestScoped
 public class TransactionsBean implements Serializable {
 
 	@Inject TransactionsController tController;
@@ -29,28 +30,21 @@ public class TransactionsBean implements Serializable {
 	private Transactions transaction;
 	private int id;
 //	private double saleAmount;
+	private List<Transactions> transactionList;
 	private int hoursAmount;
-	private List<Employee> employeeList;
 	private Employee loggedEmployee;
 	
 	@PostConstruct
 	public void init(){
 		transaction = new Transactions();
-		employeeList=new ArrayList<Employee>();
+		transactionList= new ArrayList<Transactions>();
 	}
 
 	public void setLoggedEmployee(Employee loggedEmployee) {
 		this.loggedEmployee = loggedEmployee;
 	}
-	public List<Employee> getEmployeeList() {
-		return employeeList;
-	}
 
-
-	public void setEmployeeList(List<Employee> employeeList) {
-		this.employeeList = employeeList;
-	}
-
+	
 
 	public void addSaleRecipt() {
 		try {
@@ -80,6 +74,8 @@ public class TransactionsBean implements Serializable {
 		} catch (NullPointerException e) {
 			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
 		}
+		transactionList=tController.findAll();
+
 	}
 	
 	public void addHours(){
@@ -119,6 +115,7 @@ public class TransactionsBean implements Serializable {
 		} catch (NullPointerException e) {
 			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
 		}
+		transactionList=tController.findAll();
 	}
 
 	public Transactions getTransaction() {
@@ -128,9 +125,9 @@ public class TransactionsBean implements Serializable {
 		this.transaction = transaction;
 	}
 	
-//	public int getId() {
-//		return id;
-//	}
+	public int getId() {
+		return id;
+	}
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -143,25 +140,23 @@ public class TransactionsBean implements Serializable {
 //		this.saleAmount = saleAmount;
 //	}
 
-//	public int getHoursAmount() {
-//		return hoursAmount;
-//	}
+	public int getHoursAmount() {
+		return hoursAmount;
+	}
 
 	public void setHoursAmount(int hoursAmount) {
 		this.hoursAmount = hoursAmount;
 	}
 	
 	public List<Transactions> getAllTransactions() {
-		return tController.findAll();
+		return transactionList;
 	}
-	public void addServiceCharge(){
+	public void addServiceCharge(String employeeCode){
 		String answer="";
 		transaction.setDate(new Date());
-		for (Employee employee : employeeList) {
-			transaction.setAmount(-transaction.getAmount());
-			transaction.setEmployee(emController.find(employee.getCode()));
-			answer=tController.add(transaction);
-		}
+		transaction.setAmount(-transaction.getAmount());
+		transaction.setEmployee(emController.find(employeeCode));
+		answer=tController.add(transaction);
 		try {
 			FacesContext context = FacesContext.getCurrentInstance();
 			if (answer.equals("Operation completed successfully.")) {
@@ -174,6 +169,7 @@ public class TransactionsBean implements Serializable {
 		} catch (NullPointerException e) {
 			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
 		}
+		transactionList=tController.findAll();
 	}
 //	public HashMap<String, Double> startPaydayForEmployeeType(String role) {
 //		HashMap<String, Double> employeesEarnings = tController.startPaydayForEmployeeType(role);

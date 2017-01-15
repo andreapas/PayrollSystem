@@ -49,22 +49,6 @@ public class SessionManagementController extends GenericController<Credentials> 
 		}
 		return false;
 	}
-//	public String addLogin(Login login){
-//		
-//		loginDAO.add(login);
-//		return SUCCESS;
-//	}
-//
-//	public String removeLogin(Login login) {
-//		loginDAO.remove(login.getUsername());
-//		return SUCCESS;
-//	}
-//
-//	public String updateLogin(Login login) {
-//		loginDAO.update(login);
-//		return SUCCESS;
-//	}
-//
 
 	
 }

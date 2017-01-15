@@ -173,8 +173,7 @@ public class SystemTest extends ArquillianTest {
 		transaction.setInfo("Sale ID=12345 test");
 		transaction.setAmount((float)55.55);
 		tBean.setTransaction(transaction);
-		tBean.addServiceCharge();
-//		emBean.setFireCode(anEmployee.getCode());
+		tBean.addServiceCharge(anEmployee.getCode());
 		emBean.fireEmployee(anEmployee.getCode());
 
 		List<Employee> employees = emDAO.findAll();
@@ -318,6 +317,7 @@ public class SystemTest extends ArquillianTest {
 		tBean.setLoggedEmployee(anEmployee);
 		tBean.addHours();
 
+		aTransaction = new Transactions();
 		tBean.setHoursAmount(7);
 		tBean.setTransaction(aTransaction);
 		tBean.setLoggedEmployee(anEmployee);
@@ -345,18 +345,22 @@ public class SystemTest extends ArquillianTest {
 		}
 		Assert.assertEquals(3, trans1+trans2);
 		
-		List<Employee> employeesToAddCharge=new ArrayList<Employee>();
-		employeesToAddCharge.add(anEmployee);
-		employeesToAddCharge.add(anotherEmployee);
-		tBean.setEmployeeList(employeesToAddCharge);
 		
 		Transactions charge= new Transactions();
 		charge.setAmount(100);
 		charge.setDate(new Date());
 		charge.setInfo("test charge");
-		
 		tBean.setTransaction(charge);
-		tBean.addServiceCharge();
+		tBean.addServiceCharge(anEmployee.getCode());
+		
+		charge= new Transactions();
+		charge.setAmount(100);
+		charge.setDate(new Date());
+		charge.setInfo("test charge");
+		tBean.setTransaction(charge);
+		tBean.addServiceCharge(anotherEmployee.getCode());
+		
+		
 		allTransactions = tBean.getAllTransactions();
 		int numCharges=0;
 		int employees=0;
@@ -442,15 +446,19 @@ public class SystemTest extends ArquillianTest {
 		tBean.setTransaction(aTransaction);
 		tBean.setLoggedEmployee(anEmployee);
 		tBean.addHours();
+		aTransaction = new Transactions();
 		tBean.setTransaction(aTransaction);
 		tBean.setLoggedEmployee(anEmployee);
 		tBean.addHours();
+		aTransaction = new Transactions();
 		tBean.setTransaction(aTransaction);
 		tBean.setLoggedEmployee(anEmployee);
 		tBean.addHours();
+		aTransaction = new Transactions();
 		tBean.setTransaction(aTransaction);
 		tBean.setLoggedEmployee(anEmployee);
 		tBean.addHours();
+		aTransaction = new Transactions();
 		tBean.setTransaction(aTransaction);
 		tBean.setLoggedEmployee(anEmployee);
 		tBean.addHours();
@@ -466,8 +474,6 @@ public class SystemTest extends ArquillianTest {
 		HashMap<String, Float>weeklyEarns=payer.weeklyPay();
 		HashMap<String, Float>monthlyEarns=payer.monthlyPay();
 		
-		Assert.assertEquals(235,weeklyEarns.get(anEmployee.getCode()), 0.001);
-		Assert.assertEquals(1588, monthlyEarns.get(anotherEmployee.getCode()), 0.001);
 		
 		emBean.fireEmployee(anEmployee.getCode());
 		emBean.fireEmployee(anotherEmployee.getCode());
@@ -475,7 +481,10 @@ public class SystemTest extends ArquillianTest {
 		unBean.removeUnion();
 		unBean.setFireUnionName(union1.getUnionName());
 		unBean.removeUnion();
-		
+	
+		Assert.assertEquals(235,weeklyEarns.get(anEmployee.getCode()), 0.001);
+		Assert.assertEquals(1588, monthlyEarns.get(anotherEmployee.getCode()), 0.001);
+
 	}
 	
 	@Inject
