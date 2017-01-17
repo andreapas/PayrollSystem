@@ -2,7 +2,6 @@ package it.unipv.payroll.tests;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,12 +17,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import it.unipv.payroll.controller.EmployeeController;
+import it.unipv.payroll.controller.FullTimeController;
+import it.unipv.payroll.controller.PartTimeController;
 import it.unipv.payroll.controller.UnionsController;
-import it.unipv.payroll.dao.AddressDAO;
 import it.unipv.payroll.dao.EmployeeDAO;
 import it.unipv.payroll.dao.SessionManagementDAO;
 import it.unipv.payroll.dao.TransactionsDAO;
-import it.unipv.payroll.model.Address;
 import it.unipv.payroll.model.Credentials;
 import it.unipv.payroll.model.Employee;
 import it.unipv.payroll.model.FullTimeEmployee;
@@ -33,6 +32,8 @@ import it.unipv.payroll.model.Union;
 import it.unipv.payroll.utils.AutoPayday;
 import it.unipv.payroll.utils.UnionConverter;
 import it.unipv.payroll.view.EmployeeBean;
+import it.unipv.payroll.view.FullTimeBean;
+import it.unipv.payroll.view.PartTimeBean;
 import it.unipv.payroll.view.SessionManagementBean;
 import it.unipv.payroll.view.TransactionsBean;
 import it.unipv.payroll.view.UnionsBean;
@@ -49,17 +50,18 @@ public class SystemTest extends ArquillianTest {
 	private static Union USER1_UNION;
 	private static Union USER1_UNION_EDITED;
 	private static String PAYMENT_METHOD1 = "Bank account";
-	private static String PAYMENT_METHOD2 = "By hand";
+	private static String PAYMENT_METHOD2 = "Paymaster";
 	private static PartTimeEmployee anEmployee;
 	private static FullTimeEmployee anotherEmployee;
-	private static Address ADDRESS1;
-	private static Address ADDRESS2;
 	
 	@Inject	EmployeeBean emBean;
 	@Inject	EmployeeController emController;
 	@Inject	EmployeeDAO emDAO;
 	
-	@Inject AddressDAO addrDAO;
+	@Inject	PartTimeBean ptBean;
+	@Inject FullTimeBean ftBean;
+	@Inject	PartTimeController ptController;
+	@Inject FullTimeController ftController;
 	
 	@Inject	UnionsBean unBean;
 	@Inject	UnionsController unController;	
@@ -75,22 +77,6 @@ public class SystemTest extends ArquillianTest {
 	
 	@Before
 	public void setUp(){
-		
-		ADDRESS1=new Address();
-		ADDRESS1.setCap(12345);
-		ADDRESS1.setCode(USER1_COD);
-		ADDRESS1.setDistrictCode("PV");
-		ADDRESS1.setMunicipality("Pavia");
-		ADDRESS1.setNumber(0);
-		ADDRESS1.setStreet("via dei matti");
-		
-		ADDRESS2=new Address();
-		ADDRESS2.setCap(12345);
-		ADDRESS2.setCode(USER2_COD);
-		ADDRESS2.setDistrictCode("RM");
-		ADDRESS2.setMunicipality("Roma");
-		ADDRESS2.setNumber(9);
-		ADDRESS2.setStreet("sani dei via");
 		
 		USER1_UNION= new Union();
 		USER1_UNION.setUnionName("union 1");
@@ -110,7 +96,7 @@ public class SystemTest extends ArquillianTest {
 		anEmployee.setEmail(USER1_EMAIL);
 		anEmployee.setUnion(USER1_UNION);
 		anEmployee.setPayment_method(PAYMENT_METHOD1);
-		anEmployee.setAddress(ADDRESS1);
+		anEmployee.setAddress("via Strada Nuova 33, Pavia PV");
 		anEmployee.setHourlyRate((float)6.25);
 		
 		anotherEmployee= new FullTimeEmployee();
@@ -120,7 +106,7 @@ public class SystemTest extends ArquillianTest {
 		anotherEmployee.setEmail(USER1_EMAIL);
 		anotherEmployee.setUnion(USER1_UNION);
 		anotherEmployee.setPayment_method(PAYMENT_METHOD1);
-		anotherEmployee.setAddress(ADDRESS2);
+		anotherEmployee.setAddress("via Strada Nuova 34, Pavia PV");
 		anotherEmployee.setCommissionRate(50);
 		anotherEmployee.setSalary(1200);
 	}
@@ -142,31 +128,47 @@ public class SystemTest extends ArquillianTest {
 		
 	}
 	@Test
-	public void testHireUser() {
+	public void testHirePartTimeEmployee() {
 		
-		emBean.setPartTimeEmployee(anEmployee);
-		emBean.hirePartTimeEmployee();
-		emBean.setRadioVal(emBean.getOptionsList().get(0));
+		ptBean.setPartTimeEmployee(anEmployee);
+		ptBean.hireEmployee();
 
-		List<Employee> employees = emDAO.findAll();
+		List<PartTimeEmployee> partEmployees = ptBean.getPartTimersList();
 		boolean isPresent = false;
-		for (Employee em : employees) {
+		for (Employee em : partEmployees) {
 			if (em.getCode().equals(USER1_COD)) {
 				isPresent = true;
 				break;
 			}
 			
 		}
-		Assert.assertTrue("Employee hired successfully!", isPresent);
-		Assert.assertEquals(emBean.getOptionsList().get(0), emBean.getRadioVal());
+		Assert.assertTrue("Part Time Employee hired successfully!", isPresent);
+		
+	}
+	@Test
+	public void testHireFullTimeEmployee() {
+		
+		ftBean.setFullTimeEmployee(anotherEmployee);
+		ftBean.hireEmployee();
+
+		List<FullTimeEmployee> fullEmployees = ftBean.getFullTimersList();
+		boolean isPresent = false;
+		for (Employee em : fullEmployees) {
+			if (em.getCode().equals(USER2_COD)) {
+				isPresent = true;
+				break;
+			}
+			
+		}
+		Assert.assertTrue("Full Time Employee hired successfully!", isPresent);
 		
 	}
 
 	@Test
 	public void testFireUser() {
 
-		emBean.setPartTimeEmployee(anEmployee);
-		emBean.hirePartTimeEmployee();
+		ptBean.setPartTimeEmployee(anEmployee);
+		ptBean.hireEmployee();
 		tBean.setLoggedEmployee(anEmployee);
 		Transactions transaction= new Transactions();
 		transaction.setDate(new Date());
@@ -186,50 +188,167 @@ public class SystemTest extends ArquillianTest {
 		}
 
 		Assert.assertTrue("Employee fired successfully!", !isPresent);
-		Assert.assertTrue("Address of the employee removed!", addrDAO.find(anEmployee.getCode())==null);
 		Assert.assertTrue("Transactions of the employee removed!", tDAO.find(transaction.getId())==null);
 		
 	}
 
 	@Test
-	public void editUser() {
+	public void editPartTimeEmployee() {
 		anEmployee.setUnion(USER1_UNION);
 		
-		emBean.setPartTimeEmployee(anEmployee);
-		emBean.hirePartTimeEmployee();
+		ptBean.setPartTimeEmployee(anEmployee);
+		ptBean.hireEmployee();
 		
-
-//		emBean.setLoggedUser(emBean.findEmployeeByCode(anEmployee.getCode()));;
 		anEmployee.setEmail(USER1_EMAIL_EDITED);
 		anEmployee.setUnion(USER1_UNION_EDITED);
-		anEmployee.setPayment_method(PAYMENT_METHOD2);
-		emBean.setGenericEmployee(anEmployee);
-		emBean.updateInfo();
+		anEmployee.setPayment_method(emBean.getOptionsList().get(1));
+		ptBean.setPartTimeEmployee(anEmployee);
+		ptBean.updateEmployee();
+		Assert.assertEquals(emBean.getOptionsList().get(1), ptController.find(anEmployee.getCode()).getPayment_method());
+		Assert.assertEquals(anEmployee.getAddress(), ptController.find(anEmployee.getCode()).getPayment_method_details());
+		anEmployee.setPayment_method(emBean.getOptionsList().get(0));
+		ptBean.setPartTimeEmployee(anEmployee);
+		ptBean.updateEmployee();
+		Assert.assertEquals(emBean.getOptionsList().get(0), ptController.find(anEmployee.getCode()).getPayment_method());
+		Assert.assertEquals("", ptController.find(anEmployee.getCode()).getPayment_method_details());
 
 		
-		Assert.assertEquals(PAYMENT_METHOD2, emBean.findEmployeeByCode(anEmployee.getCode()).getPayment_method());
-		Assert.assertEquals(USER1_EMAIL_EDITED, emBean.findEmployeeByCode(anEmployee.getCode()).getEmail());
-		Assert.assertEquals(USER1_UNION_EDITED.getUnionName(), emBean.findEmployeeByCode(anEmployee.getCode()).getUnion().getUnionName());
-		Assert.assertEquals(anEmployee.getCode(), emBean.getGenericEmployee().getCode());
+		Assert.assertEquals(USER1_EMAIL_EDITED, ptController.find(anEmployee.getCode()).getEmail());
+		Assert.assertEquals(USER1_UNION_EDITED.getUnionName(), ptController.find(anEmployee.getCode()).getUnion().getUnionName());
+		Assert.assertEquals(anEmployee.getCode(), ptBean.getPartTimeEmployee().getCode());
+	}
+	
+	@Test
+	public void editFullTimeEmployee() {
+		anotherEmployee.setUnion(USER1_UNION);
+		
+		ftBean.setFullTimeEmployee(anotherEmployee);
+		ftBean.hireEmployee();
+		
+		anotherEmployee.setEmail(USER1_EMAIL_EDITED);
+		anotherEmployee.setUnion(USER1_UNION_EDITED);
+		anotherEmployee.setPayment_method(emBean.getOptionsList().get(1));
+		ftBean.setFullTimeEmployee(anotherEmployee);
+		ftBean.updateEmployee();
+		Assert.assertEquals(emBean.getOptionsList().get(1), ftController.find(anotherEmployee.getCode()).getPayment_method());
+		Assert.assertEquals(anotherEmployee.getAddress(), ftController.find(anotherEmployee.getCode()).getPayment_method_details());
+		anotherEmployee.setPayment_method(emBean.getOptionsList().get(0));
+		ftBean.setFullTimeEmployee(anotherEmployee);
+		ftBean.updateEmployee();
+		Assert.assertEquals(emBean.getOptionsList().get(0), ftController.find(anotherEmployee.getCode()).getPayment_method());
+		Assert.assertEquals("", ftController.find(anotherEmployee.getCode()).getPayment_method_details());
+
+		
+		Assert.assertEquals(USER1_EMAIL_EDITED, ftController.find(anotherEmployee.getCode()).getEmail());
+		Assert.assertEquals(USER1_UNION_EDITED.getUnionName(), ftController.find(anotherEmployee.getCode()).getUnion().getUnionName());
+		Assert.assertEquals(anotherEmployee.getCode(), ftBean.getFullTimeEmployee().getCode());
+	}
+	@Test
+	public void editPartTimeLoggedUser() {
+		anEmployee.setUnion(USER1_UNION);
+		
+		ptBean.setPartTimeEmployee(anEmployee);
+		ptBean.hireEmployee();
+		
+		ptBean.setLoggedUser(anEmployee);
+		Assert.assertEquals(ptBean.getLoggedUser().getCode(), anEmployee.getCode());
+		
+		anEmployee.setEmail(USER1_EMAIL_EDITED);
+		anEmployee.setUnion(USER1_UNION_EDITED);
+		anEmployee.setPayment_method(emBean.getOptionsList().get(1));
+		ptBean.setLoggedUser(anEmployee);
+		ptBean.updateLoggedUser();
+		Assert.assertEquals(emBean.getOptionsList().get(1), ptController.find(anEmployee.getCode()).getPayment_method());
+		Assert.assertEquals(anEmployee.getAddress(), ptController.find(anEmployee.getCode()).getPayment_method_details());
+		anEmployee.setPayment_method(emBean.getOptionsList().get(0));
+		ptBean.setLoggedUser(anEmployee);
+		ptBean.updateLoggedUser();
+		Assert.assertEquals(emBean.getOptionsList().get(0), ptController.find(anEmployee.getCode()).getPayment_method());
+		Assert.assertEquals("", ptController.find(anEmployee.getCode()).getPayment_method_details());
+
+		
+		Assert.assertEquals(USER1_EMAIL_EDITED, ptController.find(anEmployee.getCode()).getEmail());
+		Assert.assertEquals(USER1_UNION_EDITED.getUnionName(), ptController.find(anEmployee.getCode()).getUnion().getUnionName());
+		Assert.assertEquals(anEmployee.getCode(), ptBean.getPartTimeEmployee().getCode());
+	}
+	
+	@Test
+	public void editFullTimeLoggedUser() {
+		anotherEmployee.setUnion(USER1_UNION);
+		
+		ftBean.setFullTimeEmployee(anotherEmployee);
+		ftBean.hireEmployee();
+		
+		ftBean.setLoggedUser(anotherEmployee);
+		Assert.assertEquals(ftBean.getLoggedUser().getCode(), anotherEmployee.getCode());
+
+		
+		anotherEmployee.setEmail(USER1_EMAIL_EDITED);
+		anotherEmployee.setUnion(USER1_UNION_EDITED);
+		anotherEmployee.setPayment_method(emBean.getOptionsList().get(1));
+		ftBean.setLoggedUser(anotherEmployee);
+		ftBean.updateLoggedUser();
+		Assert.assertEquals(emBean.getOptionsList().get(1), ftController.find(anotherEmployee.getCode()).getPayment_method());
+		Assert.assertEquals(anotherEmployee.getAddress(), ftController.find(anotherEmployee.getCode()).getPayment_method_details());
+		anotherEmployee.setPayment_method(emBean.getOptionsList().get(0));
+		ftBean.setLoggedUser(anotherEmployee);
+		ftBean.updateLoggedUser();
+		Assert.assertEquals(emBean.getOptionsList().get(0), ftController.find(anotherEmployee.getCode()).getPayment_method());
+		Assert.assertEquals("", ftController.find(anotherEmployee.getCode()).getPayment_method_details());
+
+		
+		Assert.assertEquals(USER1_EMAIL_EDITED, ftController.find(anotherEmployee.getCode()).getEmail());
+		Assert.assertEquals(USER1_UNION_EDITED.getUnionName(), ftController.find(anotherEmployee.getCode()).getUnion().getUnionName());
+		Assert.assertEquals(anotherEmployee.getCode(), ftBean.getFullTimeEmployee().getCode());
 	}
 
 	@Test
+	public void doubleHire() {
+		ftBean.setFullTimeEmployee(anotherEmployee);
+		String answer=ftBean.hireEmployee();
+		Assert.assertTrue("Hired successfully", answer==null);
+		ftBean.setFullTimeEmployee(anotherEmployee);
+		answer=ftBean.hireEmployee();
+		Assert.assertTrue("Duplicated Code detected. Nothing happened", answer!=null);
+		
+		ptBean.setPartTimeEmployee(anEmployee);
+		answer=ptBean.hireEmployee();
+		Assert.assertTrue("Hired successfully", answer==null);
+		ptBean.setPartTimeEmployee(anEmployee);
+		answer=ptBean.hireEmployee();
+		Assert.assertTrue("Duplicated Code detected. Nothing happened", answer!=null);
+		
+		
+	}
+	@Test
+	public void doubleFire() {
+		ptBean.setPartTimeEmployee(anEmployee);
+		ptBean.hireEmployee();
+		String answer=emBean.fireEmployee(USER1_COD);
+		Assert.assertTrue("Fired successfully", answer==null);
+		answer=emBean.fireEmployee(USER1_COD);
+		Assert.assertTrue("Error in firing non existent Employee detected. Nothing happened", answer!=null);
+
+	}
+	
+	
+	@Test
 	public void autoMapUnion() {
-		emBean.setPartTimeEmployee(anEmployee);
-		emBean.hirePartTimeEmployee();
+		ptBean.setPartTimeEmployee(anEmployee);
+		ptBean.hireEmployee();
 
 		boolean mapWorking=false;
-		if(emBean.findEmployeeByCode(anEmployee.getCode()).getUnion().getUnionName().equals(USER1_UNION.getUnionName())){
+		if(ptController.find(anEmployee.getCode()).getUnion().getUnionName().equals(USER1_UNION.getUnionName())){
 			mapWorking=true;
 		}
 		
 		
 		
-		emBean.setFullTimeEmployee(anotherEmployee);
-		emBean.hireFullTimeEmployee();
+		ftBean.setFullTimeEmployee(anotherEmployee);
+		ftBean.hireEmployee();
 		
 		boolean inverseMapWorking=false;
-		List<Employee> associates= unController.findUnion(USER1_UNION.getUnionName()).getAssociates();
+		List<Employee> associates= unController.find(USER1_UNION.getUnionName()).getAssociates();
 		for (Employee employee : associates) {
 			if(employee.getUnion().getUnionName().equals(USER1_COD)||employee.getUnion().getUnionName().equals(USER2_COD)){
 				inverseMapWorking=true;
@@ -275,7 +394,7 @@ public class SystemTest extends ArquillianTest {
 		Assert.assertTrue("2 unions added!", flag == 2);
 		Assert.assertTrue("Override of equals is working", isEqualsWorking);
 		
-		Union tmpUnion=unController.findUnion(union1.getUnionName());
+		Union tmpUnion=unController.find(union1.getUnionName());
 		Assert.assertTrue("findUnion is working properly", tmpUnion.equals(union1));
 		
 		
@@ -284,7 +403,7 @@ public class SystemTest extends ArquillianTest {
 		unBean.setUnion(union1);
 		unBean.updateUnion();
 		
-		Assert.assertTrue("Update successfully completed",unController.findUnion(union1.getUnionName()).equals(union1));
+		Assert.assertTrue("Update successfully completed",unController.find(union1.getUnionName()).equals(union1));
 		
 		unBean.setFireUnionName(union.getUnionName());
 		unBean.removeUnion();
@@ -306,10 +425,10 @@ public class SystemTest extends ArquillianTest {
 	@Test
 	public void testTransactions() {
 		
-		emBean.setPartTimeEmployee(anEmployee);
-		emBean.hirePartTimeEmployee();
-		emBean.setFullTimeEmployee(anotherEmployee);
-		emBean.hireFullTimeEmployee();
+		ptBean.setPartTimeEmployee(anEmployee);
+		ptBean.hireEmployee();
+		ftBean.setFullTimeEmployee(anotherEmployee);
+		ftBean.hireEmployee();
 		
 		Transactions aTransaction = new Transactions();
 		tBean.setHoursAmount(10);
@@ -393,8 +512,8 @@ public class SystemTest extends ArquillianTest {
 	public void testChangePassword() throws NoSuchAlgorithmException{
 		MessageDigest md = MessageDigest.getInstance("SHA-256");
 
-		emBean.setFullTimeEmployee(anotherEmployee);
-		emBean.hireFullTimeEmployee();
+		ftBean.setFullTimeEmployee(anotherEmployee);
+		ftBean.hireEmployee();
 		Credentials newLoginCredentials= new Credentials();
 		newLoginCredentials.setCode(anotherEmployee.getCode());
 		newLoginCredentials.setPassword(Base64.getEncoder().encodeToString(md.digest("basePassword".getBytes())));
@@ -436,10 +555,10 @@ public class SystemTest extends ArquillianTest {
 		
 		anEmployee.setUnion(union);
 		anotherEmployee.setUnion(union1);
-		emBean.setPartTimeEmployee(anEmployee);
-		emBean.hirePartTimeEmployee();
-		emBean.setFullTimeEmployee(anotherEmployee);
-		emBean.hireFullTimeEmployee();
+		ptBean.setPartTimeEmployee(anEmployee);
+		ptBean.hireEmployee();
+		ftBean.setFullTimeEmployee(anotherEmployee);
+		ftBean.hireEmployee();
 
 		Transactions aTransaction = new Transactions();
 		tBean.setHoursAmount(8);

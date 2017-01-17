@@ -38,11 +38,9 @@ public abstract class Employee implements Serializable{
 	@OneToMany(mappedBy = "employee", fetch = FetchType.EAGER, cascade={CascadeType.ALL})
 	private List<Transactions> transactions;	
 
-    @MapsId 
-    @OneToOne(mappedBy = "employee")
-    @JoinColumn(name = "code") 
-	private Address address=new Address();
+	private String address;
 	private String payment_method;
+	private String payment_method_details;
 	
 	private String role;
 	
@@ -90,10 +88,10 @@ public abstract class Employee implements Serializable{
 	public void setRole(String role) {
 		this.role = role;
 	}
-	public Address getAddress() {
+	public String getAddress() {
 		return address;
 	}
-	public void setAddress(Address address) {
+	public void setAddress(String address) {
 		this.address = address;
 	}
 	public List<Transactions> getTransactions() {
@@ -102,7 +100,12 @@ public abstract class Employee implements Serializable{
 	public void setTransactions(List<Transactions> transactions) {
 		this.transactions = transactions;
 	}
-	
+	public String getPayment_method_details() {
+		return payment_method_details;
+	}
+	public void setPayment_method_details(String payment_method_details) {
+		this.payment_method_details = payment_method_details;
+	}
 	
 	
 }

@@ -20,7 +20,7 @@ public class UnionConverter implements Converter{
 	public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if(value != null && value.trim().length() > 0) {
             try {
-            	Union union= controller.findUnion(value);
+            	Union union= controller.find(value);
                 return union;
             } catch(ClassCastException e) {
                 throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Not a valid Union."));

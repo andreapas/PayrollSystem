@@ -10,18 +10,14 @@ import it.unipv.payroll.model.Employee;
 @Stateless
 public class EmployeeController extends GenericController<Employee> {
 
-	public Employee find(String code) {
-		return dao.find(code);
-	}
-
 	public List<Employee> findAll() {
 		List<Employee> list = dao.findAll();
-//		for (Iterator<Employee> iterator = list.iterator(); iterator.hasNext();) {
-//			Employee employee = (Employee) iterator.next();
-//			if (employee.getRole().equals("Manager")) {
-//				iterator.remove();
-//			}
-//		}
+		for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+			Employee employee = (Employee) iterator.next();
+			if(employee.getRole().equals("Manager")){
+				iterator.remove();
+			}
+		}
 		return list;
 	}
 

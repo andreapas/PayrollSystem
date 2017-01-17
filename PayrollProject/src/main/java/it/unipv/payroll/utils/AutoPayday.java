@@ -33,7 +33,6 @@ public class AutoPayday {
 	public HashMap<String, Float> weeklyPay() {
 		List<Employee> employeeList= emController.findAll();
 		for (Employee employee : employeeList) {
-			System.out.println(employee.getCode());
 			Transactions trans=new Transactions();
 			trans.setAmount(-employee.getUnion().getWeeklyRate());
 			trans.setDate(new Date());

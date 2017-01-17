@@ -16,7 +16,7 @@ public abstract class GenericController<T extends Serializable> {
 
 
 	private static String SUCCESS = "Operation completed successfully.";
-	private static String ERROR = "Something went wrong. No changes has been made.";
+	private static String ERROR = "No changes has been made.";
 
 	@Inject GenericDAO<T> dao;
 	Logger logger = Logger.getLogger(UnionsController.class);
@@ -28,7 +28,7 @@ public abstract class GenericController<T extends Serializable> {
 	
 	public String add(T element) {
 		if(isAlreadyInDatabase(element)){
-			return ERROR+" element already present";
+			return "Element already present. "+ERROR;
 		}else{
 			dao.add(element);
 			return SUCCESS;
@@ -36,19 +36,23 @@ public abstract class GenericController<T extends Serializable> {
 	}
 
 	public String remove(Object id) {
-		try {
+		if (find(id)!=null) {
 			dao.remove(id);
-		} catch (Exception e) {
-			return ERROR;
+		}else{
+			return "Element is not present. "+ERROR;
 		}
 		return SUCCESS;
 	}
-
+	
+	public T find(Object id){
+		return dao.find(id);
+	}
+	
 	public String update(T element) {
-		try {
+		if (isAlreadyInDatabase(element)) {
 			dao.update(element);
-		} catch (Exception e) {
-			return ERROR;
+		}else{
+			return "Element is not present. "+ERROR;
 		}
 		return SUCCESS;
 	}
