@@ -30,7 +30,6 @@ public class SessionManagementBean implements Serializable {
 		login= new Credentials();
 		newLoginCredentials= new Credentials();
 		oldLoginCredentials=new Credentials();
-
 	}
 	
 	public String logout() {
@@ -46,17 +45,6 @@ public class SessionManagementBean implements Serializable {
 	public Credentials getOldLoginCredentials() {
 		return oldLoginCredentials;
 	}
-//	public void setLogin(Credentials login) {
-//		this.login = login;
-//	}
-	public void setCode(String username) {
-		login.setCode(username);
-	}
-
-	private void setPassword(String password) {
-		login.setPassword(password);
-		
-	}
 	public Credentials getNewLoginCredentials() {
 		return newLoginCredentials;
 	}
@@ -65,19 +53,10 @@ public class SessionManagementBean implements Serializable {
 		this.newLoginCredentials = newLoginCredentials;
 	}
 	
-	public String generatePassword(){
-		String generated=sessionManagementController.generatePassword();
-		setPassword(generated);
-		return generated;
-	}
 	//TODO: to test
-	public String modifyPassword(){
-		try {
-			oldLoginCredentials.setCode(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
-			newLoginCredentials.setCode(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
-		} catch (NullPointerException e1) {
-			System.out.println("Null face context returned, testing run detected");
-		}
+	public void modifyPassword(){
+		oldLoginCredentials.setCode(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+		newLoginCredentials.setCode(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
 		
 		FacesMessage message;
 		
@@ -90,24 +69,9 @@ public class SessionManagementBean implements Serializable {
 
 		}
 		
-		try{
-			FacesContext context = FacesContext.getCurrentInstance();
-			context.addMessage(null,message);
+		FacesContext context = FacesContext.getCurrentInstance();
+		context.addMessage(null,message);
 			
-			
-		}catch (NullPointerException e) {
-			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
-		}
-
-		return null;
 	}
 	
-	public String addLogin() {
-		return sessionManagementController.add(login);
-	}
-
-	public String removeLogin(String code) {
-		return sessionManagementController.remove(code);
-	}
-
 }

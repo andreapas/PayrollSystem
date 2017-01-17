@@ -25,14 +25,10 @@ public class SessionManagementController extends GenericController<Credentials> 
 		}
 	}
 
-	public String generatePassword() {
-		return pswdManager.generatePassword();
-	}
-    
-	@Override
-	public String add(Credentials element) {
-		element.setPassword(pswdManager.hashIt(element.getPassword()));
-		return super.add(element);
+	public String generateCredentials(Credentials credentials){
+		String password=pswdManager.generatePassword();
+		credentials.setPassword(pswdManager.hashIt(password));
+		return super.add(credentials);
 	}
 	
 	@Override

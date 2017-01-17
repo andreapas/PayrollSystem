@@ -49,14 +49,36 @@ public class Union implements Serializable{
 		return weeklyRate;
 	}
 	@Override
-	public boolean equals(Object obj) {
-		// Basic checks.
-        if (obj == this) return true;
-        if (!(obj instanceof Union)) return false;
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((associates == null) ? 0 : associates.hashCode());
+		result = prime * result + ((unionName == null) ? 0 : unionName.hashCode());
+		result = prime * result + Float.floatToIntBits(weeklyRate);
+		return result;
+	}
 
-        // Property checks.
-        Union other = (Union) obj;
-        return Objects.equals(unionName, other.unionName)
-            && Objects.equals(weeklyRate, other.weeklyRate);
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Union other = (Union) obj;
+		if (associates == null) {
+			if (other.associates != null)
+				return false;
+		} else if (!associates.equals(other.associates))
+			return false;
+		if (unionName == null) {
+			if (other.unionName != null)
+				return false;
+		} else if (!unionName.equals(other.unionName))
+			return false;
+		if (Float.floatToIntBits(weeklyRate) != Float.floatToIntBits(other.weeklyRate))
+			return false;
+		return true;
 	}
 }

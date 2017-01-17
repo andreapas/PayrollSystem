@@ -23,7 +23,6 @@ public abstract class GenericController<T extends Serializable> {
 
 	@PostConstruct
 	public void init() {
-		logger.info("Controller ready to receive new commands!");
 	}
 	
 	public String add(T element) {

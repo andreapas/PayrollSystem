@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import it.unipv.payroll.controller.EmployeeController;
+import it.unipv.payroll.controller.SessionManagementController;
 import it.unipv.payroll.controller.TransactionsController;
 import it.unipv.payroll.model.Employee;
 
@@ -26,7 +27,7 @@ public class EmployeeBean implements Serializable {
 	@Inject
 	EmployeeController emController;
 	@Inject
-	SessionManagementBean sessionManag;
+	SessionManagementController smController;
 	@Inject
 	TransactionsController transController;
 
@@ -35,12 +36,10 @@ public class EmployeeBean implements Serializable {
 	private static String bank_account = "Bank account";
 	private List<String> optionsList = new ArrayList<String>(Arrays.asList(paymaster, postal_address, bank_account));
 	private List<Employee> employeeList;
-
 	@PostConstruct
 	public void init() {
 		employeeList = emController.findAll();
 	}
-
 	public List<Employee> getEmployeeList() {
 		employeeList = emController.findAll();
 		return employeeList;
@@ -58,7 +57,7 @@ public class EmployeeBean implements Serializable {
 		String answer = emController.remove(fireCode);
 		if (answer.equals("Operation completed successfully.")) {
 			growl(FacesMessage.SEVERITY_INFO, "Success!", "The employee with code:" + fireCode + " has been successfully fired");
-			sessionManag.removeLogin(fireCode);
+			smController.remove(fireCode);
 
 		} else {
 			growl(FacesMessage.SEVERITY_FATAL, "Error!", "Something has gone wrong while trying to fire employee with code: "+fireCode+". The complete message is " + answer);

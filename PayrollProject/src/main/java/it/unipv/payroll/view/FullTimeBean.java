@@ -11,38 +11,38 @@ import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.controller.FullTimeController;
+import it.unipv.payroll.controller.SessionManagementController;
 import it.unipv.payroll.controller.TransactionsController;
+import it.unipv.payroll.model.Credentials;
 import it.unipv.payroll.model.FullTimeEmployee;
 
 
 @Named
-@RequestScoped
+@ViewScoped
 @Stateful
 public class FullTimeBean implements Serializable{
 
 	@Inject
 	FullTimeController fullController;
 	@Inject
-	EmployeeController emController;
-	@Inject
-	SessionManagementBean sessionManag;
-	@Inject
-	TransactionsController transController;
+	SessionManagementController smController;
 
 	private FullTimeEmployee fullTimeEmployee;
 	private FullTimeEmployee loggedUser;
 	private List<FullTimeEmployee> fullTimersList;
-
+	private Credentials newCred;
 	
 	
 	@PostConstruct
 	public void init() {
 		fullTimeEmployee = new FullTimeEmployee();
+		newCred=new Credentials();
 		fullTimersList = fullController.findAll();
 		try {
 			loggedUser=fullController.find(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
@@ -82,9 +82,8 @@ public class FullTimeBean implements Serializable{
 		String answer = fullController.add(fullTimeEmployee);
 		String tmpPassword = "";
 		if (answer.equals("Operation completed successfully.")) {
-			sessionManag.setCode(fullTimeEmployee.getCode());
-			tmpPassword = sessionManag.generatePassword();
-			sessionManag.addLogin();
+			newCred.setCode(fullTimeEmployee.getCode());
+			smController.generateCredentials(newCred);
 		}
 		if (answer.equals("Operation completed successfully.")) {
 			growl(FacesMessage.SEVERITY_INFO, "Success!",

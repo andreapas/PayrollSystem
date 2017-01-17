@@ -1,45 +1,46 @@
 package it.unipv.payroll.view;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.controller.PartTimeController;
+import it.unipv.payroll.controller.SessionManagementController;
 import it.unipv.payroll.controller.TransactionsController;
+import it.unipv.payroll.model.Credentials;
 import it.unipv.payroll.model.PartTimeEmployee;
 
 @Named
-@RequestScoped
+@ViewScoped
 @Stateful
 public class PartTimeBean implements Serializable{
 
 	@Inject
 	PartTimeController partController;
 	@Inject
-	SessionManagementBean sessionManag;
-	@Inject
-	TransactionsController transController;
+	SessionManagementController smController;
 
 
 	private PartTimeEmployee partTimeEmployee;
 	private PartTimeEmployee loggedUser;
 	private List<PartTimeEmployee> partTimersList;
+	private Credentials newCred;
+
 
 	
 	@PostConstruct
 	public void init() {
-//		partTimeEmployee = new PartTimeEmployee();
+		newCred=new Credentials();
+		partTimeEmployee = new PartTimeEmployee();
+		System.out.println("Reconstructing...");
 		try {
 			loggedUser=partController.find(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
 		} catch (Exception e) {
@@ -65,6 +66,7 @@ public class PartTimeBean implements Serializable{
 	}
 	
 	public void setPartTimeEmployee(PartTimeEmployee partTimeEmployee) {
+		System.out.println(partTimeEmployee.getCode());
 		this.partTimeEmployee = partTimeEmployee;
 	}
 	
@@ -76,9 +78,8 @@ public class PartTimeBean implements Serializable{
 		String answer = partController.add(partTimeEmployee);
 		String tmpPassword = "";
 		if (answer.equals("Operation completed successfully.")) {
-			sessionManag.setCode(partTimeEmployee.getCode());
-			tmpPassword = sessionManag.generatePassword();
-			sessionManag.addLogin();
+			newCred.setCode(partTimeEmployee.getCode());
+			smController.generateCredentials(newCred);
 		}
 		if (answer.equals("Operation completed successfully.")) {
 			growl(FacesMessage.SEVERITY_INFO, "Success!",

@@ -2,9 +2,11 @@ package it.unipv.payroll.controller;
 
 import java.util.List;
 
-import it.unipv.payroll.model.Employee;
+import javax.ejb.Stateless;
+
 import it.unipv.payroll.model.PartTimeEmployee;
 
+@Stateless
 public class PartTimeController extends GenericController<PartTimeEmployee> {
 
 	
