@@ -14,46 +14,43 @@ import it.unipv.payroll.dao.GenericDAO;
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public abstract class GenericController<T extends Serializable> {
 
+	public static String ERROR = "No changes has been made.";
 
-	private static String SUCCESS = "Operation completed successfully.";
-	private static String ERROR = "No changes has been made.";
-
-	@Inject GenericDAO<T> dao;
+	@Inject
+	GenericDAO<T> dao;
 	Logger logger = Logger.getLogger(UnionsController.class);
 
 	@PostConstruct
 	public void init() {
 	}
-	
-	public String add(T element) {
-		if(isAlreadyInDatabase(element)){
-			return "Element already present. "+ERROR;
-		}else{
-			dao.add(element);
-			return SUCCESS;
-		}
+
+	public void add(T element) throws Exception {
+		if (isAlreadyInDatabase(element)||!isElementOk(element))
+			throw new Exception("Element already present. " + ERROR);
+		dao.add(element);
 	}
 
-	public String remove(Object id) {
-		if (find(id)!=null) {
-			dao.remove(id);
-		}else{
-			return "Element is not present. "+ERROR;
-		}
-		return SUCCESS;
+	public void remove(String id) throws Exception {
+		if (id == null || id.isEmpty())
+			throw new Exception("Cannot remove null or empty id. " + ERROR);
+		if(find(id)==null)
+			throw new Exception("Entity not found in the database. " + ERROR);
+		dao.remove(id);
+
 	}
-	
-	public T find(Object id){
-		return dao.find(id);
+
+
+	public void update(T element) throws Exception {
+		if (!isAlreadyInDatabase(element))
+			throw new Exception("Element is not present. " + ERROR);
+		dao.update(element);
+
 	}
-	
-	public String update(T element) {
-		if (isAlreadyInDatabase(element)) {
-			dao.update(element);
-		}else{
-			return "Element is not present. "+ERROR;
-		}
-		return SUCCESS;
-	}
+
 	public abstract boolean isAlreadyInDatabase(T element);
+
+	public abstract boolean isElementOk(T element);
+	
+	public abstract T find(Object id) throws Exception;
+
 }

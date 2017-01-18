@@ -26,6 +26,7 @@ import it.unipv.payroll.dao.TransactionsDAO;
 import it.unipv.payroll.model.Credentials;
 import it.unipv.payroll.model.Employee;
 import it.unipv.payroll.model.FullTimeEmployee;
+import it.unipv.payroll.model.IEmployee;
 import it.unipv.payroll.model.PartTimeEmployee;
 import it.unipv.payroll.model.Transactions;
 import it.unipv.payroll.model.Union;
@@ -135,7 +136,7 @@ public class SystemTest extends ArquillianTest {
 
 		List<PartTimeEmployee> partEmployees = ptBean.getPartTimersList();
 		boolean isPresent = false;
-		for (Employee em : partEmployees) {
+		for (IEmployee em : partEmployees) {
 			if (em.getCode().equals(USER1_COD)) {
 				isPresent = true;
 				break;
@@ -153,7 +154,7 @@ public class SystemTest extends ArquillianTest {
 
 		List<FullTimeEmployee> fullEmployees = ftBean.getFullTimersList();
 		boolean isPresent = false;
-		for (Employee em : fullEmployees) {
+		for (IEmployee em : fullEmployees) {
 			if (em.getCode().equals(USER2_COD)) {
 				isPresent = true;
 				break;
@@ -180,7 +181,7 @@ public class SystemTest extends ArquillianTest {
 
 		List<Employee> employees = emDAO.findAll();
 		boolean isPresent = false;
-		for (Employee em : employees) {
+		for (IEmployee em : employees) {
 			if (em.getCode().equals(USER1_COD)) {
 				isPresent = true;
 				break;
@@ -349,7 +350,7 @@ public class SystemTest extends ArquillianTest {
 		
 		boolean inverseMapWorking=false;
 		List<Employee> associates= unController.find(USER1_UNION.getUnionName()).getAssociates();
-		for (Employee employee : associates) {
+		for (IEmployee employee : associates) {
 			if(employee.getUnion().getUnionName().equals(USER1_COD)||employee.getUnion().getUnionName().equals(USER2_COD)){
 				inverseMapWorking=true;
 			}

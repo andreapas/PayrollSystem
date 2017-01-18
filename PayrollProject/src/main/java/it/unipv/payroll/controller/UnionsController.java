@@ -9,18 +9,18 @@ import it.unipv.payroll.model.Union;
 @Stateless
 public class UnionsController extends GenericController<Union> {
 
-	// @Inject UnionsDAO unionsDao;
-	// Logger logger = Logger.getLogger(UnionsController.class);
-	//
-	// @PostConstruct
-	// public void init() {
-	// logger.info("UnionsController ready to receive new commands!");
-	// }
-
 	public List<Union> getUnionsList() {
 		return dao.findAll();
 	}
 
+	@Override
+	public Union find(Object id) throws Exception {
+		String pk=(String)id;
+		if (pk == null || pk.isEmpty())
+			throw new Exception("Cannot find null or empty id. " + ERROR);
+		return dao.find(id);
+	}
+	
 	@Override
 	public boolean isAlreadyInDatabase(Union element) {
 		Union union = dao.find(element.getUnionName());
@@ -30,21 +30,19 @@ public class UnionsController extends GenericController<Union> {
 		return false;
 	}
 
-	// public List<Union> addUnion(Union union) throws Exception{
-	// unionsDao.add(union);
-	//
-	// List<Union> unions = unionsDao.findAll();
-	//
-	// return unions; //Ma WTF!
-	// }
+	@Override
+	public void remove(String id) throws Exception {
+		if (find(id).getAssociates().size()!=0)
+			throw new Exception("Union with associates cannot be removed. No changes has been made.");
 
-	// public List<Union> remove(Union union) {
-	//
-	// unionsDao.remove(union.getUnionName());
-	//
-	// List<Union> unions = unionsDao.findAll();
-	//
-	// return unions; //Ma WTF!
-	// }
-	//
+		super.remove(id);
+	}
+	
+	@Override
+	public boolean isElementOk(Union element) {
+		if (element.getUnionName().isEmpty() || element.getUnionName() == null)
+			return false;
+		return true;
+		
+	}
 }

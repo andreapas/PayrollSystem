@@ -7,6 +7,7 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
+import javax.print.attribute.standard.Severity;
 
 import it.unipv.payroll.controller.UnionsController;
 import it.unipv.payroll.model.Union;
@@ -24,7 +25,11 @@ public class UnionConverter implements Converter{
                 return union;
             } catch(ClassCastException e) {
                 throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Not a valid Union."));
-            }
+            } catch (Exception e) {
+				FacesContext context =FacesContext.getCurrentInstance();
+				context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error!", e.getMessage()));
+				return null;
+			}
         } else {
             return null;
         }

@@ -1,13 +1,10 @@
 package it.unipv.payroll.view;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
@@ -15,18 +12,15 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.controller.FullTimeController;
 import it.unipv.payroll.controller.SessionManagementController;
-import it.unipv.payroll.controller.TransactionsController;
 import it.unipv.payroll.model.Credentials;
 import it.unipv.payroll.model.FullTimeEmployee;
-
 
 @Named
 @ViewScoped
 @Stateful
-public class FullTimeBean implements Serializable{
+public class FullTimeBean implements Serializable {
 
 	@Inject
 	FullTimeController fullController;
@@ -37,15 +31,14 @@ public class FullTimeBean implements Serializable{
 	private FullTimeEmployee loggedUser;
 	private List<FullTimeEmployee> fullTimersList;
 	private Credentials newCred;
-	
-	
+
 	@PostConstruct
 	public void init() {
 		fullTimeEmployee = new FullTimeEmployee();
-		newCred=new Credentials();
+		newCred = new Credentials();
 		fullTimersList = fullController.findAll();
 		try {
-			loggedUser=fullController.find(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+			loggedUser = fullController.find(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
 		} catch (Exception e) {
 			System.out.println("Null faces detected. This bean is in testing");
 		}
@@ -54,79 +47,66 @@ public class FullTimeBean implements Serializable{
 	public FullTimeEmployee getLoggedUser() {
 		return loggedUser;
 	}
+
 	public void setLoggedUser(FullTimeEmployee loggedUser) {
 		this.loggedUser = loggedUser;
 	}
+
 	public List<FullTimeEmployee> getFullTimersList() {
 		return fullTimersList;
 	}
-	
-//	public void setFullTimersList(List<FullTimeEmployee> fullTimersList) {
-//		this.fullTimersList = fullTimersList;
-//	}
-	
+
+	// public void setFullTimersList(List<FullTimeEmployee> fullTimersList) {
+	// this.fullTimersList = fullTimersList;
+	// }
+
 	public FullTimeEmployee getFullTimeEmployee() {
 		return fullTimeEmployee;
 	}
-	
+
 	public void setFullTimeEmployee(FullTimeEmployee fullTimeEmployee) {
 		this.fullTimeEmployee = fullTimeEmployee;
 	}
-	
-	public String hireEmployee() {
-		fullTimeEmployee.setRole("Monthly");
-		if (fullTimeEmployee.getPayment_method().equals("Postal address")) {
-			fullTimeEmployee.setPayment_method_details(fullTimeEmployee.getAddress());
-		}
 
-		String answer = fullController.add(fullTimeEmployee);
-		String tmpPassword = "";
-		if (answer.equals("Operation completed successfully.")) {
+	public void hireEmployee() {
+		try {
+			fullController.add(fullTimeEmployee);
+			String tmpPassword = "";
 			newCred.setCode(fullTimeEmployee.getCode());
 			smController.generateCredentials(newCred);
-		}
-		if (answer.equals("Operation completed successfully.")) {
 			growl(FacesMessage.SEVERITY_INFO, "Success!",
 					"The employee " + fullTimeEmployee.getName() + " " + fullTimeEmployee.getSurname()
 							+ " has been successfully hired",
 					FacesMessage.SEVERITY_WARN, "Attention", "Password: \'" + tmpPassword
 							+ "\' without apices. This password should be changed at first login.");
-		} else {
+
+			// cancel();
+			fullTimersList = fullController.findAll();
+		} catch (Exception e) {
 			growl(FacesMessage.SEVERITY_FATAL, "Error!",
 					"Something has gone wrong while trying to hire " + fullTimeEmployee.getName() + " "
-							+ fullTimeEmployee.getSurname() + ".\nThe complete message is " + answer);
-			return answer;
+							+ fullTimeEmployee.getSurname() + ".\nThe complete message is " + e.getMessage());
 		}
-		// cancel();
-		fullTimersList = fullController.findAll();
-		return null;
 	}
-	public String updateLoggedUser(){
-		fullTimeEmployee=loggedUser;
-		return updateEmployee();
+
+	public void updateLoggedUser() {
+		fullTimeEmployee = loggedUser;
+		updateEmployee();
 	}
-	public String updateEmployee() {
-		if (fullTimeEmployee.getPayment_method() != null) {
-			if (fullTimeEmployee.getPayment_method().equals("Postal address")) {
-				fullTimeEmployee.setPayment_method_details(fullTimeEmployee.getAddress());
-			} else if (fullTimeEmployee.getPayment_method().equals("Paymaster")) {
-				fullTimeEmployee.setPayment_method_details("");
-			}
-		}
-		String answer = fullController.update(fullTimeEmployee);
-		if (answer.equals("Operation completed successfully.")) {
+
+	public void updateEmployee() {
+		try {
+			fullController.update(fullTimeEmployee);
 			growl(FacesMessage.SEVERITY_INFO, "Success", "Your informations has been updated successfully.");
-		} else {
+
+			fullTimersList = fullController.findAll();
+		} catch (Exception e) {
 			growl(FacesMessage.SEVERITY_FATAL, "Error!",
 					"Something has gone wrong while trying to update your informations. The complete message is "
-							+ answer);
-			return answer;
+							+ e.getMessage());
 		}
-		fullTimersList=fullController.findAll();
-		return null;
 	}
-	
-	
+
 	private void growl(Severity sevMessage, String title1, String message, Severity sevMessage2, String title2,
 			String message2) {
 		try {

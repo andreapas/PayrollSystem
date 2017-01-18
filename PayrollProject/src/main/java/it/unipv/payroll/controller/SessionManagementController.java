@@ -3,48 +3,66 @@ package it.unipv.payroll.controller;
 import javax.ejb.Stateless;
 
 import it.unipv.payroll.model.Credentials;
+import it.unipv.payroll.model.FullTimeEmployee;
 import it.unipv.payroll.utils.PasswordManager;
 
 @Stateless
 public class SessionManagementController extends GenericController<Credentials> {
 
-	private PasswordManager pswdManager= new PasswordManager();
-	
+	private PasswordManager pswdManager = new PasswordManager();
+
 	public boolean areValidCredential(String username, String password) {
-		Credentials loginAttempt=dao.find(username);
-		if(loginAttempt!=null){
-//			System.out.println(loginAttempt.getPassword());
-//			System.out.println(pswdManager.hashIt(password));
+		Credentials loginAttempt = dao.find(username);
+		if (loginAttempt != null) {
+			// System.out.println(loginAttempt.getPassword());
+			// System.out.println(pswdManager.hashIt(password));
 			if (loginAttempt.getPassword().equals(pswdManager.hashIt(password))) {
 				return true;
-			}else{
+			} else {
 				return false;
 			}
-		} else{
+		} else {
 			return false;
 		}
 	}
 
-	public String generateCredentials(Credentials credentials){
-		String password=pswdManager.generatePassword();
+	public void generateCredentials(Credentials credentials) throws Exception {
+		String password = pswdManager.generatePassword();
 		credentials.setPassword(pswdManager.hashIt(password));
-		return super.add(credentials);
+		super.add(credentials);
 	}
+
+	@Override
+	public Credentials find(Object id) throws Exception {
+		String pk=(String)id;
+		if (pk == null || pk.isEmpty())
+			throw new Exception("Cannot find null or empty id. " + ERROR);
+		return dao.find(id);
+	}
+	
 	
 	@Override
-	public String update(Credentials element) {
+	public void update(Credentials element) throws Exception {
 		element.setPassword(pswdManager.hashIt(element.getPassword()));
-		return super.update(element);
+		super.update(element);
 	}
-	
+
 	@Override
 	public boolean isAlreadyInDatabase(Credentials element) {
-		Credentials login= dao.find(element.getCode());
-		if(login!=null){
+		Credentials login = dao.find(element.getCode());
+		if (login != null) {
 			return true;
 		}
 		return false;
 	}
 
-	
+	@Override
+	public boolean isElementOk(Credentials element) {
+		if (element.getCode().isEmpty() || element.getCode() == null)
+			return false;
+		if (element.getPassword().isEmpty() || element.getPassword() == null)
+			return false;
+		return true;
+	}
+
 }
