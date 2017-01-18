@@ -3,25 +3,23 @@ package it.unipv.payroll.controller;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Stateless;
-
-import org.springframework.mail.javamail.JavaMailSender;
-
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
 
 import it.unipv.payroll.model.Employee;
 import it.unipv.payroll.model.FullTimeEmployee;
 import it.unipv.payroll.model.PartTimeEmployee;
 import it.unipv.payroll.model.Transactions;
-import it.unipv.payroll.utils.PdfGenerator;
 
 @Stateless
 public class TransactionsController extends GenericController<Transactions> {
 
 	public void addSale(Transactions element) throws Exception{
-		element.setAmount((float)(element.getAmount()*(((FullTimeEmployee)element.getEmployee()).getCommissionRate()/100)));
+		float sold=element.getAmount();
+		float rate=((FullTimeEmployee)element.getEmployee()).getCommissionRate()/((float)100);
+		
+		element.setAmount(sold*rate);
 		super.add(element);
 	}
 
@@ -62,36 +60,31 @@ public class TransactionsController extends GenericController<Transactions> {
 		return dao.find(id);
 	}
 
-	public HashMap<Employee, Float> pay(String role) throws Exception {
-		HashMap<Employee, Float> earnings = new HashMap<Employee, Float>();
-		PdfGenerator generator = new PdfGenerator();
+	public HashMap<String, Float> pay(String role) throws Exception {
+		HashMap<String, Float> earnings = new HashMap<String, Float>();
 		for (Transactions ut : findAll()) {
 			if (!ut.isExecuted()) {
 
 				if (ut.getEmployee().getRole().equals(role)) {
-					if (earnings.containsKey(ut.getEmployee())) {
-						earnings.put(ut.getEmployee(), earnings.get(ut.getEmployee().getCode()) + ut.getAmount());
+					if (earnings.containsKey(ut.getEmployee().getCode())) {
+						float tot=earnings.get(ut.getEmployee().getCode())+ut.getAmount();
+						earnings.put(ut.getEmployee().getCode(), tot);
 					} else {
-						earnings.put(ut.getEmployee(), ut.getAmount());
+						earnings.put(ut.getEmployee().getCode(), ut.getAmount());
 					}
 					ut.setExecuted(true);
 					update(ut);
 				}
 			}
 		}
-		try {
-			Document document = generator.generatePdf(earnings);
-		} catch (DocumentException e) {
-			logger.error("Error while generating the pdf.");
-		}
 		return earnings;
 	}
 
-	private void sendMail(Document document) {
-		JavaMailSender mailSender;
-		// mailSender.createMimeMessage();
-
-	}
+//	private void sendMail(Document document) {
+//		JavaMailSender mailSender;
+//		// mailSender.createMimeMessage();
+//
+//	}
 
 	@Override
 	public boolean isElementOk(Transactions element) {

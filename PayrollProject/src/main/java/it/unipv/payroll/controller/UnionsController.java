@@ -31,7 +31,7 @@ public class UnionsController extends GenericController<Union> {
 	}
 
 	@Override
-	public void remove(String id) throws Exception {
+	public void remove(Object id) throws Exception {
 		if (find(id).getAssociates().size()!=0)
 			throw new Exception("Union with associates cannot be removed. No changes has been made.");
 

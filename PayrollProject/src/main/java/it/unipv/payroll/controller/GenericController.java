@@ -25,13 +25,15 @@ public abstract class GenericController<T extends Serializable> {
 	}
 
 	public void add(T element) throws Exception {
-		if (isAlreadyInDatabase(element)||!isElementOk(element))
+		if (isAlreadyInDatabase(element))
 			throw new Exception("Element already present. " + ERROR);
+		if (!isElementOk(element))
+			throw new Exception("Element not well formatted. " + ERROR);			
 		dao.add(element);
 	}
 
-	public void remove(String id) throws Exception {
-		if (id == null || id.isEmpty())
+	public void remove(Object id) throws Exception {
+		if (id == null || id.toString().isEmpty())
 			throw new Exception("Cannot remove null or empty id. " + ERROR);
 		if(find(id)==null)
 			throw new Exception("Entity not found in the database. " + ERROR);
@@ -43,6 +45,8 @@ public abstract class GenericController<T extends Serializable> {
 	public void update(T element) throws Exception {
 		if (!isAlreadyInDatabase(element))
 			throw new Exception("Element is not present. " + ERROR);
+		if (!isElementOk(element))
+			throw new Exception("Element not well formatted. " + ERROR);		
 		dao.update(element);
 
 	}

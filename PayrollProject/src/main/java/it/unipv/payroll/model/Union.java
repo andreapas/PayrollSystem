@@ -60,25 +60,13 @@ public class Union implements Serializable{
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Union other = (Union) obj;
-		if (associates == null) {
-			if (other.associates != null)
-				return false;
-		} else if (!associates.equals(other.associates))
-			return false;
-		if (unionName == null) {
-			if (other.unionName != null)
-				return false;
-		} else if (!unionName.equals(other.unionName))
-			return false;
-		if (Float.floatToIntBits(weeklyRate) != Float.floatToIntBits(other.weeklyRate))
-			return false;
-		return true;
+		// Basic checks.
+        if (obj == this) return true;
+        if (!(obj instanceof Union)) return false;
+
+        // Property checks.
+        Union other = (Union) obj;
+        return Objects.equals(unionName, other.unionName)
+            && Objects.equals(weeklyRate, other.weeklyRate);
 	}
 }
