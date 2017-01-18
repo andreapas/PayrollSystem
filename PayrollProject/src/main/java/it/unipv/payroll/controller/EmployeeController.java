@@ -6,7 +6,6 @@ import java.util.List;
 import javax.ejb.Stateless;
 
 import it.unipv.payroll.model.Employee;
-import it.unipv.payroll.model.IEmployee;
 
 @Stateless
 public class EmployeeController extends GenericController<Employee> {
@@ -14,7 +13,7 @@ public class EmployeeController extends GenericController<Employee> {
 	public List<Employee> findAll() {
 		List<Employee> list = dao.findAll();
 		for (Iterator iterator = list.iterator(); iterator.hasNext();) {
-			IEmployee employee = (IEmployee) iterator.next();
+			Employee employee = (Employee) iterator.next();
 			if(employee.getRole().equals("Manager")){
 				iterator.remove();
 			}
@@ -24,7 +23,7 @@ public class EmployeeController extends GenericController<Employee> {
 	
 	@Override
 	public boolean isAlreadyInDatabase(Employee element) {
-		IEmployee employee= dao.find(element.getCode());
+		Employee employee= dao.find(element.getCode());
 		if(employee!=null){
 			return true;
 		}

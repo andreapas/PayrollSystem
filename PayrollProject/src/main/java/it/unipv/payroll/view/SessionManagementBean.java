@@ -58,19 +58,18 @@ public class SessionManagementBean implements Serializable {
 		oldLoginCredentials.setCode(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
 		newLoginCredentials.setCode(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
 		
-		FacesMessage message;
-		
-		if(sessionManagementController.areValidCredential(oldLoginCredentials.getCode(), oldLoginCredentials.getPassword())){
-			sessionManagementController.update(newLoginCredentials);
-	        message= new FacesMessage(FacesMessage.SEVERITY_INFO,"Success!",  "Password changed successfully") ;
-
-		}else{
-	        message= new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error!",  "Wrong Password inserted. Please, try again") ;
-
+		try{
+			sessionManagementController.changePassword(oldLoginCredentials,newLoginCredentials);
+			FacesMessage message= new FacesMessage(FacesMessage.SEVERITY_INFO,"Success!",  "Password changed successfully") ;
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage(null,message);
+		}catch (Exception e) {
+			FacesMessage message= new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error!",  e.getMessage()) ;
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage(null,message);
 		}
 		
-		FacesContext context = FacesContext.getCurrentInstance();
-		context.addMessage(null,message);
+		
 			
 	}
 	

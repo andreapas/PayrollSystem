@@ -28,6 +28,7 @@ import it.unipv.payroll.model.Employee;
 import it.unipv.payroll.model.FullTimeEmployee;
 import it.unipv.payroll.model.IEmployee;
 import it.unipv.payroll.model.PartTimeEmployee;
+import it.unipv.payroll.model.Transaction;
 import it.unipv.payroll.model.Transactions;
 import it.unipv.payroll.model.Union;
 import it.unipv.payroll.utils.AutoPayday;
@@ -171,7 +172,7 @@ public class SystemTest extends ArquillianTest {
 		ptBean.setPartTimeEmployee(anEmployee);
 		ptBean.hireEmployee();
 		tBean.setLoggedEmployee(anEmployee);
-		Transactions transaction= new Transactions();
+		Transaction transaction= new Transactions();
 		transaction.setDate(new Date());
 		transaction.setInfo("Sale ID=12345 test");
 		transaction.setAmount((float)55.55);
@@ -431,7 +432,7 @@ public class SystemTest extends ArquillianTest {
 		ftBean.setFullTimeEmployee(anotherEmployee);
 		ftBean.hireEmployee();
 		
-		Transactions aTransaction = new Transactions();
+		Transaction aTransaction = new Transactions();
 		tBean.setHoursAmount(10);
 		tBean.setTransaction(aTransaction);
 		tBean.setLoggedEmployee(anEmployee);
@@ -443,7 +444,7 @@ public class SystemTest extends ArquillianTest {
 		tBean.setLoggedEmployee(anEmployee);
 		tBean.addHours();
 		
-		Transactions anotherTransaction = new Transactions();
+		Transaction anotherTransaction = new Transactions();
 		anotherTransaction.setDate(new Date());
 		anotherTransaction.setInfo("Sale ID=12345 test");
 		anotherTransaction.setAmount((float)55.55);
@@ -455,7 +456,7 @@ public class SystemTest extends ArquillianTest {
 		List<Transactions> allTransactions = tBean.getAllTransactions();
 		int trans1 = 0;
 		int trans2 = 0;
-		for (Transactions t : allTransactions) {
+		for (Transaction t : allTransactions) {
 			if (USER1_COD.equals(t.getEmployee().getCode())) {
 				trans1++;
 			}
@@ -466,7 +467,7 @@ public class SystemTest extends ArquillianTest {
 		Assert.assertEquals(3, trans1+trans2);
 		
 		
-		Transactions charge= new Transactions();
+		Transaction charge= new Transactions();
 		charge.setAmount(100);
 		charge.setDate(new Date());
 		charge.setInfo("test charge");
@@ -485,7 +486,7 @@ public class SystemTest extends ArquillianTest {
 		int numCharges=0;
 		int employees=0;
 		
-		for (Transactions t : allTransactions) {
+		for (Transaction t : allTransactions) {
 			if(t.getInfo().equals("test charge")){
 				numCharges++;
 				if(t.getEmployee().getCode().equals(anEmployee.getCode())||t.getEmployee().getCode().equals(anotherEmployee.getCode())){
@@ -499,7 +500,7 @@ public class SystemTest extends ArquillianTest {
 		Assert.assertTrue("Charges added to two employees",employees==2);
 		
 		
-		for (Transactions t : allTransactions) {
+		for (Transaction t : allTransactions) {
 			if (t.getEmployee().getCode().equals(USER1_COD)) {
 				tDAO.remove(t.getId());
 			}else if (t.getEmployee().getCode().equals(USER2_COD)) {
@@ -561,7 +562,7 @@ public class SystemTest extends ArquillianTest {
 		ftBean.setFullTimeEmployee(anotherEmployee);
 		ftBean.hireEmployee();
 
-		Transactions aTransaction = new Transactions();
+		Transaction aTransaction = new Transactions();
 		tBean.setHoursAmount(8);
 		tBean.setTransaction(aTransaction);
 		tBean.setLoggedEmployee(anEmployee);
@@ -583,7 +584,7 @@ public class SystemTest extends ArquillianTest {
 		tBean.setLoggedEmployee(anEmployee);
 		tBean.addHours();
 		
-		Transactions anotherTransaction = new Transactions();
+		Transaction anotherTransaction = new Transactions();
 		anotherTransaction.setDate(new Date());
 		anotherTransaction.setAmount(800);
 		tBean.setId(12345);

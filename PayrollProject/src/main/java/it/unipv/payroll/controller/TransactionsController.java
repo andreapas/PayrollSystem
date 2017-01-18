@@ -1,33 +1,49 @@
 package it.unipv.payroll.controller;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.ejb.Stateless;
-import javax.mail.internet.MimeMessage;
 
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMailMessage;
 
-import com.itextpdf.text.Chapter;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
 
 import it.unipv.payroll.model.Employee;
+import it.unipv.payroll.model.FullTimeEmployee;
+import it.unipv.payroll.model.PartTimeEmployee;
 import it.unipv.payroll.model.Transactions;
 import it.unipv.payroll.utils.PdfGenerator;
 
 @Stateless
 public class TransactionsController extends GenericController<Transactions> {
 
+	public void addSale(Transactions element) throws Exception{
+		element.setAmount((float)(element.getAmount()*(((FullTimeEmployee)element.getEmployee()).getCommissionRate()/100)));
+		super.add(element);
+	}
+
+	public void addHours(Transactions element, int numberOfHours) throws Exception {
+		element.setDate(new Date());
+		float rate=((PartTimeEmployee)element.getEmployee()).getHourlyRate();
+		if (numberOfHours > 8) {
+			element.setAmount((float) (8 * rate + 1.5 * (numberOfHours - 8) * rate));
+		} else {
+			element.setAmount((float) (numberOfHours * rate));
+		}
+		element.setInfo("Worked hours");
+		super.add(element);
+		
+	}
+
+	public void addCharge(Transactions element) throws Exception{
+		element.setDate(new Date());
+		element.setAmount(-element.getAmount());
+		super.add(element);
+	}
+	
 	public List<Transactions> findAll() {
 		return dao.findAll();
 	}
@@ -47,15 +63,14 @@ public class TransactionsController extends GenericController<Transactions> {
 	}
 
 	public HashMap<Employee, Float> pay(String role) throws Exception {
-		HashMap<Employee, Float> earnings= new HashMap<Employee, Float>();
-		PdfGenerator generator=new PdfGenerator();
+		HashMap<Employee, Float> earnings = new HashMap<Employee, Float>();
+		PdfGenerator generator = new PdfGenerator();
 		for (Transactions ut : findAll()) {
 			if (!ut.isExecuted()) {
 
 				if (ut.getEmployee().getRole().equals(role)) {
 					if (earnings.containsKey(ut.getEmployee())) {
-						earnings.put(ut.getEmployee(),
-								earnings.get(ut.getEmployee().getCode()) + ut.getAmount());
+						earnings.put(ut.getEmployee(), earnings.get(ut.getEmployee().getCode()) + ut.getAmount());
 					} else {
 						earnings.put(ut.getEmployee(), ut.getAmount());
 					}
@@ -65,19 +80,19 @@ public class TransactionsController extends GenericController<Transactions> {
 			}
 		}
 		try {
-			Document document=generator.generatePdf(earnings);
+			Document document = generator.generatePdf(earnings);
 		} catch (DocumentException e) {
 			logger.error("Error while generating the pdf.");
 		}
 		return earnings;
 	}
 
-	private void sendMail(Document document){
+	private void sendMail(Document document) {
 		JavaMailSender mailSender;
-//		mailSender.createMimeMessage();
-		
+		// mailSender.createMimeMessage();
+
 	}
-	
+
 	@Override
 	public boolean isElementOk(Transactions element) {
 		if (element.getEmployee() == null)

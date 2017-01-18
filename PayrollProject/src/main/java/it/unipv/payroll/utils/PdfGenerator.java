@@ -16,7 +16,6 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 
 import it.unipv.payroll.model.Employee;
-import it.unipv.payroll.model.IEmployee;
 
 public class PdfGenerator {
 
@@ -66,7 +65,7 @@ public class PdfGenerator {
 
 		tabella.setHeaderRows(1);
 		Set<Employee> keySet=earnings.keySet();
-		for (IEmployee employee : keySet) {
+		for (Employee employee : keySet) {
 			tabella.addCell(employee.getCode());
 			tabella.addCell(employee.getName());
 			tabella.addCell(employee.getSurname());

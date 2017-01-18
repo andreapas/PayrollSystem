@@ -41,25 +41,20 @@ public class UnionsBean implements Serializable {
 		this.union = union;
 	}
 
-	public String addUnion() {
-		String answer = unionsController.add(union);
+	public void addUnion() {
+		FacesContext context = FacesContext.getCurrentInstance();
 		try {
-			FacesContext context = FacesContext.getCurrentInstance();
-			if (answer.equals("Operation completed successfully.")) {
-				context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!",
-						"The union " + union.getUnionName() + " has been successfully added"));
-			} else {
-				context.addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error!",
-								"Something has gone wrong while trying to add " + union.getUnionName()
-										+ ". The complete message is: " + answer));
-			}
-		} catch (NullPointerException e) {
-			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
+			unionsController.add(union);
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!",
+					"The union " + union.getUnionName() + " has been successfully added"));
+			unions = unionsController.getUnionsList();
+		} catch (Exception e) {
+			context.addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error!",
+							"Something has gone wrong while trying to add " + union.getUnionName()
+									+ ". The complete message is: " + e.getMessage()));
+
 		}
-		unions = unionsController.getUnionsList();
-		// clearUnion();
-		return answer;
 
 	}
 
@@ -67,27 +62,22 @@ public class UnionsBean implements Serializable {
 	// union.setUnionName("");
 	// union.setWeeklyRate(0);
 	// }
-	public String removeUnion() {
-		String answer = unionsController.remove(fireUnionName);
+	public void removeUnion() {
+		FacesContext context = FacesContext.getCurrentInstance();
+
 		try {
-			FacesContext context = FacesContext.getCurrentInstance();
-			if (answer.equals("Operation completed successfully.")) {
-				context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!",
-						"The union " + fireUnionName + " has been successfully removed"));
-			} else {
-				context.addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error!",
-								"Something has gone wrong while trying to remove " + fireUnionName
-										+ ". The complete message is: " + answer));
-			}
-		} catch (NullPointerException e) {
-			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
+			unionsController.remove(fireUnionName);
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!",
+					"The union " + fireUnionName + " has been successfully removed"));
+			fireUnionName = "";
+			unions = unionsController.getUnionsList();
+		} catch (Exception e) {
+			context.addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error!",
+							"Something has gone wrong while trying to remove " + fireUnionName
+									+ ". The complete message is: " + e.getMessage()));
+
 		}
-		fireUnionName = "";
-		unions = unionsController.getUnionsList();
-
-		return answer;
-
 	}
 
 	public String getFireUnionName() {
@@ -104,26 +94,24 @@ public class UnionsBean implements Serializable {
 
 	// TODO: to be tested
 	public void updateUnion() {
-		String answer = unionsController.update(union);
-		try {
-			FacesMessage message;
-			if (answer.equals("Operation completed successfully.")) {
-				message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!",
-						"The Union " + union.getUnionName() + " has been updated successfully!");
-			} else {
-				message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error!",
-						"Something has gone wrong while trying to update the Union details. The complete message is: "
-								+ answer);
+		FacesContext context = FacesContext.getCurrentInstance();
 
-			}
-			FacesContext context = FacesContext.getCurrentInstance();
+		FacesMessage message;
+		try {
+			unionsController.update(union);
+			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!",
+					"The Union " + union.getUnionName() + " has been updated successfully!");
+
 			context.addMessage(null, message);
 
-		} catch (NullPointerException e) {
-			System.out.println("Detected a null FacesContext: maybe this bean has been ran for testing.");
+			unions = unionsController.getUnionsList();
+			fireUnionName = "";
+		} catch (Exception e) {
+			message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error!",
+					"Something has gone wrong while trying to update the Union details. The complete message is: "
+							+ e.getMessage());
+
 		}
-		unions = unionsController.getUnionsList();
-		fireUnionName = "";
 	}
 	// public void clearSelection(){
 	// fireUnionName="";

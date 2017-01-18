@@ -11,7 +11,7 @@ public class SessionManagementController extends GenericController<Credentials> 
 
 	private PasswordManager pswdManager = new PasswordManager();
 
-	public boolean areValidCredential(String username, String password) {
+	private boolean areValidCredential(String username, String password) {
 		Credentials loginAttempt = dao.find(username);
 		if (loginAttempt != null) {
 			// System.out.println(loginAttempt.getPassword());
@@ -41,10 +41,11 @@ public class SessionManagementController extends GenericController<Credentials> 
 	}
 	
 	
-	@Override
-	public void update(Credentials element) throws Exception {
-		element.setPassword(pswdManager.hashIt(element.getPassword()));
-		super.update(element);
+	public void changePassword(Credentials oldest,Credentials newest) throws Exception {
+		if(!areValidCredential(oldest.getCode(), oldest.getPassword()))
+			throw new Exception("Wrong Password inserted. Please, try again");
+		newest.setPassword(pswdManager.hashIt(newest.getPassword()));
+		super.update(newest);
 	}
 
 	@Override

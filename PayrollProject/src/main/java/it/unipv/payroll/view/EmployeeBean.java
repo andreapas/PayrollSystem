@@ -36,35 +36,38 @@ public class EmployeeBean implements Serializable {
 	private static String bank_account = "Bank account";
 	private List<String> optionsList = new ArrayList<String>(Arrays.asList(paymaster, postal_address, bank_account));
 	private List<Employee> employeeList;
+
 	@PostConstruct
 	public void init() {
 		employeeList = emController.findAll();
 	}
+
 	public List<Employee> getEmployeeList() {
 		employeeList = emController.findAll();
 		return employeeList;
 	}
 
-//	public void setEmployeeList(List<Employee> employeeList) {
-//		this.employeeList = employeeList;
-//	}
+	// public void setEmployeeList(List<Employee> employeeList) {
+	// this.employeeList = employeeList;
+	// }
 
 	public List<String> getOptionsList() {
 		return optionsList;
 	}
 
-	public String fireEmployee(String fireCode) {
-		String answer = emController.remove(fireCode);
-		if (answer.equals("Operation completed successfully.")) {
-			growl(FacesMessage.SEVERITY_INFO, "Success!", "The employee with code:" + fireCode + " has been successfully fired");
+	public void fireEmployee(String fireCode) {
+		try {
+			emController.remove(fireCode);
+			growl(FacesMessage.SEVERITY_INFO, "Success!",
+					"The employee with code:" + fireCode + " has been successfully fired");
 			smController.remove(fireCode);
-
-		} else {
-			growl(FacesMessage.SEVERITY_FATAL, "Error!", "Something has gone wrong while trying to fire employee with code: "+fireCode+". The complete message is " + answer);
-			return answer;
+		} catch (Exception e) {
+			growl(FacesMessage.SEVERITY_FATAL, "Error!",
+					"Something has gone wrong while trying to fire employee with code: " + fireCode
+							+ ". The complete message is " + e.getMessage());
+			employeeList = emController.findAll();
 		}
-		employeeList = emController.findAll();
-		return null;
+
 	}
 
 	private void growl(Severity sevMessage, String title, String message) {
