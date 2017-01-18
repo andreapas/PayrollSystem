@@ -15,13 +15,13 @@
 	$( document ).ready(function() {
 		setTimeout(function() {
 
-			if ("#{employeeBean.loggedUser.role}" == "Weekly") {
+			if ("#{partTimeBean.loggedUser.role}" == "Weekly") {
 				$(location).attr('href', './weeklyIndex.xhtml');	
 			}
-			if ("#{employeeBean.loggedUser.role}" == "Monthly") {
+			if ("#{fullTimeBean.loggedUser.role}" == "Monthly") {
 				$(location).attr('href', './monthlyIndex.xhtml');	
 			}
-			if ("#{employeeBean.loggedUser.role}" == "Manager") {
+			if ("#{fullTimeBean.loggedUser.role}" == "Manager") {
 				$(location).attr('href', './managerIndex.xhtml');	
 			}
 			

@@ -12,183 +12,160 @@
 	<h:outputScript library="js" name="scripts.js" />
 	<script type="text/javascript">
 	$( document ).ready(function() {
-		showElementsOfRole("#{employeeBean.loggedUser.role}");
+		showElementsOfRole("#{partTimeBean.loggedUser.role}");
 	});
 	</script>
 
 <!-- 	<h:form> -->
-		<div class="ui-g">
+	<div class="ui-g">
 
-			<div class="ui-g-3">
+		<div class="ui-g-3">
 
-				<p:panel id="mainMenu" header="Menu">
-					<h:panelGrid columns="1" cellpadding="10">
-					
-						<p>Welcome #{employeeBean.loggedUser.name}</p>
-						<h:form>
+			<p:panel id="mainMenu" header="Menu">
+				<h:panelGrid columns="1" cellpadding="10">
+				
+					<p>Welcome #{partTimeBean.loggedUser.name}</p>
+					<h:form>
 						<h:commandButton value="logout" action="#{sessionManagementBean.logout()}" />
-						</h:form>
-						<p:button value="Overview" icon="fa fa-eye" onclick="return showOnlyDivByClass('overviewPanel','dynamicPanel')" />
-						<p:button value="Settings" icon="fa fa-gears" onclick="return showOnlyDivByClass('settingsPanel','dynamicPanel')" />						
-						<p:button value="Insert Hours" icon="fa fa-clock-o" onclick="return showOnlyDivByClass('insertHoursPanel','dynamicPanel')" />
-						
-					</h:panelGrid>
-				</p:panel>
+					</h:form>
+					<p:button value="Overview" icon="fa fa-eye" onclick="return showOnlyDivByClass('overviewPanel','dynamicPanel')" />
+					<p:button value="Settings" icon="fa fa-gears" onclick="return showOnlyDivByClass('settingsPanel','dynamicPanel')" />						
+					<p:button value="Insert Hours" icon="fa fa-clock-o" onclick="return showOnlyDivByClass('insertHoursPanel','dynamicPanel')" />
+					
+				</h:panelGrid>
+			</p:panel>
 
-			</div>
+		</div>
 
-			<div class="ui-g-9">
+		<div class="ui-g-9">
 
-				<p:growl id="infoGrowl" autoUpdate="true" severity="info"
-				sticky="false" life="3000" showDetail="true"></p:growl>
-			<p:messages id="warnErrorPanel" autoUpdate="true" showDetail="true"
-				severity="warn,error,fatal" closable="true" />
+			<p:growl id="infoGrowl" autoUpdate="true" severity="info"
+			sticky="false" life="3000" showDetail="true"></p:growl>
+		<p:messages id="warnErrorPanel" autoUpdate="true" showDetail="true"
+			severity="warn,error,fatal" closable="true" />
 
-			<h:form id="overview">
-				<p:panel header="Personal Informations:"
-					class="dynamicPanel overviewPanel" style="display:block">
-					<h:panelGrid columns="2">
-						<p:outputLabel value="Name:" />
-						<p:outputLabel value="#{employeeBean.loggedUser.name}" />
+		<h:form id="overview">
+			<p:panel header="Personal Informations:"
+				class="dynamicPanel overviewPanel" style="display:block">
+				<h:panelGrid columns="2">
+					<p:outputLabel value="Name:" />
+					<p:outputLabel value="#{partTimeBean.loggedUser.name}" />
 
-						<p:outputLabel value="Surname:" />
-						<p:outputLabel value="#{employeeBean.loggedUser.surname}" />
-						<p:outputLabel value="Email:" />
-						<p:outputLabel value="#{employeeBean.loggedUser.email}" />
-						<p:outputLabel value="Address:" />
-						<p:outputLabel
-							value="#{employeeBean.loggedUser.address.toString()}" />
-						<p:outputLabel value="Preferred payment method selected:" />
-						<p:outputLabel value="#{employeeBean.loggedUser.payment_method}" />
-						<p:outputLabel value="Associated to Union:" />
-						<p:outputLabel value="#{employeeBean.loggedUser.union.unionName}" />
+					<p:outputLabel value="Surname:" />
+					<p:outputLabel value="#{partTimeBean.loggedUser.surname}" />
+					<p:outputLabel value="Email:" />
+					<p:outputLabel value="#{partTimeBean.loggedUser.email}" />
+					<p:outputLabel value="Address:" />
+					<p:outputLabel
+						value="#{partTimeBean.loggedUser.address.toString()}" />
+					<p:outputLabel value="Preferred payment method selected:" />
+					<p:outputLabel value="#{partTimeBean.loggedUser.payment_method}" />
+					<p:outputLabel value="Associated to Union:" />
+					<p:outputLabel value="#{partTimeBean.loggedUser.union.unionName}" />
 
-					</h:panelGrid>
-				</p:panel>
-			</h:form>
-			<p:panel header="Settings" class="dynamicPanel settingsPanel">
-				<p:panel header="Personal Informations"
-					class="dynamicPanel settingsPanel">
-					<h:form id="persInfo">
+				</h:panelGrid>
+			</p:panel>
+		</h:form>
+		<p:panel header="Settings" class="dynamicPanel settingsPanel">
+			<p:panel header="Personal Informations"
+				class="dynamicPanel settingsPanel">
+				<h:form id="persInfo">
 
-						<h:panelGrid cellpadding="10" id="updateInfos">
-							<p:outputLabel for="paymentMethod" value="Method of payment:" />
-							<p:selectOneRadio id="paymentMethod"
-								value="#{employeeBean.radioVal}">
-								<f:selectItem itemLabel="Held for pickup by the paymaster"
-									itemValue="#{employeeBean.optionsList.get(0)}" />
-								<f:selectItem itemLabel="Mailed to the postal address"
-									itemValue="#{employeeBean.optionsList.get(1)}" />
-								<f:selectItem itemLabel="Deposited into the bank account"
-									itemValue="#{employeeBean.optionsList.get(2)}" />
-								<p:ajax process="paymentMethod" update="updateInfos" />
-							</p:selectOneRadio>
-							<p:panel header="Additional Informations"
-								rendered="#{employeeBean.radioVal eq employeeBean.optionsList.get(1)}">
+					<h:panelGrid cellpadding="10" id="updateInfos">
+						<p:outputLabel for="paymentMethod" value="Method of payment:" />
+						<p:selectOneRadio id="paymentMethod"
+							value="#{partTimeBean.partTimeEmployee.payment_method}">
+							<f:selectItem itemLabel="Held for pickup by the paymaster"
+								itemValue="#{employeeBean.optionsList.get(0)}" />
+							<f:selectItem itemLabel="Mailed to the postal address"
+								itemValue="#{employeeBean.optionsList.get(1)}" />
+							<f:selectItem itemLabel="Deposited into the bank account"
+								itemValue="#{employeeBean.optionsList.get(2)}" />
+							<p:ajax process="paymentMethod" update="updateInfos" />
+						</p:selectOneRadio>
+						<p:panel header="Additional Informations"
+								rendered="#{partTimeBean.partTimeEmployee.payment_method eq employeeBean.optionsList.get(1)}">
 								<h:panelGrid columns="2">
 									<p:outputLabel value="Address:" />
-									<p:outputLabel
-										value="#{employeeBean.loggedUser.address.toString()}" />
+									<p:outputLabel value="#{partTimeBean.loggedUser.address}" />
 								</h:panelGrid>
 							</p:panel>
 							<p:panel header="Additional Informations"
-								rendered="#{employeeBean.radioVal eq employeeBean.optionsList.get(2)}">
+								rendered="#{partTimeBean.partTimeEmployee.payment_method eq employeeBean.optionsList.get(2)}">
 								<h:panelGrid columns="2">
 									<p:outputLabel for="bank" value="IBAN:" />
 									<p:inputMask id="bank"
-										value="#{employeeBean.loggedUser.payment_method}" size="27"
+										value="#{partTimeBean.loggedUser.payment_method}" size="27"
 										required="true" mask="aa99**********************" />
 								</h:panelGrid>
 							</p:panel>
 
-							<h:panelGrid columns="2">
-								<p:outputLabel for="street" value="Street:" />
-								<p:inputText id="street"
-									value="#{employeeBean.loggedUser.address.street}" />
-
-								<p:outputLabel for="num" value="Number:" />
-								<p:inputText id="num"
-									value="#{employeeBean.loggedUser.address.number}" label="num">
-									<f:validateDoubleRange minimum="1" maximum="999999" />
-								</p:inputText>
-
-								<p:outputLabel for="cap" value="CAP:" />
-								<p:inputMask id="cap"
-									value="#{employeeBean.loggedUser.address.cap}" mask="99999" />
-
-								<p:outputLabel for="city" value="City:" />
-								<p:inputText id="city"
-									value="#{employeeBean.loggedUser.address.municipality}" />
-
-								<p:outputLabel for="disCode" value="District Code:" />
-								<p:selectOneMenu id="disCode"
-									value="#{employeeBean.loggedUser.address.districtCode}"
-									style="width:125px">
-									<f:selectItems value="#{employeeBean.districtCodeList}"
-										var="disList" itemLabel="#{disList}" />
-								</p:selectOneMenu>
-							</h:panelGrid>
-
-							<p:outputLabel for="email" value="New email address:" />
-							<p:inputText id="email" placeholder="Email"
-								value="#{employeeBean.loggedUser.email}" />
-
-							<p:outputLabel for="union" value="Change Union:" />
-							<p:selectOneMenu id="union"
-								value="#{employeeBean.loggedUser.union}" style="width:125px"
-								converter="unionTranslator">
-								<f:selectItems value="#{unionsBean.unionsList}" var="union"
-									itemLabel="#{union.unionName}" />
-							</p:selectOneMenu>
-
-							<p:commandButton value="Submit updated informations"
-								actionListener="#{employeeBean.updateInfo(employeeBean.loggedUser)}"
-								update="updateInfos :overview @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)"
-								oncomplete="showOnlyDivByClass('settingsPanel', 'overviewPanel')" />
+						<h:panelGrid columns="2">
+								<p:outputLabel for="address" value="Address:" />
+								<p:inputText id="address"
+									value="#{partTimeBean.partTimeEmployee.address}" />
 						</h:panelGrid>
-					</h:form>
-				</p:panel>
-				<p:panel header="Password Management"
-					class="dynamicPanel settingsPanel">
-					<h:form id="passMgmt">
-						<h:panelGrid cellpadding="10">
-							<h:outputText value="Old Password: " />
-							<p:password id="oldPassword"
-								value="#{sessionManagementBean.oldLoginCredentials.password}"
-								required="true" label="password" />
 
-							<h:outputText value="New Password: " />
-							<p:password id="newPassword"
-								value="#{sessionManagementBean.newLoginCredentials.password}"
-								feedback="true" match="repeatNewPassword" required="true" />
+						<p:outputLabel for="email" value="New email address:" />
+						<p:inputText id="email" placeholder="Email"
+								value="#{partTimeBean.loggedUser.email}" />
 
-							<h:outputText value="Repeat New Password: " />
-							<p:password id="repeatNewPassword"
-								value="#{sessionManagementBean.newLoginCredentials.password}"
-								feedback="true" required="true" />
+						<p:outputLabel for="union" value="Change Union:" />
+						<p:selectOneMenu id="union"
+							value="#{partTimeBean.loggedUser.union}" style="width:125px"
+							converter="unionTranslator">
+							<f:selectItems value="#{unionsBean.unionsList}" var="union"
+								itemLabel="#{union.unionName}" />
+						</p:selectOneMenu>
 
-							<p:commandButton value="Change Password"
-								actionListener="#{sessionManagementBean.modifyPassword()}" />
-						</h:panelGrid>
-					</h:form>
-				</p:panel>
-
-			</p:panel>
-				
-				<h:form>
-				<p:panel header="Insert Hours" class="dynamicPanel insertHoursPanel">
-					<h:panelGrid cellpadding="10">
-						<h:outputText id="output" value="Hours worked today: #{transactionsBean.hoursAmount}" />
-						<h:inputHidden id="h" value="#{transactionsBean.hoursAmount}" />
-						<p:slider for="h" display="output" step="1" maxValue="20" displayTemplate="Hours worked today: {value}" />
-						<p:commandButton value="Add" actionListener="#{transactionsBean.addHours()}" />
-					</h:panelGrid>	
-				</p:panel>
+						<p:commandButton value="Submit updated informations"
+							actionListener="#{partTimeBean.updateEmployee(partTimeBean.loggedUser)}"
+							update="updateInfos :overview @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)"
+							oncomplete="showOnlyDivByClass('settingsPanel', 'overviewPanel')" />
+					</h:panelGrid>
 				</h:form>
+			</p:panel>
+			<p:panel header="Password Management"
+				class="dynamicPanel settingsPanel">
+				<h:form id="passMgmt">
+					<h:panelGrid cellpadding="10">
+						<h:outputText value="Old Password: " />
+						<p:password id="oldPassword"
+							value="#{sessionManagementBean.oldLoginCredentials.password}"
+							required="true" label="password" />
 
-			</div>
+						<h:outputText value="New Password: " />
+						<p:password id="newPassword"
+							value="#{sessionManagementBean.newLoginCredentials.password}"
+							feedback="true" match="repeatNewPassword" required="true" />
+
+						<h:outputText value="Repeat New Password: " />
+						<p:password id="repeatNewPassword"
+							value="#{sessionManagementBean.newLoginCredentials.password}"
+							feedback="true" required="true" />
+
+						<p:commandButton value="Change Password"
+							actionListener="#{sessionManagementBean.modifyPassword()}" />
+					</h:panelGrid>
+				</h:form>
+			</p:panel>
+
+		</p:panel>
 			
+			<h:form>
+			<p:panel header="Insert Hours" class="dynamicPanel insertHoursPanel">
+				<h:panelGrid cellpadding="10">
+					<h:outputText id="output" value="Hours worked today: #{transactionsBean.hoursAmount}" />
+					<h:inputHidden id="h" value="#{transactionsBean.hoursAmount}" />
+					<p:slider for="h" display="output" step="1" maxValue="20" displayTemplate="Hours worked today: {value}" />
+					<p:commandButton value="Add" actionListener="#{transactionsBean.addHours()}" />
+				</h:panelGrid>	
+			</p:panel>
+			</h:form>
+
 		</div>
+		
+	</div>
 <!-- 	</h:form> -->
 
 </h:body>

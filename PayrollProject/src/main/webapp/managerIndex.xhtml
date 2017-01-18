@@ -26,8 +26,7 @@
 
 					<p>Welcome #{fullTimeBean.loggedUser.name}</p>
 					<h:form>
-						<h:commandButton value="logout"
-							action="#{sessionManagementBean.logout()}" />
+						<h:commandButton value="logout" action="#{sessionManagementBean.logout()}" />
 					</h:form>
 					<p:button value="Overview" icon="fa fa-eye"
 						onclick="return showOnlyDivByClass('overviewPanel','dynamicPanel')" />
