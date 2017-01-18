@@ -1,9 +1,9 @@
 package it.unipv.payroll.utils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.ejb.Schedule;
@@ -27,7 +27,11 @@ public class AutoPayday {
 	EmployeeController emController;
 	@Inject
 	FullTimeController ftController;
-
+	@Inject
+	Mail mailer;
+	
+	private ReportCreator fileCreator=new ReportCreator();
+	
 	@Resource
 	TimerService timerService;
 
@@ -48,7 +52,9 @@ public class AutoPayday {
 
 				// tController.add(trans);
 			}
-			return tController.pay("Weekly");
+			HashMap<String, Float>earnings= tController.pay("Weekly");
+			sendMail(employeeList, earnings, "Part-time");
+			return earnings;
 
 		} catch (Exception e) {
 			System.out.println("ERROR: cacchio" + e.getMessage());
@@ -70,16 +76,20 @@ public class AutoPayday {
 				trans.setInfo("Monthly Salary");
 				tController.add(trans);
 			}
-			return tController.pay("Monthly");
+			List<Employee> emList=new ArrayList<Employee>();
+			emList.addAll(ftList);
+			HashMap<String, Float>earnings= tController.pay("Monthly");
+			sendMail(emList, earnings, "Full-time");
+			return earnings;
 		} catch (Exception e) {
 			System.out.println("ERROR: shit" + e.getMessage());
 			return null;
 		}
 	}
 
-	// private void cancelTimers() {
-	// for (Timer timer : timerService.getTimers()) {
-	// timer.cancel();
-	// }
-	// }
+	private void sendMail(List<Employee>employeeList,HashMap<String, Float>earnings, String type ){
+		String file=fileCreator.generateFile(employeeList, earnings, type);
+		mailer.send("andrea_pasquali@hotmail.it", "Reminder of payed employees "+type, "Attached you can find the report of the payment executed or waiting to be delivered from the Paymaster.\n\n\nThis mail has been auto-generated. do not reply.", file);
+	}
+	
 }

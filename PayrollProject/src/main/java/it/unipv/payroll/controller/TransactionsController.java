@@ -3,11 +3,9 @@ package it.unipv.payroll.controller;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import javax.ejb.Stateless;
 
-import it.unipv.payroll.model.Employee;
 import it.unipv.payroll.model.FullTimeEmployee;
 import it.unipv.payroll.model.PartTimeEmployee;
 import it.unipv.payroll.model.Transactions;
@@ -79,12 +77,6 @@ public class TransactionsController extends GenericController<Transactions> {
 		}
 		return earnings;
 	}
-
-//	private void sendMail(Document document) {
-//		JavaMailSender mailSender;
-//		// mailSender.createMimeMessage();
-//
-//	}
 
 	@Override
 	public boolean isElementOk(Transactions element) {

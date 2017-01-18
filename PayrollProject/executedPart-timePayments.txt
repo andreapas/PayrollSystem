@@ -1,0 +1,9 @@
+Code            Name            Surname         Amount          Payment Method  Payments Details
+ABC001DEF       Mario           Rossi           235.0           Bank account    IT54jhbawd5awd54a34wd3a5w4d54adw3
+cccc            Andrea          Pasquali        null            via Ferrata 1 27100 Pavia (PV) Italy (IT)                
+olmk            lkm             lkm             -42.0           Paymaster                      
+test1           Ciao            Ciao            -42.0           Paymaster                      
+test2           Ciao            ciao            null            Paymaster                      
+test3           test3           test3           null            Paymaster                      
+test4           test4           test4           null            Bank account                   
+wow987654321    Mario           Rossi           null            Paymaster                      

@@ -7,7 +7,6 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
-import javax.print.attribute.standard.Severity;
 
 import it.unipv.payroll.controller.UnionsController;
 import it.unipv.payroll.model.Union;

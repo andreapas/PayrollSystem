@@ -3,7 +3,6 @@ package it.unipv.payroll.controller;
 import javax.ejb.Stateless;
 
 import it.unipv.payroll.model.Credentials;
-import it.unipv.payroll.model.FullTimeEmployee;
 import it.unipv.payroll.utils.PasswordManager;
 
 @Stateless

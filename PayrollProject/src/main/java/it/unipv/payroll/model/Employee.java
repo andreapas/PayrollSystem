@@ -12,10 +12,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 @Entity
@@ -43,7 +40,6 @@ public abstract class Employee implements Serializable{
 	private String payment_method_details;
 	
 	private String role;
-	
 	
 	
 	public String getCode() {

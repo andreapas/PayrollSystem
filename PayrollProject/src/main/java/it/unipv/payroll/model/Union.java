@@ -27,10 +27,6 @@ public class Union implements Serializable{
 		return associates;
 	}
 
-//	public void setAssociates(List<Employee> associates) {
-//		this.associates = associates;
-//	}
-
 	public void setUnionName(String unionName) {
 		this.unionName = unionName;
 	}
