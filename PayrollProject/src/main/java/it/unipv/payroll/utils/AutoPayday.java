@@ -110,6 +110,10 @@ public class AutoPayday {
 		for (Employee employee : employeeList) {
 			System.out.println(employee.getRole());
 		}
+//		System.out.println("printing: "+type);
+//		for (Employee employee : employeeList) {
+//			System.out.println(employee.getRole());
+//		}
 	}
 
 }
