@@ -1,76 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.1.13" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
   associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
-  <interface id="1" language="java" name="it.unipv.payroll.model.ICredentials" project="PayrollProject" 
-    file="/PayrollProject/src/main/java/it/unipv/payroll/model/ICredentials.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="135" width="150" x="156" y="89"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </interface>  
-  <class id="2" language="java" name="it.unipv.payroll.controller.SessionManagementController" project="PayrollProject" 
-    file="/PayrollProject/src/main/java/it/unipv/payroll/controller/SessionManagementController.java" binary="false" 
+  <class id="1" language="java" name="it.unipv.payroll.mediator.ControllerMediator" project="PayrollProject" 
+    file="/PayrollProject/src/main/java/it/unipv/payroll/mediator/ControllerMediator.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="698" y="173"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    <position height="173" width="259" x="366" y="205"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="it.unipv.payroll.model.Credentials" project="PayrollProject" 
-    file="/PayrollProject/src/main/java/it/unipv/payroll/model/Credentials.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="225" width="150" x="126" y="351"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="4" language="java" name="it.unipv.payroll.view.SessionManagementBean" project="PayrollProject" 
-    file="/PayrollProject/src/main/java/it/unipv/payroll/view/SessionManagementBean.java" binary="false" 
+  <class id="2" language="java" name="it.unipv.payroll.controller.EmployeeController" project="PayrollProject" 
+    file="/PayrollProject/src/main/java/it/unipv/payroll/controller/EmployeeController.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="628" y="443"/>    
+    <position height="189" width="221" x="72" y="8"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <association id="5">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="6" name="newLoginCredentials"/>      
-      <multiplicity id="7" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="8">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="9" name="login"/>      
-      <multiplicity id="10" minimum="0" maximum="1"/>    
+  <class id="3" language="java" name="it.unipv.payroll.view.EmployeeBean" project="PayrollProject" 
+    file="/PayrollProject/src/main/java/it/unipv/payroll/view/EmployeeBean.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="805" y="307"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="4">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="5" name="med"/>      
+      <multiplicity id="6" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="1" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="11">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="12" name="oldLoginCredentials"/>      
-      <multiplicity id="13" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization id="14">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="1"/>  
-  </realization>  
-  <association id="15">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="16" name="sessionManagementController"/>      
-      <multiplicity id="17" minimum="0" maximum="1"/>    
+  <association id="7">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="8" name="emController"/>      
+      <multiplicity id="9" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  

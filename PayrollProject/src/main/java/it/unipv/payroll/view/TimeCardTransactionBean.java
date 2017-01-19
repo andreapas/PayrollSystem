@@ -12,6 +12,7 @@ import javax.inject.Named;
 
 import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.controller.TimeCardController;
+import it.unipv.payroll.mediator.ControllerMediator;
 import it.unipv.payroll.model.IEmployee;
 import it.unipv.payroll.model.TimeCard;
 
@@ -20,10 +21,10 @@ import it.unipv.payroll.model.TimeCard;
 @Stateful
 public class TimeCardTransactionBean implements Serializable {
 
-	@Inject
-	TimeCardController tcController;
-	@Inject
-	EmployeeController emController;
+//	@Inject
+//	TimeCardController tcController;
+//	@Inject
+//	EmployeeController emController;
 	private IEmployee loggedUser;
 	private TimeCard timeCard;
 	
@@ -32,7 +33,7 @@ public class TimeCardTransactionBean implements Serializable {
 	public void init(){
 		timeCard=new TimeCard();
 		try {
-			loggedUser = emController.find(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+			loggedUser = ControllerMediator.getMed().getEmController().find(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -44,7 +45,7 @@ public class TimeCardTransactionBean implements Serializable {
 		FacesContext context = FacesContext.getCurrentInstance();
 		try {
 			timeCard.setEmployee(loggedUser);
-			tcController.addHours(timeCard);
+			ControllerMediator.getMed().getTcController().addHours(timeCard);
 			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!",
 					"The worked hours have been correctly added"));
 		} catch (Exception e) {

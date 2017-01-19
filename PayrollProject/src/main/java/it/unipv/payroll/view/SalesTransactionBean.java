@@ -12,6 +12,7 @@ import javax.inject.Named;
 
 import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.controller.SalesController;
+import it.unipv.payroll.mediator.ControllerMediator;
 import it.unipv.payroll.model.IEmployee;
 import it.unipv.payroll.model.Sales;
 
@@ -20,10 +21,10 @@ import it.unipv.payroll.model.Sales;
 @Stateful
 public class SalesTransactionBean implements Serializable {
 
-	@Inject
-	SalesController sController;
-	@Inject
-	EmployeeController emController;
+//	@Inject
+//	SalesController sController;
+//	@Inject
+//	EmployeeController emController;
 	private IEmployee loggedUser;
 	private Sales sale;
 
@@ -31,7 +32,7 @@ public class SalesTransactionBean implements Serializable {
 	public void init() {
 		sale = new Sales();
 		try {
-			loggedUser = emController.find(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+			loggedUser = ControllerMediator.getMed().getEmController().find(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -45,7 +46,7 @@ public class SalesTransactionBean implements Serializable {
 		FacesContext context = FacesContext.getCurrentInstance();
 		try {
 			sale.setEmployee(loggedUser);
-			sController.addSale(sale);
+			ControllerMediator.getMed().getSaController().addSale(sale);
 			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!",
 					"The sale receipt have been correctly added"));
 		} catch (Exception e) {

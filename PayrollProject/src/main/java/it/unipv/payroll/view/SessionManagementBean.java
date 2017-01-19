@@ -11,6 +11,7 @@ import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
 import it.unipv.payroll.controller.SessionManagementController;
+import it.unipv.payroll.mediator.ControllerMediator;
 import it.unipv.payroll.model.Credentials;
 import it.unipv.payroll.model.ICredentials;
 
@@ -18,8 +19,8 @@ import it.unipv.payroll.model.ICredentials;
 @SessionScoped
 public class SessionManagementBean implements Serializable {
 
-	@Inject
-	SessionManagementController sessionManagementController;
+//	@Inject
+//	SessionManagementController sessionManagementController;
 
 
 	private ICredentials login;
@@ -60,7 +61,7 @@ public class SessionManagementBean implements Serializable {
 		newLoginCredentials.setCode(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
 		
 		try{
-			sessionManagementController.changePassword(oldLoginCredentials,newLoginCredentials);
+			ControllerMediator.getMed().getSmController().changePassword(oldLoginCredentials,newLoginCredentials);
 			FacesMessage message= new FacesMessage(FacesMessage.SEVERITY_INFO,"Success!",  "Password changed successfully") ;
 			FacesContext context = FacesContext.getCurrentInstance();
 			context.addMessage(null,message);
