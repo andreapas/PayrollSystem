@@ -27,8 +27,6 @@ public class EmployeeBean implements Serializable {
 	EmployeeController emController;
 	@Inject
 	SessionManagementController smController;
-	@Inject
-	WeeklyTransactionsBean transController;
 
 	private static String paymaster = "Paymaster";
 	private static String postal_address = "Postal address";
