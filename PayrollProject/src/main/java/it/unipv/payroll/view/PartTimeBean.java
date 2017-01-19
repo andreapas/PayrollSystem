@@ -4,11 +4,10 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateful;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -18,8 +17,7 @@ import it.unipv.payroll.model.Credentials;
 import it.unipv.payroll.model.PartTimeEmployee;
 
 @Named
-@ViewScoped
-@Stateful
+@RequestScoped
 public class PartTimeBean implements Serializable {
 
 	@Inject
@@ -73,7 +71,7 @@ public class PartTimeBean implements Serializable {
 		try {
 			partController.add(partTimeEmployee);
 			newCred.setCode(partTimeEmployee.getCode());
-			smController.generateCredentials(newCred);
+			smController.generateCredentials(partTimeEmployee,newCred);
 			growl(FacesMessage.SEVERITY_INFO, "Success!",
 					"The employee " + partTimeEmployee.getName() + " " + partTimeEmployee.getSurname()
 							+ " has been successfully hired",

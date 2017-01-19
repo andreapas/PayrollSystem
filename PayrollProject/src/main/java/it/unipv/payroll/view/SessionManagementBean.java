@@ -3,7 +3,7 @@ package it.unipv.payroll.view;
 import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -15,13 +15,12 @@ import it.unipv.payroll.model.Credentials;
 import it.unipv.payroll.model.ICredentials;
 
 @Named
-@SessionScoped
+@RequestScoped
 public class SessionManagementBean implements Serializable {
 
 	@Inject
 	SessionManagementController sessionManagementController;
-
-
+	
 	private ICredentials login;
 	private Credentials newLoginCredentials;
 	private ICredentials oldLoginCredentials;
@@ -34,12 +33,8 @@ public class SessionManagementBean implements Serializable {
 	}
 	
 	public String logout() {
-	    try {
-			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-			session.invalidate();
-		} catch (NullPointerException e) {
-			System.out.println("Null face context detected, maybe this bean has been run for testing");
-		}
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+		session.invalidate();
 	    return "/index.xhtml?faces-redirect=true";
 	}
 
@@ -54,7 +49,6 @@ public class SessionManagementBean implements Serializable {
 		this.newLoginCredentials = newLoginCredentials;
 	}
 	
-	//TODO: to test
 	public void modifyPassword(){
 		oldLoginCredentials.setCode(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
 		newLoginCredentials.setCode(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());

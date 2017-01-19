@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
@@ -18,8 +19,7 @@ import it.unipv.payroll.model.Credentials;
 import it.unipv.payroll.model.FullTimeEmployee;
 
 @Named
-@ViewScoped
-@Stateful
+@RequestScoped
 public class FullTimeBean implements Serializable {
 
 	@Inject
@@ -40,7 +40,7 @@ public class FullTimeBean implements Serializable {
 		try {
 			loggedUser = fullController.find(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
 		} catch (Exception e) {
-			System.out.println("Null faces detected. This bean is in testing");
+			growl(FacesMessage.SEVERITY_FATAL, "Fatal Error", "Please Relog");
 		}
 	}
 
@@ -71,14 +71,11 @@ public class FullTimeBean implements Serializable {
 	public void hireEmployee() {
 		try {
 			fullController.add(fullTimeEmployee);
-			String tmpPassword = "";
-			newCred.setCode(fullTimeEmployee.getCode());
-			smController.generateCredentials(newCred);
+			smController.generateCredentials(fullTimeEmployee, newCred);
 			growl(FacesMessage.SEVERITY_INFO, "Success!",
 					"The employee " + fullTimeEmployee.getName() + " " + fullTimeEmployee.getSurname()
 							+ " has been successfully hired",
-					FacesMessage.SEVERITY_WARN, "Attention", "Password: \'" + tmpPassword
-							+ "\' without apices. This password should be changed at first login.");
+					FacesMessage.SEVERITY_WARN, "Attention", "Password sent to the employee email. This password should be changed at first login.");
 
 			// cancel();
 			fullTimersList = fullController.findAll();

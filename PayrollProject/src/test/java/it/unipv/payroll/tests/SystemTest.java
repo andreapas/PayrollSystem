@@ -527,7 +527,7 @@ public class SystemTest extends ArquillianTest {
 			ftController.add(anotherEmployee);
 			Credentials oldLoginCredentials = new Credentials();
 			oldLoginCredentials.setCode(anotherEmployee.getCode());
-			smController.generateCredentials(oldLoginCredentials);
+			smController.generateCredentials(anotherEmployee,oldLoginCredentials);
 			oldLoginCredentials.setPassword(Base64.getEncoder().encodeToString(md.digest("basePassword".getBytes())));
 			smController.update(oldLoginCredentials);
 			oldLoginCredentials.setPassword("basePassword");
