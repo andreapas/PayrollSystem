@@ -9,9 +9,11 @@ import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
-import it.unipv.payroll.mediator.ControllerMediator;
+import it.unipv.payroll.controller.FullTimeController;
+import it.unipv.payroll.controller.SessionManagementController;
 import it.unipv.payroll.model.Credentials;
 import it.unipv.payroll.model.FullTimeEmployee;
 
@@ -20,22 +22,23 @@ import it.unipv.payroll.model.FullTimeEmployee;
 @Stateful
 public class FullTimeBean implements Serializable {
 
-//	@Inject
-//	FullTimeController fullController;
-//	@Inject
-//	SessionManagementController smController;
+	@Inject
+	FullTimeController fullController;
+	@Inject
+	SessionManagementController smController;
 
 	private FullTimeEmployee fullTimeEmployee;
 	private FullTimeEmployee loggedUser;
 	private List<FullTimeEmployee> fullTimersList;
 	private Credentials newCred;
+
 	@PostConstruct
 	public void init() {
 		fullTimeEmployee = new FullTimeEmployee();
 		newCred = new Credentials();
-		fullTimersList = ControllerMediator.getMed().getFtController().findAll();
+		fullTimersList = fullController.findAll();
 		try {
-			loggedUser = ControllerMediator.getMed().getFtController().find(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+			loggedUser = fullController.find(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
 		} catch (Exception e) {
 			System.out.println("Null faces detected. This bean is in testing");
 		}
@@ -67,10 +70,10 @@ public class FullTimeBean implements Serializable {
 
 	public void hireEmployee() {
 		try {
-			ControllerMediator.getMed().getFtController().add(fullTimeEmployee);
+			fullController.add(fullTimeEmployee);
 			String tmpPassword = "";
 			newCred.setCode(fullTimeEmployee.getCode());
-			ControllerMediator.getMed().getSmController().generateCredentials(newCred);
+			smController.generateCredentials(newCred);
 			growl(FacesMessage.SEVERITY_INFO, "Success!",
 					"The employee " + fullTimeEmployee.getName() + " " + fullTimeEmployee.getSurname()
 							+ " has been successfully hired",
@@ -78,7 +81,7 @@ public class FullTimeBean implements Serializable {
 							+ "\' without apices. This password should be changed at first login.");
 
 			// cancel();
-			fullTimersList = ControllerMediator.getMed().getFtController().findAll();
+			fullTimersList = fullController.findAll();
 		} catch (Exception e) {
 			growl(FacesMessage.SEVERITY_FATAL, "Error!",
 					"Something has gone wrong while trying to hire " + fullTimeEmployee.getName() + " "
@@ -93,10 +96,10 @@ public class FullTimeBean implements Serializable {
 
 	public void updateEmployee() {
 		try {
-			ControllerMediator.getMed().getFtController().update(fullTimeEmployee);
+			fullController.update(fullTimeEmployee);
 			growl(FacesMessage.SEVERITY_INFO, "Success", "Your informations has been updated successfully.");
 
-			fullTimersList =ControllerMediator.getMed().getFtController().findAll();
+			fullTimersList = fullController.findAll();
 		} catch (Exception e) {
 			growl(FacesMessage.SEVERITY_FATAL, "Error!",
 					"Something has gone wrong while trying to update your informations. The complete message is "

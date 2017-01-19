@@ -11,7 +11,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import it.unipv.payroll.controller.UnionsController;
-import it.unipv.payroll.mediator.ControllerMediator;
 import it.unipv.payroll.model.IUnion;
 import it.unipv.payroll.model.Union;
 
@@ -19,8 +18,8 @@ import it.unipv.payroll.model.Union;
 @SessionScoped
 public class UnionsBean implements Serializable {
 
-//	@Inject
-//	UnionsController unionsController;
+	@Inject
+	UnionsController unionsController;
 
 	private Union union;
 	private String fireUnionName;
@@ -31,7 +30,7 @@ public class UnionsBean implements Serializable {
 	public void init() {
 		union = new Union();
 		fireUnionName = new String();
-		unions =ControllerMediator.getMed().getUnController().getUnionsList();
+		unions =unionsController.getUnionsList();
 
 	}
 
@@ -46,10 +45,10 @@ public class UnionsBean implements Serializable {
 	public void addUnion() {
 		FacesContext context = FacesContext.getCurrentInstance();
 		try {
-			ControllerMediator.getMed().getUnController().add(union);
+			unionsController.add(union);
 			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!",
 					"The union " + union.getUnionName() + " has been successfully added"));
-			unions = ControllerMediator.getMed().getUnController().getUnionsList();
+			unions = unionsController.getUnionsList();
 		} catch (Exception e) {
 			context.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error!",
@@ -68,11 +67,11 @@ public class UnionsBean implements Serializable {
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		try {
-			ControllerMediator.getMed().getUnController().remove(fireUnionName);
+			unionsController.remove(fireUnionName);
 			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!",
 					"The union " + fireUnionName + " has been successfully removed"));
 			fireUnionName = "";
-			unions = ControllerMediator.getMed().getUnController().getUnionsList();
+			unions = unionsController.getUnionsList();
 		} catch (Exception e) {
 			context.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error!",
@@ -100,13 +99,13 @@ public class UnionsBean implements Serializable {
 
 		FacesMessage message;
 		try {
-			ControllerMediator.getMed().getUnController().update(union);
+			unionsController.update(union);
 			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!",
 					"The Union " + union.getUnionName() + " has been updated successfully!");
 
 			context.addMessage(null, message);
 
-			unions = ControllerMediator.getMed().getUnController().getUnionsList();
+			unions = unionsController.getUnionsList();
 			fireUnionName = "";
 		} catch (Exception e) {
 			message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error!",

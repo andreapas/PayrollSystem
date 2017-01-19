@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import it.unipv.payroll.controller.ChargesController;
-import it.unipv.payroll.mediator.ControllerMediator;
 import it.unipv.payroll.model.Charges;
 import it.unipv.payroll.model.IEmployee;
 
@@ -18,8 +17,8 @@ import it.unipv.payroll.model.IEmployee;
 @Stateful
 public class ChargesTransactionBean {
 
-//	@Inject
-//	ChargesController cController;
+	@Inject
+	ChargesController cController;
 	
 	private Charges charge;
 	private IEmployee employee;
@@ -42,7 +41,7 @@ public class ChargesTransactionBean {
 
 		try {
 			charge.setEmployee(employee);
-			ControllerMediator.getMed().getcController().addCharge(charge);
+			cController.addCharge(charge);
 			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!",
 					"The service charge has been successfully set"));
 

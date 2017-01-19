@@ -14,7 +14,6 @@ import javax.inject.Named;
 
 import it.unipv.payroll.controller.PartTimeController;
 import it.unipv.payroll.controller.SessionManagementController;
-import it.unipv.payroll.mediator.ControllerMediator;
 import it.unipv.payroll.model.Credentials;
 import it.unipv.payroll.model.PartTimeEmployee;
 
@@ -23,10 +22,10 @@ import it.unipv.payroll.model.PartTimeEmployee;
 @Stateful
 public class PartTimeBean implements Serializable {
 
-//	@Inject
-//	PartTimeController partController;
-//	@Inject
-//	SessionManagementController smController;
+	@Inject
+	PartTimeController partController;
+	@Inject
+	SessionManagementController smController;
 
 	private PartTimeEmployee partTimeEmployee;
 	private PartTimeEmployee loggedUser;
@@ -39,11 +38,11 @@ public class PartTimeBean implements Serializable {
 		partTimeEmployee = new PartTimeEmployee();
 		System.out.println("Reconstructing...");
 		try {
-			loggedUser = ControllerMediator.getMed().getPtController().find(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+			loggedUser = partController.find(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
 		} catch (Exception e) {
 			System.out.println("Null face context detected. Bean run for testing");
 		}
-		partTimersList = ControllerMediator.getMed().getPtController().findAll();
+		partTimersList = partController.findAll();
 	}
 
 	public PartTimeEmployee getLoggedUser() {
@@ -72,15 +71,15 @@ public class PartTimeBean implements Serializable {
 
 	public void hireEmployee() {
 		try {
-			ControllerMediator.getMed().getPtController().add(partTimeEmployee);
+			partController.add(partTimeEmployee);
 			newCred.setCode(partTimeEmployee.getCode());
-			ControllerMediator.getMed().getSmController().generateCredentials(newCred);
+			smController.generateCredentials(newCred);
 			growl(FacesMessage.SEVERITY_INFO, "Success!",
 					"The employee " + partTimeEmployee.getName() + " " + partTimeEmployee.getSurname()
 							+ " has been successfully hired",
 					FacesMessage.SEVERITY_WARN, "Attention",
 					"Password sent to the employee email. This password should be changed at first login.");
-			partTimersList = ControllerMediator.getMed().getPtController().findAll();
+			partTimersList = partController.findAll();
 		} catch (Exception e) {
 			growl(FacesMessage.SEVERITY_FATAL, "Error!",
 					"Something has gone wrong while trying to hire " + partTimeEmployee.getName() + " "
@@ -96,9 +95,9 @@ public class PartTimeBean implements Serializable {
 
 	public void updateEmployee() {
 		try {
-			ControllerMediator.getMed().getPtController().update(partTimeEmployee);
+			partController.update(partTimeEmployee);
 			growl(FacesMessage.SEVERITY_INFO, "Success", "Your informations has been updated successfully.");
-			partTimersList = ControllerMediator.getMed().getPtController().findAll();
+			partTimersList = partController.findAll();
 		} catch (Exception e) {
 			growl(FacesMessage.SEVERITY_FATAL, "Error!",
 					"Something has gone wrong while trying to update your informations. The complete message is "

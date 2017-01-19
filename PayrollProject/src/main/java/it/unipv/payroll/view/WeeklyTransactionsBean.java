@@ -12,7 +12,6 @@ import it.unipv.payroll.controller.ChargesController;
 import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.controller.PartTimeController;
 import it.unipv.payroll.controller.TimeCardController;
-import it.unipv.payroll.mediator.ControllerMediator;
 import it.unipv.payroll.model.Charges;
 import it.unipv.payroll.model.IEmployee;
 import it.unipv.payroll.utils.Mail;
@@ -21,16 +20,16 @@ import it.unipv.payroll.utils.ReportCreator;
 @RequestScoped
 public class WeeklyTransactionsBean implements Serializable {
 
-//	@Inject
-//	TimeCardController tcController;
-//	@Inject
-//	ChargesController cController;
-//	@Inject
-//	PartTimeController ptController;
-//	@Inject
-//	EmployeeController emController;
-//	@Inject
-//	Mail mailer;
+	@Inject
+	TimeCardController tcController;
+	@Inject
+	ChargesController cController;
+	@Inject
+	PartTimeController ptController;
+	@Inject
+	EmployeeController emController;
+	@Inject
+	Mail mailer;
 
 	private String managerEmail;
 	private ReportCreator fileCreator = new ReportCreator();
@@ -38,22 +37,22 @@ public class WeeklyTransactionsBean implements Serializable {
 	private List<IEmployee> ptList = new ArrayList<IEmployee>();
 
 	public HashMap<String, Float> pay() {
-		ptList.addAll(ControllerMediator.getMed().getPtController().findAll());
+		ptList.addAll(ptController.findAll());
 		List<String> codeEmList = new ArrayList<String>();
 		for (IEmployee employee : ptList) {
 			codeEmList.add(employee.getCode());
 		}
 		HashMap<String, Float> total = new HashMap<String, Float>();
 		try {
-			HashMap<String, Float> dues = ControllerMediator.getMed().getcController().chargeFee(codeEmList);
-			HashMap<String, Float> earnings = ControllerMediator.getMed().getTcController().payTimeCards(codeEmList);
+			HashMap<String, Float> dues = cController.chargeFee(codeEmList);
+			HashMap<String, Float> earnings = tcController.payTimeCards(codeEmList);
 
 			for (String code : codeEmList) {
 				total.put(code, dues.get(code) + earnings.get(code));
 			}
 			emList.clear();
 			emList.addAll(ptList);
-			managerEmail = ControllerMediator.getMed().getEmController().getManager().getEmail();
+			managerEmail = emController.getManager().getEmail();
 			sendMail(emList, earnings, "Part-time", managerEmail);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -63,7 +62,7 @@ public class WeeklyTransactionsBean implements Serializable {
 	}
 
 	public void addWeeklyUnionFee() {
-		emList.addAll(ControllerMediator.getMed().getEmController().findAll());
+		emList.addAll(emController.findAll());
 
 		for (IEmployee employee : emList) {
 			Charges trans = new Charges();
@@ -71,7 +70,7 @@ public class WeeklyTransactionsBean implements Serializable {
 			trans.setEmployee(employee);
 			trans.setInfo("Weekly charge for being an associate to the union: " + employee.getUnion().getUnionName());
 			try {
-				ControllerMediator.getMed().getcController().addCharge(trans);
+				cController.addCharge(trans);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -81,7 +80,7 @@ public class WeeklyTransactionsBean implements Serializable {
 	private void sendMail(List<IEmployee> employeeList, HashMap<String, Float> earnings, String type,
 			String recipientEmail) {
 		String file = fileCreator.generateFile(employeeList, earnings, type);
-		ControllerMediator.getMed().getMailer().send(recipientEmail, "Reminder of payed employees " + type,
+		mailer.send(recipientEmail, "Reminder of payed employees " + type,
 				"Attached you can find the report of the payment executed or waiting to be delivered from the Paymaster.\n\n\nThis mail has been auto-generated. do not reply.",
 				file);
 	}

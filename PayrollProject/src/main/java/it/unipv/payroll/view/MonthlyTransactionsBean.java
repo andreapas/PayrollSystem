@@ -14,7 +14,6 @@ import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.controller.FullTimeController;
 import it.unipv.payroll.controller.SalaryController;
 import it.unipv.payroll.controller.SalesController;
-import it.unipv.payroll.mediator.ControllerMediator;
 import it.unipv.payroll.model.FullTimeEmployee;
 import it.unipv.payroll.model.IEmployee;
 import it.unipv.payroll.model.Salary;
@@ -23,18 +22,18 @@ import it.unipv.payroll.utils.ReportCreator;
 
 @RequestScoped
 public class MonthlyTransactionsBean implements Serializable{
-//	@Inject
-//	SalesController sController;
-//	@Inject
-//	SalaryController saController;
-//	@Inject
-//	ChargesController cController;
-//	@Inject
-//	FullTimeController ftController;
-//	@Inject
-//	EmployeeController emController;
-//	@Inject
-//	Mail mailer;
+	@Inject
+	SalesController sController;
+	@Inject
+	SalaryController saController;
+	@Inject
+	ChargesController cController;
+	@Inject
+	FullTimeController ftController;
+	@Inject
+	EmployeeController emController;
+	@Inject
+	Mail mailer;
 
 	private String managerEmail;
 	private ReportCreator fileCreator = new ReportCreator();
@@ -42,16 +41,16 @@ public class MonthlyTransactionsBean implements Serializable{
 	private List<IEmployee> emList = new ArrayList<IEmployee>();
 
 	public HashMap<String, Float> pay() {
-		ftList = ControllerMediator.getMed().getFtController().findAll();
+		ftList = ftController.findAll();
 		List<String> codeEmList = new ArrayList<String>();
 		for (IEmployee employee : ftList) {
 			codeEmList.add(employee.getCode());
 		}
 		HashMap<String, Float> total = new HashMap<String, Float>();
 		try {
-			HashMap<String, Float> dues = ControllerMediator.getMed().getcController().chargeFee(codeEmList);
-			HashMap<String, Float> salesEarnings = ControllerMediator.getMed().getSaController().paySales(codeEmList);
-			HashMap<String, Float> salaryEarnings = ControllerMediator.getMed().getSalaryController().paySalary(codeEmList);
+			HashMap<String, Float> dues = cController.chargeFee(codeEmList);
+			HashMap<String, Float> salesEarnings = sController.paySales(codeEmList);
+			HashMap<String, Float> salaryEarnings = saController.paySalary(codeEmList);
 			float due=0;
 			float sale=0;
 			float salary=0;
@@ -67,7 +66,7 @@ public class MonthlyTransactionsBean implements Serializable{
 					salary=salaryEarnings.get(code);
 				total.put(code, due+sale+salary);
 			}
-			managerEmail = ControllerMediator.getMed().getEmController().getManager().getEmail();
+			managerEmail = emController.getManager().getEmail();
 			emList.addAll(ftList);
 			sendMail(emList, total, "Full-time", managerEmail);
 		} catch (Exception e) {
@@ -78,7 +77,7 @@ public class MonthlyTransactionsBean implements Serializable{
 	}
 
 	public void addSalaries() {
-		ftList = ControllerMediator.getMed().getFtController().findAll();
+		ftList = ftController.findAll();
 		for (FullTimeEmployee employee : ftList) {
 			Salary trans = new Salary();
 			trans.setDate(new Date());
@@ -86,7 +85,7 @@ public class MonthlyTransactionsBean implements Serializable{
 			trans.setEmployee(employee);
 			trans.setInfo("Monthly salary");
 			try {
-				ControllerMediator.getMed().getSalaryController().add(trans);
+				saController.add(trans);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -96,7 +95,7 @@ public class MonthlyTransactionsBean implements Serializable{
 	private void sendMail(List<IEmployee> employeeList, HashMap<String, Float> earnings, String type,
 			String recipientEmail) {
 		String file = fileCreator.generateFile(employeeList, earnings, type);
-		ControllerMediator.getMed().getMailer().send(recipientEmail, "Reminder of payed employees " + type,
+		mailer.send(recipientEmail, "Reminder of payed employees " + type,
 				"Attached you can find the report of the payment executed or waiting to be delivered from the Paymaster.\n\n\nThis mail has been auto-generated. do not reply.",
 				file);
 	}

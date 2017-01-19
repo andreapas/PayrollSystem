@@ -16,7 +16,6 @@ import javax.inject.Named;
 
 import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.controller.SessionManagementController;
-import it.unipv.payroll.mediator.ControllerMediator;
 import it.unipv.payroll.model.Employee;
 
 @Named
@@ -24,10 +23,10 @@ import it.unipv.payroll.model.Employee;
 @Stateful
 public class EmployeeBean implements Serializable {
 
-//	@Inject
-//	EmployeeController emController;
-//	@Inject
-//	SessionManagementController smController;
+	@Inject
+	EmployeeController emController;
+	@Inject
+	SessionManagementController smController;
 
 	private static String paymaster = "Paymaster";
 	private static String postal_address = "Postal address";
@@ -37,11 +36,11 @@ public class EmployeeBean implements Serializable {
 
 	@PostConstruct
 	public void init() {
-		employeeList = ControllerMediator.getMed().getEmController().findAll();
+		employeeList = emController.findAll();
 	}
 
 	public List<Employee> getEmployeeList() {
-		employeeList = ControllerMediator.getMed().getEmController().findAll();
+		employeeList = emController.findAll();
 		return employeeList;
 	}
 
@@ -55,15 +54,15 @@ public class EmployeeBean implements Serializable {
 
 	public void fireEmployee(String fireCode) {
 		try {
-			ControllerMediator.getMed().getEmController().remove(fireCode);
+			emController.remove(fireCode);
 			growl(FacesMessage.SEVERITY_INFO, "Success!",
 					"The employee with code:" + fireCode + " has been successfully fired");
-			ControllerMediator.getMed().getSmController().remove(fireCode);
+			smController.remove(fireCode);
 		} catch (Exception e) {
 			growl(FacesMessage.SEVERITY_FATAL, "Error!",
 					"Something has gone wrong while trying to fire employee with code: " + fireCode
 							+ ". The complete message is " + e.getMessage());
-			employeeList = ControllerMediator.getMed().getEmController().findAll();
+			employeeList = emController.findAll();
 		}
 
 	}
