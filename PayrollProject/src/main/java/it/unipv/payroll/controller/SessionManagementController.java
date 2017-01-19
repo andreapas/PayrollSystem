@@ -3,6 +3,7 @@ package it.unipv.payroll.controller;
 import javax.ejb.Stateless;
 
 import it.unipv.payroll.model.Credentials;
+import it.unipv.payroll.model.ICredentials;
 import it.unipv.payroll.utils.PasswordManager;
 
 @Stateless
@@ -11,7 +12,7 @@ public class SessionManagementController extends GenericController<Credentials> 
 	private PasswordManager pswdManager = new PasswordManager();
 
 	private boolean areValidCredential(String username, String password) {
-		Credentials loginAttempt = dao.find(username);
+		ICredentials loginAttempt = dao.find(username);
 		if (loginAttempt != null) {
 			// System.out.println(loginAttempt.getPassword());
 			// System.out.println(pswdManager.hashIt(password));
@@ -40,7 +41,7 @@ public class SessionManagementController extends GenericController<Credentials> 
 	}
 	
 	
-	public void changePassword(Credentials oldest,Credentials newest) throws Exception {
+	public void changePassword(ICredentials oldest,Credentials newest) throws Exception {
 		if(!areValidCredential(oldest.getCode(), oldest.getPassword()))
 			throw new Exception("Wrong Password inserted. Please, try again");
 		newest.setPassword(pswdManager.hashIt(newest.getPassword()));
@@ -49,7 +50,7 @@ public class SessionManagementController extends GenericController<Credentials> 
 
 	@Override
 	public boolean isAlreadyInDatabase(Credentials element) {
-		Credentials login = dao.find(element.getCode());
+		ICredentials login = dao.find(element.getCode());
 		if (login != null) {
 			return true;
 		}

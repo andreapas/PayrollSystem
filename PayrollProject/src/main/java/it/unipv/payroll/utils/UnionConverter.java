@@ -9,7 +9,7 @@ import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 
 import it.unipv.payroll.controller.UnionsController;
-import it.unipv.payroll.model.Union;
+import it.unipv.payroll.model.IUnion;
 
 @FacesConverter("unionTranslator")
 public class UnionConverter implements Converter{
@@ -20,7 +20,7 @@ public class UnionConverter implements Converter{
 	public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if(value != null && value.trim().length() > 0) {
             try {
-            	Union union= controller.find(value);
+            	IUnion union= controller.find(value);
                 return union;
             } catch(ClassCastException e) {
                 throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Not a valid Union."));
@@ -36,7 +36,7 @@ public class UnionConverter implements Converter{
 	@Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if(object != null) {
-        	String name=(((Union) object).getUnionName());
+        	String name=(((IUnion) object).getUnionName());
             return name;
         }else {
             return null;

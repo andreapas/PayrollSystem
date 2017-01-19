@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import it.unipv.payroll.controller.SessionManagementController;
 import it.unipv.payroll.model.Credentials;
+import it.unipv.payroll.model.ICredentials;
 
 @Named
 @SessionScoped
@@ -21,9 +22,9 @@ public class SessionManagementBean implements Serializable {
 	SessionManagementController sessionManagementController;
 
 
-	private Credentials login;
+	private ICredentials login;
 	private Credentials newLoginCredentials;
-	private Credentials oldLoginCredentials;
+	private ICredentials oldLoginCredentials;
 
 	@PostConstruct
 	public void init(){
@@ -42,10 +43,10 @@ public class SessionManagementBean implements Serializable {
 	    return "/index.xhtml?faces-redirect=true";
 	}
 
-	public Credentials getOldLoginCredentials() {
+	public ICredentials getOldLoginCredentials() {
 		return oldLoginCredentials;
 	}
-	public Credentials getNewLoginCredentials() {
+	public ICredentials getNewLoginCredentials() {
 		return newLoginCredentials;
 	}
 	

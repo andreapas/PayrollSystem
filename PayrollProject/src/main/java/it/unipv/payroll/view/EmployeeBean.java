@@ -16,7 +16,6 @@ import javax.inject.Named;
 
 import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.controller.SessionManagementController;
-import it.unipv.payroll.controller.TransactionsController;
 import it.unipv.payroll.model.Employee;
 
 @Named
@@ -29,7 +28,7 @@ public class EmployeeBean implements Serializable {
 	@Inject
 	SessionManagementController smController;
 	@Inject
-	TransactionsController transController;
+	WeeklyTransactionsBean transController;
 
 	private static String paymaster = "Paymaster";
 	private static String postal_address = "Postal address";

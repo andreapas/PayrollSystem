@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 
+import it.unipv.payroll.model.IUnion;
 import it.unipv.payroll.model.Union;
 
 @Stateless
@@ -23,7 +24,7 @@ public class UnionsController extends GenericController<Union> {
 	
 	@Override
 	public boolean isAlreadyInDatabase(Union element) {
-		Union union = dao.find(element.getUnionName());
+		IUnion union = dao.find(element.getUnionName());
 		if (union != null) {
 			return true;
 		}
@@ -45,4 +46,6 @@ public class UnionsController extends GenericController<Union> {
 		return true;
 		
 	}
+	
+	
 }

@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="unions")
-public class Union implements Serializable{
+public class Union implements Serializable, IUnion{
 
 	@Id
 	private String unionName;
@@ -23,23 +23,43 @@ public class Union implements Serializable{
 	@OneToMany(mappedBy = "union", fetch = FetchType.EAGER)
 	private List<Employee> associates;	
 	
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IUnion#getAssociates()
+	 */
+	@Override
 	public List<Employee> getAssociates() {
 		return associates;
 	}
 
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IUnion#setUnionName(java.lang.String)
+	 */
+	@Override
 	public void setUnionName(String unionName) {
 		this.unionName = unionName;
 	}
 
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IUnion#setWeeklyRate(float)
+	 */
+	@Override
 	public void setWeeklyRate(float weeklyRate) {
 		this.weeklyRate = weeklyRate;
 	}
 
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IUnion#getUnionName()
+	 */
+	@Override
 	public String getUnionName() {
 		
 		return unionName;
 	}
 
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IUnion#getWeeklyRate()
+	 */
+	@Override
 	public float getWeeklyRate() {
 		
 		return weeklyRate;

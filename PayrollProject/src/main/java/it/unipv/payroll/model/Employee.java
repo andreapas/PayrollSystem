@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @Table(name = "employees")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "employee_type")
-public abstract class Employee implements Serializable{
+public abstract class Employee implements Serializable, IEmployee{
 
 	@Id
 	private String code;
@@ -28,12 +28,12 @@ public abstract class Employee implements Serializable{
 	private String surname;
 	private String email;
 //	private String address;
-	@ManyToOne/*(cascade={CascadeType.ALL})*/
+	@ManyToOne(targetEntity=Union.class)/*(cascade={CascadeType.ALL})*/
 	@JoinColumn(name="union_name")
-	private Union union;
+	private IUnion union;
 	
-	@OneToMany(mappedBy = "employee", fetch = FetchType.EAGER, cascade={CascadeType.ALL})
-	private List<Transactions> transactions;	
+	@OneToMany(mappedBy = "employee", fetch = FetchType.EAGER, cascade={CascadeType.ALL}, targetEntity=Charges.class)
+	private List<ITransaction> charges;	
 
 	private String address;
 	private String payment_method;
@@ -42,63 +42,143 @@ public abstract class Employee implements Serializable{
 	private String role;
 	
 	
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IEmployee#getCode()
+	 */
+	@Override
 	public String getCode() {
 		return code;
 	}
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IEmployee#setCode(java.lang.String)
+	 */
+	@Override
 	public void setCode(String code) {
 		this.code = code;
 	}
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IEmployee#getName()
+	 */
+	@Override
 	public String getName() {
 		return name;
 	}
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IEmployee#setName(java.lang.String)
+	 */
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IEmployee#getSurname()
+	 */
+	@Override
 	public String getSurname() {
 		return surname;
 	}
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IEmployee#setSurname(java.lang.String)
+	 */
+	@Override
 	public void setSurname(String surname) {
 		this.surname = surname;
 	}
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IEmployee#getEmail()
+	 */
+	@Override
 	public String getEmail() {
 		return email;
 	}
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IEmployee#setEmail(java.lang.String)
+	 */
+	@Override
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public Union getUnion() {
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IEmployee#getUnion()
+	 */
+	@Override
+	public IUnion getUnion() {
 		return union;
 	}
-	public void setUnion(Union union) {
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IEmployee#setUnion(it.unipv.payroll.model.Union)
+	 */
+	@Override
+	public void setUnion(IUnion union) {
 		this.union = union;
 	}
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IEmployee#getPayment_method()
+	 */
+	@Override
 	public String getPayment_method() {
 		return payment_method;
 	}
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IEmployee#setPayment_method(java.lang.String)
+	 */
+	@Override
 	public void setPayment_method(String payment_method) {
 		this.payment_method = payment_method;
 	}
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IEmployee#getRole()
+	 */
+	@Override
 	public String getRole() {
 		return role;
 	}
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IEmployee#setRole(java.lang.String)
+	 */
+	@Override
 	public void setRole(String role) {
 		this.role = role;
 	}
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IEmployee#getAddress()
+	 */
+	@Override
 	public String getAddress() {
 		return address;
 	}
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IEmployee#setAddress(java.lang.String)
+	 */
+	@Override
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	public List<Transactions> getTransactions() {
-		return transactions;
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IEmployee#getTransactions()
+	 */
+	@Override
+	public List<ITransaction> getCharges() {
+		return charges;
 	}
-	public void setTransactions(List<Transactions> transactions) {
-		this.transactions = transactions;
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IEmployee#setTransactions(java.util.List)
+	 */
+	@Override
+	public void setCharges(List<ITransaction> charges) {
+		this.charges = charges;
 	}
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IEmployee#getPayment_method_details()
+	 */
+	@Override
 	public String getPayment_method_details() {
 		return payment_method_details;
 	}
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.IEmployee#setPayment_method_details(java.lang.String)
+	 */
+	@Override
 	public void setPayment_method_details(String payment_method_details) {
 		this.payment_method_details = payment_method_details;
 	}
@@ -114,7 +194,7 @@ public abstract class Employee implements Serializable{
 		result = prime * result + ((payment_method_details == null) ? 0 : payment_method_details.hashCode());
 		result = prime * result + ((role == null) ? 0 : role.hashCode());
 		result = prime * result + ((surname == null) ? 0 : surname.hashCode());
-		result = prime * result + ((transactions == null) ? 0 : transactions.hashCode());
+		result = prime * result + ((charges == null) ? 0 : charges.hashCode());
 		result = prime * result + ((union == null) ? 0 : union.hashCode());
 		return result;
 	}
@@ -167,10 +247,10 @@ public abstract class Employee implements Serializable{
 				return false;
 		} else if (!surname.equals(other.surname))
 			return false;
-		if (transactions == null) {
-			if (other.transactions != null)
+		if (charges == null) {
+			if (other.charges != null)
 				return false;
-		} else if (!transactions.equals(other.transactions))
+		} else if (!charges.equals(other.charges))
 			return false;
 		if (union == null) {
 			if (other.union != null)

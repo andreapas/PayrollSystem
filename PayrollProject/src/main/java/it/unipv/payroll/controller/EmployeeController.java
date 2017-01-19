@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 
 import it.unipv.payroll.model.Employee;
+import it.unipv.payroll.model.IEmployee;
 
 @Stateless
 public class EmployeeController extends GenericController<Employee> {
@@ -14,9 +15,19 @@ public class EmployeeController extends GenericController<Employee> {
 		return list;
 	}
 	
+	public Employee getManager(){
+		List<Employee> list = dao.findAll();
+		for (Employee employee : list) {
+			if (employee.getRole().equals("Manager")) {
+				return employee;
+			}
+		}
+		return null;
+	}
+	
 	@Override
 	public boolean isAlreadyInDatabase(Employee element) {
-		Employee employee= dao.find(element.getCode());
+		IEmployee employee= dao.find(element.getCode());
 		if(employee!=null){
 			return true;
 		}
@@ -33,7 +44,7 @@ public class EmployeeController extends GenericController<Employee> {
 	public void remove(Object id) throws Exception {
 		if(find(id)==null)
 			throw new Exception("Entity not found in the database. " + ERROR);
-		Employee em=find(id);
+		IEmployee em=find(id);
 		if (em.getRole().equals("Manager")) 
 			throw new Exception("You're not allowed to remove the Manager. "+ERROR);
 		super.remove(id);

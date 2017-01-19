@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import it.unipv.payroll.controller.UnionsController;
+import it.unipv.payroll.model.IUnion;
 import it.unipv.payroll.model.Union;
 
 @Named
@@ -33,7 +34,7 @@ public class UnionsBean implements Serializable {
 
 	}
 
-	public Union getUnion() {
+	public IUnion getUnion() {
 		return union;
 	}
 

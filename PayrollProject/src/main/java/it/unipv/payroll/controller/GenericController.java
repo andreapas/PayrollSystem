@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
 import it.unipv.payroll.dao.GenericDAO;
+import it.unipv.payroll.model.IEmployee;
 
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public abstract class GenericController<T extends Serializable> {
@@ -56,5 +57,7 @@ public abstract class GenericController<T extends Serializable> {
 	public abstract boolean isElementOk(T element);
 	
 	public abstract T find(Object id) throws Exception;
+	
+	
 
 }

@@ -10,22 +10,38 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="credentials")
-public class Credentials implements Serializable{
+public class Credentials implements Serializable, ICredentials{
 
 	@Id
 	private String code;
 	
 	private String password;
 	
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.ICredentials#getCode()
+	 */
+	@Override
 	public String getCode() {
 		return code;
 	}
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.ICredentials#setCode(java.lang.String)
+	 */
+	@Override
 	public void setCode(String code) {
 		this.code = code;
 	}
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.ICredentials#getPassword()
+	 */
+	@Override
 	public String getPassword() {
 		return password;
 	}
+	/* (non-Javadoc)
+	 * @see it.unipv.payroll.model.ICredentials#setPassword(java.lang.String)
+	 */
+	@Override
 	public void setPassword(String password) {
 		this.password = password;
 	}

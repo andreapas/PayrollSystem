@@ -20,16 +20,19 @@ import it.unipv.payroll.controller.EmployeeController;
 import it.unipv.payroll.controller.FullTimeController;
 import it.unipv.payroll.controller.PartTimeController;
 import it.unipv.payroll.controller.SessionManagementController;
-import it.unipv.payroll.controller.TransactionsController;
 import it.unipv.payroll.controller.UnionsController;
 import it.unipv.payroll.model.Credentials;
 import it.unipv.payroll.model.Employee;
 import it.unipv.payroll.model.FullTimeEmployee;
+import it.unipv.payroll.model.IEmployee;
+import it.unipv.payroll.model.IUnion;
 import it.unipv.payroll.model.PartTimeEmployee;
-import it.unipv.payroll.model.Transactions;
+import it.unipv.payroll.model.ITransaction;
+import it.unipv.payroll.model.ITransaction;
 import it.unipv.payroll.model.Union;
 import it.unipv.payroll.utils.AutoPayday;
 import it.unipv.payroll.utils.UnionConverter;
+import it.unipv.payroll.view.WeeklyTransactionsBean;
 
 @RunWith(Arquillian.class)
 public class SystemTest extends ArquillianTest {
@@ -55,7 +58,7 @@ public class SystemTest extends ArquillianTest {
 	FullTimeController ftController;
 
 	@Inject
-	TransactionsController tController;
+	WeeklyTransactionsBean tController;
 	@Inject
 	SessionManagementController smController;
 	@Inject
@@ -125,7 +128,7 @@ public class SystemTest extends ArquillianTest {
 
 			List<PartTimeEmployee> partEmployees = ptController.findAll();
 			boolean isPresent = false;
-			for (Employee em : partEmployees) {
+			for (IEmployee em : partEmployees) {
 				if (em.getCode().equals(USER1_COD)) {
 					isPresent = true;
 					break;
@@ -147,7 +150,7 @@ public class SystemTest extends ArquillianTest {
 
 			List<FullTimeEmployee> fullEmployees = ftController.findAll();
 			boolean isPresent = false;
-			for (Employee em : fullEmployees) {
+			for (IEmployee em : fullEmployees) {
 				if (em.getCode().equals(USER2_COD)) {
 					isPresent = true;
 					break;
@@ -163,7 +166,7 @@ public class SystemTest extends ArquillianTest {
 
 	@Test
 	public void testFireUser() {
-		Transactions transaction = new Transactions();
+		ITransaction transaction = new Transactions();
 		transaction.setDate(new Date());
 		transaction.setInfo("Sale ID=12345 test");
 		transaction.setAmount((float) 55.55);
@@ -181,7 +184,7 @@ public class SystemTest extends ArquillianTest {
 
 		List<Employee> employees = emController.findAll();
 		boolean isPresent = false;
-		for (Employee em : employees) {
+		for (IEmployee em : employees) {
 			if (em.getCode().equals(USER1_COD)) {
 				isPresent = true;
 				break;
@@ -323,7 +326,7 @@ public class SystemTest extends ArquillianTest {
 			ftController.add(anotherEmployee);
 			inverseMapWorking = false;
 			List<Employee> associates = unController.find(USER1_UNION.getUnionName()).getAssociates();
-			for (Employee employee : associates) {
+			for (IEmployee employee : associates) {
 				if (employee.getUnion().getUnionName().equals(USER1_COD)
 						|| employee.getUnion().getUnionName().equals(USER2_COD)) {
 					inverseMapWorking = true;
@@ -359,7 +362,7 @@ public class SystemTest extends ArquillianTest {
 			List<Union> unions = unController.getUnionsList();
 			int flag = 0;
 			boolean isEqualsWorking = false;
-			for (Union u : unions) {
+			for (IUnion u : unions) {
 				if (u.equals(union) || u.equals(union1)) {
 					if (u.getUnionName().equals(union.getUnionName())
 							|| u.getUnionName().equals(union1.getUnionName())) {
@@ -371,7 +374,7 @@ public class SystemTest extends ArquillianTest {
 			Assert.assertTrue("2 unions added!", flag == 2);
 			Assert.assertTrue("Override of equals is working", isEqualsWorking);
 
-			Union tmpUnion = unController.find(union1.getUnionName());
+			IUnion tmpUnion = unController.find(union1.getUnionName());
 			Assert.assertTrue("findUnion is working properly", tmpUnion.equals(union1));
 
 			union1.setWeeklyRate((float) 1.50);
@@ -384,7 +387,7 @@ public class SystemTest extends ArquillianTest {
 
 			unions = unController.getUnionsList();
 			boolean hasBeenFired = true;
-			for (Union u : unions) {
+			for (IUnion u : unions) {
 				if (u.equals(union) || u.equals(union1)) {
 					hasBeenFired = false;
 				}
@@ -403,7 +406,7 @@ public class SystemTest extends ArquillianTest {
 			ptController.add(anEmployee);
 			ftController.add(anotherEmployee);
 
-			Transactions aTransaction = new Transactions();
+			ITransaction aTransaction = new Transactions();
 			aTransaction.setEmployee(anEmployee);
 			tController.addHours(aTransaction, 10);
 
@@ -411,7 +414,7 @@ public class SystemTest extends ArquillianTest {
 			aTransaction.setEmployee(anEmployee);
 			tController.addHours(aTransaction, 7);
 
-			Transactions anotherTransaction = new Transactions();
+			ITransaction anotherTransaction = new Transactions();
 			anotherTransaction.setDate(new Date());
 			anotherTransaction.setInfo("Sale ID=12345 test");
 			anotherTransaction.setAmount((float) 51);
@@ -421,7 +424,7 @@ public class SystemTest extends ArquillianTest {
 			List<Transactions> allTransactions = tController.findAll();
 			int trans1 = 0;
 			int trans2 = 0;
-			for (Transactions t : allTransactions) {
+			for (ITransaction t : allTransactions) {
 				if (anEmployee.getCode().equals(t.getEmployee().getCode())) {
 					trans1++;
 				}
@@ -431,7 +434,7 @@ public class SystemTest extends ArquillianTest {
 				}
 			}
 			Assert.assertEquals(3, trans1 + trans2);
-			Transactions charge = new Transactions();
+			ITransaction charge = new Transactions();
 			charge.setAmount(100);
 			charge.setDate(new Date());
 			charge.setInfo("test charge");
@@ -449,7 +452,7 @@ public class SystemTest extends ArquillianTest {
 			int numCharges = 0;
 			int employees = 0;
 
-			for (Transactions t : allTransactions) {
+			for (ITransaction t : allTransactions) {
 				if (t.getInfo().equals("test charge")) {
 					numCharges++;
 					if (t.getEmployee().getCode().equals(anEmployee.getCode())
@@ -463,7 +466,7 @@ public class SystemTest extends ArquillianTest {
 			Assert.assertTrue("Two total charges added", numCharges == 2);
 			Assert.assertTrue("Charges added to two employees", employees == 2);
 
-			for (Transactions t : allTransactions) {
+			for (ITransaction t : allTransactions) {
 				if (t.getEmployee().getCode().equals(USER1_COD)) {
 					tController.remove(t.getId());
 				} else if (t.getEmployee().getCode().equals(USER2_COD)) {
@@ -521,7 +524,7 @@ public class SystemTest extends ArquillianTest {
 			ptController.add(anEmployee);
 			ftController.add(anotherEmployee);
 
-			Transactions aTransaction = new Transactions();
+			ITransaction aTransaction = new Transactions();
 			aTransaction.setEmployee(anEmployee);
 			tController.addHours(aTransaction, 8);
 
@@ -541,7 +544,7 @@ public class SystemTest extends ArquillianTest {
 			aTransaction.setEmployee(anEmployee);
 			tController.addHours(aTransaction, 8);
 
-			Transactions anotherTransaction = new Transactions();
+			ITransaction anotherTransaction = new Transactions();
 			anotherTransaction.setDate(new Date());
 			anotherTransaction.setAmount(800);
 			anotherTransaction.setInfo("Sale ID=12345 test");
@@ -556,7 +559,7 @@ public class SystemTest extends ArquillianTest {
 			unController.remove(union.getUnionName());
 			unController.remove(union1.getUnionName());
 			List<Transactions> tList=tController.findAll();
-			for (Transactions transactions : tList) {
+			for (ITransaction transactions : tList) {
 				if (transactions.getEmployee().getCode().equals(anEmployee.getCode())||transactions.getEmployee().getCode().equals(anEmployee.getCode()))
 					tController.remove(transactions.getId());
 			}

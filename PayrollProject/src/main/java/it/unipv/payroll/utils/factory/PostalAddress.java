@@ -1,13 +1,13 @@
 package it.unipv.payroll.utils.factory;
 
-import it.unipv.payroll.model.Employee;
+import it.unipv.payroll.model.IEmployee;
 
 public class PostalAddress implements IPaymentsMethod {
 
 		public static String NAME= "Postal address";
 
 	@Override
-	public String getPaymentDetails(Employee employee) {
+	public String getPaymentDetails(IEmployee employee) {
 		return employee.getAddress();
 	}
 
