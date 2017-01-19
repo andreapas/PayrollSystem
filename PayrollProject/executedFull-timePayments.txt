@@ -1,6 +1,0 @@
-Code            Name            Surname         Amount          Payment Method  Payments Details
-cccc            Andrea          Pasquali        null            via Ferrata 1 27100 Pavia (PV) Italy (IT)                
-test2           Ciao            ciao            1158.0          Paymaster                      
-test3           test3           test3           312.0           Paymaster                      
-test4           test4           test4           3834.0          Bank account                   
-wow987654321    Mario           Rossi           1588.0          Paymaster                      

@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 
+import it.unipv.payroll.model.Employee;
 import it.unipv.payroll.model.FullTimeEmployee;
 import it.unipv.payroll.model.PartTimeEmployee;
 import it.unipv.payroll.model.Transactions;
@@ -58,12 +59,12 @@ public class TransactionsController extends GenericController<Transactions> {
 		return dao.find(id);
 	}
 
-	public HashMap<String, Float> pay(String role) throws Exception {
+	public HashMap<String, Float> pay(List<String> codeEmList) throws Exception {
 		HashMap<String, Float> earnings = new HashMap<String, Float>();
 		for (Transactions ut : findAll()) {
 			if (!ut.isExecuted()) {
 
-				if (ut.getEmployee().getRole().equals(role)) {
+				if (codeEmList.contains(ut.getEmployee().getCode())) {
 					if (earnings.containsKey(ut.getEmployee().getCode())) {
 						float tot=earnings.get(ut.getEmployee().getCode())+ut.getAmount();
 						earnings.put(ut.getEmployee().getCode(), tot);
