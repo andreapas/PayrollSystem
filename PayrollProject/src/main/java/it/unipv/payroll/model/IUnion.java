@@ -4,14 +4,14 @@ import java.util.List;
 
 public interface IUnion {
 
-	List<Employee> getAssociates();
+	public List<Employee> getAssociates();
 
-	void setUnionName(String unionName);
+	public void setUnionName(String unionName);
 
-	void setWeeklyRate(float weeklyRate);
+	public void setWeeklyRate(float weeklyRate);
 
-	String getUnionName();
+	public String getUnionName();
 
-	float getWeeklyRate();
+	public float getWeeklyRate();
 
 }

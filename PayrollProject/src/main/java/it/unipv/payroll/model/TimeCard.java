@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @DiscriminatorValue(value="TimeCard")
 public class TimeCard extends Transaction{
 	@ManyToOne(cascade={CascadeType.MERGE}, targetEntity=PartTimeEmployee.class)
-	@JoinColumn(name="employee_code")
+	@JoinColumn(name="part_time_code")
 	private IEmployee employee;
 
 	private int hoursWorked;

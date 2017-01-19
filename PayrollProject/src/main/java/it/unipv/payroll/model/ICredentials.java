@@ -4,12 +4,12 @@ import java.io.Serializable;
 
 public interface ICredentials extends Serializable {
 
-	String getCode();
+	public String getCode();
 
-	void setCode(String code);
+	public void setCode(String code);
 
-	String getPassword();
+	public String getPassword();
 
-	void setPassword(String password);
+	public void setPassword(String password);
 
 }

@@ -1,5 +1,6 @@
 package it.unipv.payroll.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -13,8 +14,8 @@ import javax.persistence.OneToMany;
 public class PartTimeEmployee extends Employee {
 
 	private float hourlyRate;
-	@OneToMany(mappedBy = "employee", fetch = FetchType.EAGER, cascade={CascadeType.ALL}, targetEntity=TimeCard.class)
-	private List<ITransaction> timeCards;	
+	@OneToMany(mappedBy = "employee", fetch = FetchType.EAGER, cascade={CascadeType.ALL}, targetEntity=TimeCard.class, orphanRemoval = true)
+	private List<ITransaction> timeCards=new ArrayList<ITransaction>();	
 	
 	public float getHourlyRate() {
 		return hourlyRate;

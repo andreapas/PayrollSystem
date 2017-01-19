@@ -38,8 +38,6 @@ public interface IEmployee {
 
 	public List<ITransaction> getCharges();
 
-	public void setCharges(List<ITransaction> transactions);
-
 	public String getPayment_method_details();
 
 	public void setPayment_method_details(String payment_method_details);

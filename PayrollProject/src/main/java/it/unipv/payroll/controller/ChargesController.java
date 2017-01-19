@@ -39,6 +39,7 @@ public class ChargesController extends GenericController<Charges> {
 	
 	public void addCharge(Charges element) throws Exception{
 		element.setDate(new Date());
+		element.setAmount(-element.getAmount());
 		super.add(element);
 	}
 	

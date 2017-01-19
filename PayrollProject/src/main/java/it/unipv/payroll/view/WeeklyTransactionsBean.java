@@ -50,6 +50,8 @@ public class WeeklyTransactionsBean implements Serializable {
 			for (String code : codeEmList) {
 				total.put(code, dues.get(code) + earnings.get(code));
 			}
+			emList.clear();
+			emList.addAll(ptList);
 			managerEmail = emController.getManager().getEmail();
 			sendMail(emList, earnings, "Part-time", managerEmail);
 		} catch (Exception e) {

@@ -1,6 +1,7 @@
 package it.unipv.payroll.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -32,8 +33,8 @@ public abstract class Employee implements Serializable, IEmployee{
 	@JoinColumn(name="union_name")
 	private IUnion union;
 	
-	@OneToMany(mappedBy = "employee", fetch = FetchType.EAGER, cascade={CascadeType.ALL}, targetEntity=Charges.class)
-	private List<ITransaction> charges;	
+	@OneToMany(mappedBy = "employee", fetch = FetchType.EAGER, cascade={CascadeType.ALL}, targetEntity=Charges.class, orphanRemoval = true)
+	private List<ITransaction> charges=new ArrayList<ITransaction>();	
 
 	private String address;
 	private String payment_method;
@@ -160,13 +161,6 @@ public abstract class Employee implements Serializable, IEmployee{
 	@Override
 	public List<ITransaction> getCharges() {
 		return charges;
-	}
-	/* (non-Javadoc)
-	 * @see it.unipv.payroll.model.IEmployee#setTransactions(java.util.List)
-	 */
-	@Override
-	public void setCharges(List<ITransaction> charges) {
-		this.charges = charges;
 	}
 	/* (non-Javadoc)
 	 * @see it.unipv.payroll.model.IEmployee#getPayment_method_details()

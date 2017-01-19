@@ -16,7 +16,8 @@ import it.unipv.payroll.model.Sales;
 public class SalesController extends GenericController<Sales> {
 
 	public List<Sales> findAll() {
-		return dao.findAll();
+		List<Sales> salesList=dao.findAll();
+		return salesList;
 	}
 	
 	public void addSale(Sales element) throws Exception{

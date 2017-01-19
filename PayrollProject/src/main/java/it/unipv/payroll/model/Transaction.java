@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 @Entity
@@ -26,6 +27,12 @@ public abstract class Transaction implements ITransaction {
 	private float amount;
 	private String info;
 	private boolean executed;
+	
+	@PrePersist
+    void preInsert() {
+       executed=false;
+    }
+	
 	@Override
 	public Date getDate() {
 		return date;
@@ -61,6 +68,44 @@ public abstract class Transaction implements ITransaction {
 	@Override
 	public int getId() {
 		return id;
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Float.floatToIntBits(amount);
+		result = prime * result + ((date == null) ? 0 : date.hashCode());
+		result = prime * result + (executed ? 1231 : 1237);
+		result = prime * result + id;
+		result = prime * result + ((info == null) ? 0 : info.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Transaction other = (Transaction) obj;
+		if (Float.floatToIntBits(amount) != Float.floatToIntBits(other.amount))
+			return false;
+		if (date == null) {
+			if (other.date != null)
+				return false;
+		} else if (!date.equals(other.date))
+			return false;
+		if (executed != other.executed)
+			return false;
+		if (id != other.id)
+			return false;
+		if (info == null) {
+			if (other.info != null)
+				return false;
+		} else if (!info.equals(other.info))
+			return false;
+		return true;
 	}
 
 }

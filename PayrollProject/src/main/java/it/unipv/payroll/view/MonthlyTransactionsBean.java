@@ -2,6 +2,7 @@ package it.unipv.payroll.view;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -50,13 +51,24 @@ public class MonthlyTransactionsBean implements Serializable{
 			HashMap<String, Float> dues = cController.chargeFee(codeEmList);
 			HashMap<String, Float> salesEarnings = sController.paySales(codeEmList);
 			HashMap<String, Float> salaryEarnings = saController.paySalary(codeEmList);
-
+			float due=0;
+			float sale=0;
+			float salary=0;
 			for (String code : codeEmList) {
-				total.put(code, dues.get(code) + salesEarnings.get(code) + salaryEarnings.get(code));
+				due=0;
+				sale=0;
+				salary=0;
+				if(dues.containsKey(code))
+					due=dues.get(code);
+				if(salesEarnings.containsKey(code))
+					sale=salesEarnings.get(code);
+				if(salaryEarnings.containsKey(code))
+					salary=salaryEarnings.get(code);
+				total.put(code, due+sale+salary);
 			}
 			managerEmail = emController.getManager().getEmail();
 			emList.addAll(ftList);
-			sendMail(emList, total, "Part-time", managerEmail);
+			sendMail(emList, total, "Full-time", managerEmail);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -68,6 +80,7 @@ public class MonthlyTransactionsBean implements Serializable{
 		ftList = ftController.findAll();
 		for (FullTimeEmployee employee : ftList) {
 			Salary trans = new Salary();
+			trans.setDate(new Date());
 			trans.setAmount(employee.getSalary());
 			trans.setEmployee(employee);
 			trans.setInfo("Monthly salary");
