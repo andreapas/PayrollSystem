@@ -3,15 +3,17 @@ package it.unipv.payroll.controller;
 import java.util.List;
 
 import javax.ejb.Stateless;
-
-import org.jboss.as.cli.handlers.ifelse.ElseHandler;
+import javax.inject.Inject;
 
 import it.unipv.payroll.model.FullTimeEmployee;
-import it.unipv.payroll.utils.factory.PaymentFactory;
+import it.unipv.payroll.utils.payments_factory.IPaymentsFactory;
+import it.unipv.payroll.utils.payments_factory.PaymentFactory;
 
 @Stateless
 public class FullTimeController extends GenericController<FullTimeEmployee> {
 
+	@Inject IPaymentsFactory factory;
+	
 	public List<FullTimeEmployee> findAll() {
 		List<FullTimeEmployee> list = dao.findAll();
 		return list;
@@ -55,7 +57,6 @@ public class FullTimeController extends GenericController<FullTimeEmployee> {
 		if (element.getPayment_method().isEmpty() || element.getPayment_method() == null){
 			return false;
 		}else{
-			PaymentFactory factory= new PaymentFactory();
 			String paymentDetails=factory.getPayment(element.getPayment_method()).getPaymentDetails(element);
 			if (paymentDetails==null) {
 				return false;

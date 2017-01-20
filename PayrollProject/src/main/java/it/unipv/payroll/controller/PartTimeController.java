@@ -3,14 +3,19 @@ package it.unipv.payroll.controller;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 
 import it.unipv.payroll.model.FullTimeEmployee;
 import it.unipv.payroll.model.PartTimeEmployee;
-import it.unipv.payroll.utils.factory.PaymentFactory;
+import it.unipv.payroll.utils.payments_factory.IPaymentsFactory;
+import it.unipv.payroll.utils.payments_factory.PaymentFactory;
 
 @Stateless
 public class PartTimeController extends GenericController<PartTimeEmployee> {
 
+	@Inject
+	IPaymentsFactory factory;
+	
 	public List<PartTimeEmployee> findAll() {
 		List<PartTimeEmployee> list = dao.findAll();
 		return list;
@@ -52,7 +57,6 @@ public class PartTimeController extends GenericController<PartTimeEmployee> {
 		if (element.getPayment_method().isEmpty() || element.getPayment_method() == null) {
 			return false;
 		} else {
-			PaymentFactory factory = new PaymentFactory();
 			String paymentDetails = factory.getPayment(element.getPayment_method()).getPaymentDetails(element);
 			if (paymentDetails == null) {
 				return false;

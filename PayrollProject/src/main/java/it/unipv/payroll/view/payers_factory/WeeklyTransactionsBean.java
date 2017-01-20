@@ -1,4 +1,4 @@
-package it.unipv.payroll.view;
+package it.unipv.payroll.view.payers_factory;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,25 +18,32 @@ import it.unipv.payroll.utils.Mail;
 import it.unipv.payroll.utils.ReportCreator;
 
 @RequestScoped
-public class WeeklyTransactionsBean implements Serializable {
+public class WeeklyTransactionsBean implements Serializable, IPayer {
 
 	@Inject
-	TimeCardController tcController;
+	private TimeCardController tcController;
 	@Inject
-	ChargesController cController;
+	private ChargesController cController;
 	@Inject
-	PartTimeController ptController;
+	private PartTimeController ptController;
 	@Inject
-	EmployeeController emController;
+	private EmployeeController emController;
 	@Inject
-	Mail mailer;
+	private Mail mailer;
 
 	private String managerEmail;
 	private ReportCreator fileCreator = new ReportCreator();
 	private List<IEmployee> emList = new ArrayList<IEmployee>();
 	private List<IEmployee> ptList = new ArrayList<IEmployee>();
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see it.unipv.payroll.view.IPayer#pay()
+	 */
+	@Override
 	public HashMap<String, Float> pay() {
+		addWeeklyUnionFee();
 		ptList.addAll(ptController.findAll());
 		List<String> codeEmList = new ArrayList<String>();
 		for (IEmployee employee : ptList) {
@@ -61,7 +68,7 @@ public class WeeklyTransactionsBean implements Serializable {
 
 	}
 
-	public void addWeeklyUnionFee() {
+	private void addWeeklyUnionFee() {
 		emList.addAll(emController.findAll());
 
 		for (IEmployee employee : emList) {

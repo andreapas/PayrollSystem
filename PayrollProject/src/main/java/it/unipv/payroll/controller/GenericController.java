@@ -34,8 +34,6 @@ public abstract class GenericController<T extends Serializable> {
 	}
 
 	public void remove(Object id) throws Exception {
-		if (id == null || id.toString().isEmpty())
-			throw new Exception("Cannot remove null or empty id. " + ERROR);
 		if(find(id)==null)
 			throw new Exception("Entity not found in the database. " + ERROR);
 		dao.remove(id);

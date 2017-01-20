@@ -35,8 +35,8 @@ import it.unipv.payroll.model.PartTimeEmployee;
 import it.unipv.payroll.model.Sales;
 import it.unipv.payroll.model.TimeCard;
 import it.unipv.payroll.model.Union;
-import it.unipv.payroll.utils.AutoPayday;
 import it.unipv.payroll.utils.UnionConverter;
+import it.unipv.payroll.view.payers_factory.AutoPayday;
 
 @RunWith(Arquillian.class)
 public class SystemTest extends ArquillianTest {
@@ -317,6 +317,27 @@ public class SystemTest extends ArquillianTest {
 			emController.remove(anEmployee.getCode());
 			Assert.fail("REMOVED A NON EXISTENT CODE!");
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			Assert.assertTrue(e.getMessage(), true);
+
+		}
+
+	}
+	@Test
+	public void badSalesRemove() {
+		try {
+			Sales sales= new Sales();
+			saController.remove(sales.getId());
+			Assert.fail("REMOVED A NON EXISTENT Id!");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			Assert.assertTrue(e.getMessage(), true);
+		}
+		try {
+			unController.remove(null);
+			Assert.fail("REMOVED A NULL ID!");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			Assert.assertTrue(e.getMessage(), true);
 
 		}

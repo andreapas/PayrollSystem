@@ -1,4 +1,4 @@
-package it.unipv.payroll.view;
+package it.unipv.payroll.view.payers_factory;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,26 +21,33 @@ import it.unipv.payroll.utils.Mail;
 import it.unipv.payroll.utils.ReportCreator;
 
 @RequestScoped
-public class MonthlyTransactionsBean implements Serializable{
+public class MonthlyTransactionsBean implements Serializable, IPayer {
 	@Inject
-	SalesController sController;
+	private SalesController sController;
 	@Inject
-	SalaryController saController;
+	private SalaryController saController;
 	@Inject
-	ChargesController cController;
+	private ChargesController cController;
 	@Inject
-	FullTimeController ftController;
+	private FullTimeController ftController;
 	@Inject
-	EmployeeController emController;
+	private EmployeeController emController;
 	@Inject
-	Mail mailer;
+	private Mail mailer;
 
 	private String managerEmail;
 	private ReportCreator fileCreator = new ReportCreator();
 	private List<FullTimeEmployee> ftList;
 	private List<IEmployee> emList = new ArrayList<IEmployee>();
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see it.unipv.payroll.view.IPayer#pay()
+	 */
+	@Override
 	public HashMap<String, Float> pay() {
+		addSalaries();
 		ftList = ftController.findAll();
 		List<String> codeEmList = new ArrayList<String>();
 		for (IEmployee employee : ftList) {
@@ -51,20 +58,20 @@ public class MonthlyTransactionsBean implements Serializable{
 			HashMap<String, Float> dues = cController.chargeFee(codeEmList);
 			HashMap<String, Float> salesEarnings = sController.paySales(codeEmList);
 			HashMap<String, Float> salaryEarnings = saController.paySalary(codeEmList);
-			float due=0;
-			float sale=0;
-			float salary=0;
+			float due = 0;
+			float sale = 0;
+			float salary = 0;
 			for (String code : codeEmList) {
-				due=0;
-				sale=0;
-				salary=0;
-				if(dues.containsKey(code))
-					due=dues.get(code);
-				if(salesEarnings.containsKey(code))
-					sale=salesEarnings.get(code);
-				if(salaryEarnings.containsKey(code))
-					salary=salaryEarnings.get(code);
-				total.put(code, due+sale+salary);
+				due = 0;
+				sale = 0;
+				salary = 0;
+				if (dues.containsKey(code))
+					due = dues.get(code);
+				if (salesEarnings.containsKey(code))
+					sale = salesEarnings.get(code);
+				if (salaryEarnings.containsKey(code))
+					salary = salaryEarnings.get(code);
+				total.put(code, due + sale + salary);
 			}
 			managerEmail = emController.getManager().getEmail();
 			emList.addAll(ftList);
@@ -76,7 +83,7 @@ public class MonthlyTransactionsBean implements Serializable{
 
 	}
 
-	public void addSalaries() {
+	private void addSalaries() {
 		ftList = ftController.findAll();
 		for (FullTimeEmployee employee : ftList) {
 			Salary trans = new Salary();
