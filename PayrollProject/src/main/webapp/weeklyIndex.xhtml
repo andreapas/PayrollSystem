@@ -62,6 +62,8 @@
 					<p:outputLabel value="#{partTimeBean.loggedUser.payment_method}" />
 					<p:outputLabel value="Associated to Union:" />
 					<p:outputLabel value="#{partTimeBean.loggedUser.union.unionName}" />
+					<p:outputLabel value="Hourly Rate:" />
+					<p:outputLabel value="#{partTimeBean.loggedUser.hourlyRate}€/h" />
 
 				</h:panelGrid>
 			</p:panel>
@@ -74,7 +76,7 @@
 					<h:panelGrid cellpadding="10" id="updateInfos">
 						<p:outputLabel for="paymentMethod" value="Method of payment:" />
 						<p:selectOneRadio id="paymentMethod"
-							value="#{partTimeBean.partTimeEmployee.payment_method}">
+							value="#{partTimeBean.loggedUser.payment_method}">
 							<f:selectItem itemLabel="Held for pickup by the paymaster"
 								itemValue="#{employeeBean.optionsList.get(0)}" />
 							<f:selectItem itemLabel="Mailed to the postal address"
@@ -84,14 +86,14 @@
 							<p:ajax process="paymentMethod" update="updateInfos" />
 						</p:selectOneRadio>
 						<p:panel header="Additional Informations"
-								rendered="#{partTimeBean.partTimeEmployee.payment_method eq employeeBean.optionsList.get(1)}">
+								rendered="#{partTimeBean.loggedUser.payment_method eq employeeBean.optionsList.get(1)}">
 								<h:panelGrid columns="2">
 									<p:outputLabel value="Address:" />
 									<p:outputLabel value="#{partTimeBean.loggedUser.address}" />
 								</h:panelGrid>
 							</p:panel>
 							<p:panel header="Additional Informations"
-								rendered="#{partTimeBean.partTimeEmployee.payment_method eq employeeBean.optionsList.get(2)}">
+								rendered="#{partTimeBean.loggedUser.payment_method eq employeeBean.optionsList.get(2)}">
 								<h:panelGrid columns="2">
 									<p:outputLabel for="bank" value="IBAN:" />
 									<p:inputMask id="bank"
@@ -103,7 +105,7 @@
 						<h:panelGrid columns="2">
 								<p:outputLabel for="address" value="Address:" />
 								<p:inputText id="address"
-									value="#{partTimeBean.partTimeEmployee.address}" />
+									value="#{partTimeBean.loggedUser.address}" />
 						</h:panelGrid>
 
 						<p:outputLabel for="email" value="New email address:" />
@@ -119,7 +121,7 @@
 						</p:selectOneMenu>
 
 						<p:commandButton value="Submit updated informations"
-							actionListener="#{partTimeBean.updateEmployee(partTimeBean.loggedUser)}"
+							actionListener="#{partTimeBean.updateLoggedUser()}"
 							update="updateInfos :overview @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)"
 							oncomplete="showOnlyDivByClass('settingsPanel', 'overviewPanel')" />
 					</h:panelGrid>
@@ -155,10 +157,10 @@
 			<h:form>
 			<p:panel header="Insert Hours" class="dynamicPanel insertHoursPanel">
 				<h:panelGrid cellpadding="10">
-					<h:outputText id="output" value="Hours worked today: #{transactionsBean.hoursAmount}" />
-					<h:inputHidden id="h" value="#{transactionsBean.hoursAmount}" />
+					<h:outputText id="output" value="Hours worked today: #{timeCardTransactionBean.timeCard.hoursWorked}" />
+					<h:inputHidden id="h" value="#{timeCardTransactionBean.timeCard.hoursWorked}" />
 					<p:slider for="h" display="output" step="1" maxValue="20" displayTemplate="Hours worked today: {value}" />
-					<p:commandButton value="Add" actionListener="#{transactionsBean.addHours()}" />
+					<p:commandButton value="Add" actionListener="#{timeCardTransactionBean.addHours()}" />
 				</h:panelGrid>	
 			</p:panel>
 			</h:form>

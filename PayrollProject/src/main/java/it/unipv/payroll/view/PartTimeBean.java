@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -17,7 +17,7 @@ import it.unipv.payroll.model.Credentials;
 import it.unipv.payroll.model.PartTimeEmployee;
 
 @Named
-@RequestScoped
+@ViewScoped
 public class PartTimeBean implements Serializable {
 
 	@Inject
@@ -34,7 +34,6 @@ public class PartTimeBean implements Serializable {
 	public void init() {
 		newCred = new Credentials();
 		partTimeEmployee = new PartTimeEmployee();
-		System.out.println("Reconstructing...");
 		try {
 			loggedUser = partController.find(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
 		} catch (Exception e) {

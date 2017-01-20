@@ -26,7 +26,8 @@
 
 					<p>Welcome #{fullTimeBean.loggedUser.name}</p>
 					<h:form>
-						<h:commandButton value="logout" action="#{sessionManagementBean.logout()}" />
+						<h:commandButton value="logout"
+							action="#{sessionManagementBean.logout()}" />
 					</h:form>
 					<p:button value="Overview" icon="fa fa-eye"
 						onclick="return showOnlyDivByClass('overviewPanel','dynamicPanel')" />
@@ -67,6 +68,10 @@
 						<p:outputLabel value="#{fullTimeBean.loggedUser.payment_method}" />
 						<p:outputLabel value="Associated to Union:" />
 						<p:outputLabel value="#{fullTimeBean.loggedUser.union.unionName}" />
+						<p:outputLabel value="Salary:" />
+						<p:outputLabel value="#{fullTimeBean.loggedUser.salary}€" />
+						<p:outputLabel value="Commission Rate:" />
+						<p:outputLabel value="#{fullTimeBean.loggedUser.commissionRate}%" />
 
 					</h:panelGrid>
 				</p:panel>
@@ -79,7 +84,7 @@
 						<h:panelGrid cellpadding="10" id="updateInfos">
 							<p:outputLabel for="paymentMethod" value="Method of payment:" />
 							<p:selectOneRadio id="paymentMethod"
-								value="#{fullTimeBean.fullTimeEmployee.payment_method}">
+								value="#{fullTimeBean.loggedUser.payment_method}">
 								<f:selectItem itemLabel="Held for pickup by the paymaster"
 									itemValue="#{employeeBean.optionsList.get(0)}" />
 								<f:selectItem itemLabel="Mailed to the postal address"
@@ -89,14 +94,14 @@
 								<p:ajax process="paymentMethod" update="updateInfos" />
 							</p:selectOneRadio>
 							<p:panel header="Additional Informations"
-								rendered="#{fullTimeBean.fullTimeEmployee.payment_method eq employeeBean.optionsList.get(1)}">
+								rendered="#{fullTimeBean.loggedUser.payment_method eq employeeBean.optionsList.get(1)}">
 								<h:panelGrid columns="2">
 									<p:outputLabel value="Address:" />
 									<p:outputLabel value="#{fullTimeBean.loggedUser.address}" />
 								</h:panelGrid>
 							</p:panel>
 							<p:panel header="Additional Informations"
-								rendered="#{fullTimeBean.fullTimeEmployee.payment_method eq employeeBean.optionsList.get(2)}">
+								rendered="#{fullTimeBean.loggedUser.payment_method eq employeeBean.optionsList.get(2)}">
 								<h:panelGrid columns="2">
 									<p:outputLabel for="bank" value="IBAN:" />
 									<p:inputMask id="bank"
@@ -106,9 +111,9 @@
 							</p:panel>
 
 							<h:panelGrid columns="2">
-								<p:outputLabel for="address" value="Address:" />
+								<p:outputLabel for="address" value="Change your address:" />
 								<p:inputText id="address"
-									value="#{fullTimeBean.fullTimeEmployee.address}" />
+									value="#{fullTimeBean.loggedUser.address}" />
 							</h:panelGrid>
 
 							<p:outputLabel for="email" value="New email address:" />
@@ -124,8 +129,8 @@
 							</p:selectOneMenu>
 
 							<p:commandButton value="Submit updated informations"
-								actionListener="#{fullTimeBean.updateEmployee(fullTimeBean.loggedUser)}"
-								update="@widgetVar(editTable) @widgetVar(employeesTable) @widgetVar(unionEditTable) @widgetVar(unionDeleteTable) :persInfo :partHireAdditionalInfo :fullHireAdditionalInfo :selectedEmployee :selectedDeletableEmployee"
+								actionListener="#{fullTimeBean.updateLoggedUser()}"
+								update="@widgetVar(editPartTable) @widgetVar(employeesTable) @widgetVar(unionEditTable) @widgetVar(unionDeleteTable) :persInfo :partHireAdditionalInfo :fullHireAdditionalInfo :selectedPartEmployee :selectedFullEmployee :selectedDeletableEmployee"
 								oncomplete="showOnlyDivByClass('settingsPanel', 'overviewPanel')" />
 						</h:panelGrid>
 					</h:form>
@@ -183,7 +188,8 @@
 						onclick="return showOnlyDivByClass('insertDetailsPanelFullTime','typeSubPanel')" />
 				</h:panelGrid>
 			</p:panel>
-			<p:panel header="Insert Employee Details - Part Time Employee"
+			<p:panel id="partHireForm"
+				header="Insert Employee Details - Part Time Employee"
 				class="dynamicPanel usersSubPanel typeSubPanel insertDetailsPanelPartTime">
 				<h:form id="partHireAdditionalInfo">
 					<p:panelGrid id="partGrid" cellpadding="5">
@@ -292,18 +298,27 @@
 							</p:column>
 						</p:row>
 						<p:row>
-							<p:column colspan="2">
-								<p:commandButton value="Add"
-									process=":partHireAdditionalInfo"
+							<p:column>
+								<p:commandButton value="Add" process=":partHireAdditionalInfo"
 									action="#{partTimeBean.hireEmployee()}"
-									update="@widgetVar(associatesList) partGrid @widgetVar(editTable) @widgetVar(employeesTable) @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)" />
+									update="@widgetVar(associatesList) partGrid @widgetVar(editPartTable) @widgetVar(employeesTable) @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)"
+									ajax="false" />
+							</p:column>
+							<p:column>
+								<p:commandButton value="Reset Form" update="partHireForm"
+									process="@this"
+									oncomplete="return showOnlyDivByClass('insertDetailsPanelPartTime','typeSubPanel')">
+									<p:resetInput target="partHireForm" />
+								</p:commandButton>
+
 							</p:column>
 						</p:row>
 					</p:panelGrid>
 				</h:form>
 
 			</p:panel>
-			<p:panel header="Insert Employee Details - Full Time Employee"
+			<p:panel id="fullHireForm"
+				header="Insert Employee Details - Full Time Employee"
 				class="dynamicPanel usersSubPanel typeSubPanel insertDetailsPanelFullTime">
 				<h:form id="fullHireAdditionalInfo">
 					<p:panelGrid id="fullGrid" cellpadding="5">
@@ -422,11 +437,19 @@
 							</p:column>
 						</p:row>
 						<p:row>
-							<p:column colspan="2">
+							<p:column>
 
 								<p:commandButton value="Add"
 									actionListener="#{fullTimeBean.hireEmployee()}"
-									update="@widgetVar(associatesList) fullGrid @widgetVar(editTable) @widgetVar(employeesTable) @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)" />
+									update="@widgetVar(associatesList) fullGrid @widgetVar(editPartTable) @widgetVar(employeesTable) @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)" />
+							</p:column>
+							<p:column>
+								<p:commandButton value="Reset Form" update="fullHireForm"
+									process="@this"
+									oncomplete="return showOnlyDivByClass('insertDetailsPanelPartTime','typeSubPanel')">
+									<p:resetInput target="fullHireForm" />
+								</p:commandButton>
+
 							</p:column>
 						</p:row>
 					</p:panelGrid>
@@ -443,12 +466,12 @@
 			</p:panel>
 			<p:panel header="Edit Employee - Part-time Employee"
 				class="dynamicPanel typeEditSubPanel selectEditPartTime">
-				<h:form id="selectedEmployee">
+				<h:form id="selectedPartEmployee">
 
 					<p:panelGrid columns="3">
 						<p:dataTable id="selEditPart"
 							value="#{partTimeBean.partTimersList}" var="employee"
-							widgetVar="editTable" rows="10" rowsPerPageTemplate="5,10,15"
+							widgetVar="editPartTable" rows="10" rowsPerPageTemplate="5,10,15"
 							selectionMode="single"
 							selection="#{partTimeBean.partTimeEmployee}"
 							rowKey="#{employee.code}">
@@ -456,7 +479,7 @@
 								<p:outputPanel>
 									<h:outputText value="Search all fields:" />
 									<p:inputText id="globalFilter"
-										onkeyup="PF('editTable').filter()" style="width:150px"
+										onkeyup="PF('editPartTable').filter()" style="width:150px"
 										placeholder="Enter keyword" />
 								</p:outputPanel>
 							</f:facet>
@@ -492,9 +515,13 @@
 								filterStyle="display:none" headerText="Union">
 								<h:outputText value="#{employee.union.unionName}" />
 							</p:column>
+							<p:column filterBy="#{employee.hourlyRate}"
+								filterStyle="display:none" headerText="Hourly Rate">
+								<h:outputText value="#{employee.hourlyRate}€/h" />
+							</p:column>
 							<f:facet name="footer">
 								<p:commandButton icon="fa fa-edit" process="selEditPart"
-									update=":selectedEmployee:changeSelPart"
+									update=":selectedPartEmployee:changeSelPart"
 									oncomplete="return showDivsByClass('editDetailsEmployeePanel')" />
 							</f:facet>
 
@@ -502,8 +529,8 @@
 					</p:panelGrid>
 					<p:panel
 						header="Change information of employee #{partTimeBean.partTimeEmployee.name} #{partTimeBean.partTimeEmployee.surname}"
-						class="dynamicPanel  editDetailsEmployeePanel">
-						<h:panelGrid id="changeSelPart" cellpadding="5" columns="2">
+						class="dynamicPanel selectEditPartTime editDetailsEmployeePanel">
+						<p:panelGrid id="changeSelPart" cellpadding="5" columns="2">
 
 							<p:outputLabel for="editName" value="Name:" />
 							<p:inputText id="editName"
@@ -525,20 +552,141 @@
 							<p:outputLabel for="editAddress" value="Address:" />
 							<p:inputText id="editAddress"
 								value="#{partTimeBean.partTimeEmployee.address}" />
-
+							<p:outputLabel for="editHourlyRate" value="Hourly Rate:" />
+							<p:inputNumber id="editHourlyRate"
+								value="#{partTimeBean.partTimeEmployee.hourlyRate}"
+								symbol=" €/h" symbolPosition="s" decimalSeparator=","
+								thousandSeparator="." />
 							<f:facet name="footer">
 								<p:panelGrid columns="2">
 									<p:commandButton value="Update User Info"
 										action="#{partTimeBean.updateEmployee()}"
-										update="@widgetVar(associatesList) :selectedEmployee @widgetVar(editTable) @widgetVar(employeesTable) @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)"
+										update="@widgetVar(associatesList) :selectedPartEmployee @widgetVar(editPartTable) @widgetVar(employeesTable) @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)"
 										onclick="showOnlyDivByClass('editEmployeePanel', 'editDetailsEmployeePanel')" />
 									<p:commandButton value="Cancel" resetValues="true"
-										update=":selectedEmployee"
+										update=":selectedPartEmployee"
+										onclick="showOnlyDivByClass('editEmployeePanel', 'editDetailsEmployeePanel')" />
+								</p:panelGrid>
+							</f:facet>
+						</p:panelGrid>
+
+					</p:panel>
+				</h:form>
+			</p:panel>
+			<p:panel header="Edit Employee - Full-time Employee"
+				class="dynamicPanel typeEditSubPanel selectEditFullTime">
+				<h:form id="selectedFullEmployee">
+
+					<p:panelGrid columns="3">
+						<p:dataTable id="selEditFull"
+							value="#{fullTimeBean.fullTimersList}" var="employee"
+							widgetVar="editFullTable" rows="10" rowsPerPageTemplate="5,10,15"
+							selectionMode="single"
+							selection="#{fullTimeBean.fullTimeEmployee}"
+							rowKey="#{employee.code}">
+							<f:facet name="header">
+								<p:outputPanel>
+									<h:outputText value="Search all fields:" />
+									<p:inputText id="globalFilter"
+										onkeyup="PF('editFullTable').filter()" style="width:150px"
+										placeholder="Enter keyword" />
+								</p:outputPanel>
+							</f:facet>
+
+							<p:column sortBy="#{employee.code}" filterBy="#{employee.code}"
+								filterStyle="display:none" headerText="Code">
+								<h:outputText value="#{employee.code}" />
+							</p:column>
+
+							<p:column sortBy="#{employee.name}" filterBy="#{employee.name}"
+								filterStyle="display:none" headerText="Name">
+								<h:outputText value="#{employee.name}" />
+							</p:column>
+
+							<p:column sortBy="#{employee.surname}"
+								filterBy="#{employee.surname}" filterStyle="display:none"
+								headerText="Surname">
+								<h:outputText value="#{employee.surname}" />
+							</p:column>
+
+							<p:column sortBy="#{employee.address.toString()}"
+								filterBy="#{employee.address.toString()}"
+								filterStyle="display:none" headerText="Address">
+								<h:outputText value="#{employee.address.toString()}" />
+							</p:column>
+
+							<p:column filterBy="#{employee.email}" filterStyle="display:none"
+								headerText="Email">
+								<h:outputText value="#{employee.email}" />
+							</p:column>
+
+							<p:column filterBy="#{employee.union.unionName}"
+								filterStyle="display:none" headerText="Union">
+								<h:outputText value="#{employee.union.unionName}" />
+							</p:column>
+							<p:column filterBy="#{employee.commissionRate}"
+								filterStyle="display:none" headerText="Commission Rate">
+								<h:outputText value="#{employee.commissionRate}%" />
+							</p:column>
+							<p:column filterBy="#{employee.salary}"
+								filterStyle="display:none" headerText="Salary">
+								<h:outputText value="#{employee.salary}€" />
+							</p:column>
+							<f:facet name="footer">
+								<p:commandButton icon="fa fa-edit" process="selEditFull"
+									update=":selectedFullEmployee:changeSelFul"
+									oncomplete="return showDivsByClass('editDetailsEmployeePanel')" />
+							</f:facet>
+
+						</p:dataTable>
+					</p:panelGrid>
+					<p:panel
+						header="Change information of employee #{fullTimeBean.fullTimeEmployee.name} #{fullTimeBean.fullTimeEmployee}"
+						class="dynamicPanel  editDetailsEmployeePanel">
+						<p:panelGrid id="changeSelFul" cellpadding="5" columns="2">
+
+							<p:outputLabel for="editName" value="Name:" />
+							<p:inputText id="editName"
+								value="#{fullTimeBean.fullTimeEmployee.name}" />
+							<p:outputLabel for="editSurname" value="Surname:" />
+							<p:inputText id="editSurname"
+								value="#{fullTimeBean.fullTimeEmployee.surname}" />
+							<p:outputLabel for="editEmail" value="Email:" />
+							<p:inputText id="editEmail"
+								value="#{fullTimeBean.fullTimeEmployee.email}" />
+
+							<p:outputLabel for="editUnion" value="Union:" />
+							<p:selectOneMenu id="editUnion"
+								value="#{fullTimeBean.fullTimeEmployee.union}"
+								style="width:125px" converter="unionTranslator">
+								<f:selectItems value="#{unionsBean.unionsList}" var="union"
+									itemLabel="#{union.unionName}" />
+							</p:selectOneMenu>
+							<p:outputLabel for="editAddress" value="Address:" />
+							<p:inputText id="editAddress"
+								value="#{fullTimeBean.fullTimeEmployee.address}" />
+							<p:outputLabel for="editCommissionRate" value="Commission Rate:" />
+							<p:inputNumber id="editCommissionRate"
+								value="#{fullTimeBean.fullTimeEmployee.commissionRate}"
+								symbol=" €" symbolPosition="s" decimalSeparator=","
+								thousandSeparator="."></p:inputNumber>
+							<p:outputLabel for="editSalary" value="Salary:" />
+							<p:inputNumber id="editSalary"
+								value="#{fullTimeBean.fullTimeEmployee.salary}" symbol=" €"
+								symbolPosition="s" decimalSeparator="," thousandSeparator="."></p:inputNumber>
+							<f:facet name="footer">
+								<p:panelGrid columns="2">
+									<p:commandButton value="Update User Info"
+										action="#{fullTimeBean.updateEmployee()}"
+										update="@widgetVar(associatesList) :selectedFullEmployee @widgetVar(editPartTable) @widgetVar(employeesTable) @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)"
+										onclick="showOnlyDivByClass('editEmployeePanel', 'editDetailsEmployeePanel')" />
+									<p:commandButton value="Cancel" resetValues="true"
+										update=":selectedFullEmployee"
 										onclick="showOnlyDivByClass('editEmployeePanel', 'editDetailsEmployeePanel')" />
 								</p:panelGrid>
 							</f:facet>
 
-						</h:panelGrid>
+						</p:panelGrid>
 
 					</p:panel>
 				</h:form>
@@ -637,7 +785,7 @@
 							symbolPosition="s" />
 
 						<p:commandButton action="#{unionsBean.addUnion()}"
-							update="@widgetVar(associatesList) addUnionForm :persInfo :partHireAdditionalInfo :fullHireAdditionalInfo :selectedEmployee :selectedDeletableEmployee @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)"
+							update="@widgetVar(associatesList) addUnionForm :persInfo :partHireAdditionalInfo :fullHireAdditionalInfo :selectedPartEmployee :selectedFullEmployee :selectedDeletableEmployee @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)"
 							value="Add Union" />
 					</h:panelGrid>
 				</h:form>
@@ -675,7 +823,7 @@
 						<p:column headerText="Edit">
 							<p:commandButton icon="fa fa-edit"
 								action="#{unionsBean.setUnion(union)}"
-								update="selectedUnion :persInfo :partHireAdditionalInfo :fullHireAdditionalInfo :selectedEmployee :selectedDeletableEmployee @widgetVar(unionEditTable) @widgetVar(unionDeleteTable) @widgetVar(associatesList)"
+								update="selectedUnion :persInfo :partHireAdditionalInfo :fullHireAdditionalInfo :selectedPartEmployee :selectedFullEmployee :selectedDeletableEmployee @widgetVar(unionEditTable) @widgetVar(unionDeleteTable) @widgetVar(associatesList)"
 								onclick="return showOnlyDivByClass('editDetailsUnionPanel');" />
 						</p:column>
 					</p:dataTable>
@@ -693,7 +841,7 @@
 
 							<p:commandButton action="#{unionsBean.updateUnion()}"
 								value="Update this Union"
-								update="selectedUnion :persInfo :partHireAdditionalInfo :fullHireAdditionalInfo :selectedEmployee :selectedDeletableEmployee @widgetVar(unionEditTable) @widgetVar(unionDeleteTable) @widgetVar(associatesList)"
+								update="selectedUnion :persInfo :partHireAdditionalInfo :fullHireAdditionalInfo :selectedPartEmployee :selectedFullEmployee :selectedDeletableEmployee @widgetVar(unionEditTable) @widgetVar(unionDeleteTable) @widgetVar(associatesList)"
 								onclick="showOnlyDivByClass('editUnionPanel', 'editDetailsUnionPanel')" />
 							<p:commandButton resetValues="true" value="Cancel"
 								update="selectedUnion"
@@ -749,7 +897,7 @@
 							value="Do you want to delete #{unionsBean.fireUnionName}?" />
 						<h:panelGrid cellpadding="5" columns="2">
 							<p:commandButton action="#{unionsBean.removeUnion()}"
-								update="deletableUnionForm :persInfo :partHireAdditionalInfo :fullHireAdditionalInfo :selectedEmployee :selectedDeletableEmployee @widgetVar(unionEditTable) @widgetVar(unionDeleteTable) @widgetVar(associatesList)"
+								update="deletableUnionForm :persInfo :partHireAdditionalInfo :fullHireAdditionalInfo :selectedPartEmployee :selectedFullEmployee :selectedDeletableEmployee @widgetVar(unionEditTable) @widgetVar(unionDeleteTable) @widgetVar(associatesList)"
 								value="Yes"
 								onclick="showOnlyDivByClass('deleteUnionPanel', 'deletableUnion')" />
 							<p:commandButton resetValues="true" update="deletableUnionForm"
@@ -762,19 +910,11 @@
 			<p:panel header="Add union service charge"
 				class="serviceChargePanel dynamicPanel">
 				<h:form id="chargeForm">
-					<h:panelGrid columns="2">
-
-						<p:outputLabel value="Amount to charge:" />
-						<p:inputNumber id="amount" decimalSeparator=","
-							thousandSeparator="."
-							value="#{transactionsBean.transaction.amount}" required="true"
-							symbol="€" symbolPosition="s" />
-						<p:outputLabel value="Informations:" />
-						<p:inputTextarea id="info"
-							value="#{transactionsBean.transaction.info}" required="true" />
-					</h:panelGrid>
 					<p:dataTable widgetVar="associatesList" id="associatesTable"
-						var="employee" value="#{employeeBean.employeeList}">
+						var="employee" value="#{employeeBean.employeeList}"
+						selectionMode="single"
+						selection="#{chargesTransactionBean.employee}"
+						rowKey="#{employee.code}">
 						<p:column sortBy="#{employee.code}" headerText="Code">
 							<p:outputLabel value="#{employee.code}" />
 						</p:column>
@@ -789,25 +929,36 @@
 							<p:outputLabel value="#{employee.union.unionName}" />
 						</p:column>
 
-						<p:column>
-
-							<p:commandButton icon="fa fa-dollar"
-								action="#{transactionsBean.addServiceCharge(employee.code)}">
-								<p:confirm header="Confirmation"
-									message="Do you really want to add the specified charge to employee #{employee.code}?"
-									icon="ui-icon-alert" />
+						<f:facet name="footer">
+							<p:commandButton icon="fa fa-dollar" value="Add charge"
+								process="associatesTable" update=":chargeForm:confirmCharge"
+								oncomplete="return showDivsByClass('confirmChargePanel')">
 							</p:commandButton>
-							<p:confirmDialog global="true" showEffect="fade"
-								hideEffect="fade">
-								<p:commandButton value="Yes" type="button"
-									styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
-								<p:commandButton value="No" type="button"
-									styleClass="ui-confirmdialog-no" icon="fa fa-close" />
-							</p:confirmDialog>
-						</p:column>
+						</f:facet>
 					</p:dataTable>
+					<p:panel id="confirmCharge" header="Add charge to Employee #{chargesTransactionBean.employee.name} #{chargesTransactionBean.employee.surname}"
+						class="dynamicPanel confirmChargePanel">
+						<h:panelGrid columns="2">
+							<p:outputLabel value="Amount to charge:" />
+							<p:inputNumber id="amount" decimalSeparator=","
+								thousandSeparator="."
+								value="#{chargesTransactionBean.charge.amount}" required="true"
+								symbol=" €" symbolPosition="s" />
+							<p:outputLabel value="Informations:" />
+							<p:inputTextarea id="info"
+								value="#{chargesTransactionBean.charge.info}" required="true" />
+							<p:commandButton action="#{chargesTransactionBean.addCharge()}"
+								update="deletableUnionForm :persInfo :partHireAdditionalInfo :fullHireAdditionalInfo :selectedPartEmployee :selectedFullEmployee :selectedDeletableEmployee @widgetVar(unionEditTable) @widgetVar(unionDeleteTable) @widgetVar(associatesList)"
+								value="Yes"
+								onclick="showOnlyDivByClass('serviceChargePanel', 'confirmChargePanel')" />
+							<p:commandButton resetValues="true" update="chargeForm"
+								value="No"
+								onclick="showOnlyDivByClass('serviceChargePanel', 'confirmChargePanel')" />
+						</h:panelGrid>
+					</p:panel>
 				</h:form>
 			</p:panel>
+
 		</div>
 
 	</div>

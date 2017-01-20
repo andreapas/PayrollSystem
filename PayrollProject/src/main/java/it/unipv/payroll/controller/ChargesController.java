@@ -14,19 +14,18 @@ import it.unipv.payroll.model.ITransaction;
 @Stateless
 public class ChargesController extends GenericController<Charges> {
 
-	
-	public HashMap<String, Float> chargeFee(List<String> codesToChargeTo) throws Exception{
-		List<Charges> list=findAll();
-		HashMap<String, Float> dues=new HashMap<String, Float>();
+	public HashMap<String, Float> chargeFee(List<String> codesToChargeTo) throws Exception {
+		List<Charges> list = findAll();
+		HashMap<String, Float> dues = new HashMap<String, Float>();
 		for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 			Charges charges = (Charges) iterator.next();
 			if (!charges.isExecuted()) {
-				IEmployee em=charges.getEmployee();
+				IEmployee em = charges.getEmployee();
 				if (codesToChargeTo.contains(em.getCode())) {
 					if (!dues.containsKey(em.getCode())) {
 						dues.put(em.getCode(), charges.getAmount());
-					}else{
-						dues.put(em.getCode(), dues.get(em.getCode())+charges.getAmount());
+					} else {
+						dues.put(em.getCode(), dues.get(em.getCode()) + charges.getAmount());
 					}
 					charges.setExecuted(true);
 					super.update(charges);
@@ -35,19 +34,17 @@ public class ChargesController extends GenericController<Charges> {
 		}
 		return dues;
 	}
-	
-	
-	public void addCharge(Charges element) throws Exception{
+
+	public void addCharge(Charges element) throws Exception {
 		element.setDate(new Date());
 		element.setAmount(-element.getAmount());
 		super.add(element);
 	}
-	
+
 	public List<Charges> findAll() {
 		return dao.findAll();
 	}
 
-	
 	@Override
 	public boolean isAlreadyInDatabase(Charges element) {
 		ITransaction tinfo = dao.find(element.getId());
@@ -59,12 +56,15 @@ public class ChargesController extends GenericController<Charges> {
 
 	@Override
 	public boolean isElementOk(Charges element) {
-		if (element.getEmployee() == null)
+		if (element.getEmployee() == null) {
 			return false;
-		if (element.getDate() == null)
+		}
+		if (element.getDate() == null) {
 			return false;
-		if (element.getInfo().isEmpty() || element.getInfo() == null)
+		}
+		if (element.getInfo().isEmpty() || element.getInfo() == null) {
 			return false;
+		}
 		return true;
 	}
 

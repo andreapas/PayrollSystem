@@ -1,10 +1,12 @@
 package it.unipv.payroll.view;
 
+import java.io.Serializable;
+
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateful;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -13,9 +15,8 @@ import it.unipv.payroll.model.Charges;
 import it.unipv.payroll.model.IEmployee;
 
 @Named
-@ViewScoped
-@Stateful
-public class ChargesTransactionBean {
+@RequestScoped
+public class ChargesTransactionBean implements Serializable{
 
 	@Inject
 	ChargesController cController;
@@ -33,12 +34,15 @@ public class ChargesTransactionBean {
 		return charge;
 	}
 	
+	public IEmployee getEmployee() {
+		return employee;
+	}
 	public void setEmployee(IEmployee employee) {
 		this.employee = employee;
+		
 	}
 	public void addCharge() {
 		FacesContext context = FacesContext.getCurrentInstance();
-
 		try {
 			charge.setEmployee(employee);
 			cController.addCharge(charge);

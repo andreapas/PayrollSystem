@@ -3,10 +3,10 @@ package it.unipv.payroll.view;
 import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateful;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -16,8 +16,7 @@ import it.unipv.payroll.model.IEmployee;
 import it.unipv.payroll.model.TimeCard;
 
 @Named
-@ViewScoped
-@Stateful
+@RequestScoped
 public class TimeCardTransactionBean implements Serializable {
 
 	@Inject

@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateful;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
@@ -19,7 +17,7 @@ import it.unipv.payroll.model.Credentials;
 import it.unipv.payroll.model.FullTimeEmployee;
 
 @Named
-@RequestScoped
+@ViewScoped
 public class FullTimeBean implements Serializable {
 
 	@Inject

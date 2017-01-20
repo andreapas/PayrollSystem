@@ -8,7 +8,7 @@
 <h:head />
 
 <h:body>
-<h:outputStylesheet library="css" name="style.css" />
+	<h:outputStylesheet library="css" name="style.css" />
 	<h:outputScript library="js" name="scripts.js" />
 	<script type="text/javascript">
 	$( document ).ready(function() {
@@ -26,7 +26,8 @@
 
 					<p>Welcome #{fullTimeBean.loggedUser.name}</p>
 					<h:form>
-						<h:commandButton value="logout" action="#{sessionManagementBean.logout()}" />
+						<h:commandButton value="logout"
+							action="#{sessionManagementBean.logout()}" />
 					</h:form>
 					<p:button value="Overview" icon="fa fa-eye"
 						onclick="return showOnlyDivByClass('overviewPanel','dynamicPanel')" />
@@ -65,7 +66,10 @@
 						<p:outputLabel value="#{fullTimeBean.loggedUser.payment_method}" />
 						<p:outputLabel value="Associated to Union:" />
 						<p:outputLabel value="#{fullTimeBean.loggedUser.union.unionName}" />
-
+						<p:outputLabel value="Salary:" />
+						<p:outputLabel value="#{fullTimeBean.loggedUser.salary}" />
+						<p:outputLabel value="Commission Rate" />
+						<p:outputLabel value="#{fullTimeBean.loggedUser.commissionRate}%" />
 					</h:panelGrid>
 				</p:panel>
 			</h:form>
@@ -77,7 +81,7 @@
 						<h:panelGrid cellpadding="10" id="updateInfos">
 							<p:outputLabel for="paymentMethod" value="Method of payment:" />
 							<p:selectOneRadio id="paymentMethod"
-								value="#{fullTimeBean.fullTimeEmployee.payment_method}">
+								value="#{fullTimeBean.loggedUser.payment_method}">
 								<f:selectItem itemLabel="Held for pickup by the paymaster"
 									itemValue="#{employeeBean.optionsList.get(0)}" />
 								<f:selectItem itemLabel="Mailed to the postal address"
@@ -87,14 +91,14 @@
 								<p:ajax process="paymentMethod" update="updateInfos" />
 							</p:selectOneRadio>
 							<p:panel header="Additional Informations"
-								rendered="#{fullTimeBean.fullTimeEmployee.payment_method eq employeeBean.optionsList.get(1)}">
+								rendered="#{fullTimeBean.loggedUser.payment_method eq employeeBean.optionsList.get(1)}">
 								<h:panelGrid columns="2">
 									<p:outputLabel value="Address:" />
 									<p:outputLabel value="#{fullTimeBean.loggedUser.address}" />
 								</h:panelGrid>
 							</p:panel>
 							<p:panel header="Additional Informations"
-								rendered="#{fullTimeBean.fullTimeEmployee.payment_method eq employeeBean.optionsList.get(2)}">
+								rendered="#{fullTimeBean.loggedUser.payment_method eq employeeBean.optionsList.get(2)}">
 								<h:panelGrid columns="2">
 									<p:outputLabel for="bank" value="IBAN:" />
 									<p:inputMask id="bank"
@@ -106,7 +110,7 @@
 							<h:panelGrid columns="2">
 								<p:outputLabel for="address" value="Address:" />
 								<p:inputText id="address"
-									value="#{fullTimeBean.fullTimeEmployee.address}" />
+									value="#{fullTimeBean.loggedUser.address}" />
 							</h:panelGrid>
 
 							<p:outputLabel for="email" value="New email address:" />
@@ -122,7 +126,7 @@
 							</p:selectOneMenu>
 
 							<p:commandButton value="Submit updated informations"
-								actionListener="#{fullTimeBean.updateEmployee(fullTimeBean.loggedUser)}"
+								actionListener="#{fullTimeBean.updateLoggedUser()}"
 								update="updateInfos :overview @widgetVar(unionEditTable) @widgetVar(unionDeleteTable)"
 								oncomplete="showOnlyDivByClass('settingsPanel', 'overviewPanel')" />
 						</h:panelGrid>
@@ -157,13 +161,21 @@
 			<h:form>
 				<p:panel header="Insert sales" class="dynamicPanel insertSalesPanel">
 					<h:panelGrid cellpadding="10">
-						<h:outputLabel for="id" value="Recipt ID:" />
-						<p:inputText id="id" required="true" value="#{transactionsBean.id}" />
+						<h:outputLabel for="id" value="Receipt ID:" />
+						<p:inputNumber id="id" value="#{salesTransactionBean.sale.amount}" required="true"/>
 						<h:outputLabel for="amount" value="Amount of the sale:" />
-						<p:inputText id="amount" required="true" value="#{transactionsBean.transaction.amount}" />
+						<p:inputNumber id="amount" decimalSeparator=","
+								thousandSeparator="."
+								value="#{salesTransactionBean.sale.amount}" required="true"
+								symbol=" €" symbolPosition="s" />
 						<p:outputLabel for="date" value="Date of the sale:" />
-						<p:calendar id="date" required="true" value="#{transactionsBean.transaction.date}" />
-						<p:commandButton value="Add" actionListener="#{transactionsBean.addSaleRecipt()}" />
+						<p:calendar id="date" required="true"
+							value="#{salesTransactionBean.sale.date}" />
+						<p:outputLabel for="info" value="Addtional info:" />
+						<p:inputTextarea id="info" required="true"
+							value="#{salesTransactionBean.sale.info}" />
+						<p:commandButton value="Add"
+							actionListener="#{salesTransactionBean.addSaleRecipt()}" />
 					</h:panelGrid>
 				</p:panel>
 			</h:form>
